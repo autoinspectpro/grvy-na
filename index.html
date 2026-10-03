@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>GRYVNA</title>
 <style>
-:root{color-scheme:dark;--bg:#07100c;--panel:#0d1712;--panel2:#111e17;--text:#f5f7f5;--muted:#91a39a;--green:#36e58b;--green2:#21b96b;--line:rgba(255,255,255,.08);--gold:#f4d16a}
+:root{color-scheme:dark;--bg:#07100c;--panel:#0d1712;--panel2:#111e17;--text:#f5f7f5;--muted:#91a39a;--green:#36e58b;--green2:#21b96b;--line:rgba(255,255,255,.08);--gold:#f4d16a)}
 *{box-sizing:border-box}
 html,body{margin:0;min-height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}
 body{overflow-x:hidden}
@@ -64,10 +64,10 @@ body{overflow-x:hidden}
 .toast{position:fixed;left:50%;bottom:90px;transform:translate(-50%,20px);background:#eafff2;color:#062416;padding:10px 15px;border-radius:999px;font-weight:800;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.3);z-index:30}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media(max-width:380px){
-  .coin{width:165px;height:165px}
-  .coin span{font-size:66px}
-  .amount{font-size:40px}
-  .nav-item small{font-size:9px}
+.coin{width:165px;height:165px}
+.coin span{font-size:66px}
+.amount{font-size:40px}
+.nav-item small{font-size:9px}
 }
 </style>
 </head>
@@ -76,363 +76,334 @@ body{overflow-x:hidden}
 <main class="app">
 
 <header class="top">
-  <div class="brand">GRYVNA</div>
-  <div class="status">MVP</div>
+<div class="brand">GRYVNA</div>
+<div class="status">MVP</div>
 </header>
 
 <section class="screen active" id="screen-home">
-  <section class="balance">
-    <div class="label">Ваш баланс</div>
-    <div class="amount">
-      <span id="balance">50.00</span>
-      <span class="currency">UAH</span>
-    </div>
-  </section>
 
-  <section class="coin-wrap">
-    <button class="coin" id="earn" aria-label="Заробити">
-      <span>₴</span>
-    </button>
-  </section>
+<section class="balance">
+<div class="label">Ваш баланс</div>
+<div class="amount">
+<span id="balance">50.00</span>
+<span class="currency">UAH</span>
+</div>
+</section>
 
-  <div class="hint">Натискайте, щоб заробляти</div>
+<section class="coin-wrap">
+<button class="coin" id="earn" aria-label="Заробити">
+<span>₴</span>
+</button>
+</section>
 
-  <section class="energy">
-    <div class="row">
-      <b>Енергія</b>
-      <span class="muted"><span id="energy">100</span> / 100</span>
-    </div>
-    <div class="bar">
-      <div class="fill" id="energyFill"></div>
-    </div>
-  </section>
+<div class="hint">Натискайте, щоб заробляти</div>
 
-  <section class="upgrade">
-    <div class="upgrade-title">ПОКРАЩЕННЯ</div>
-    <div class="upgrade-name">Сила тапу</div>
-    <div class="upgrade-desc">
-      Збільшує винагороду за кожне натискання.
-    </div>
+<section class="energy">
+<div class="row">
+<b>Енергія</b>
+<span class="muted"><span id="energy">100</span> / 100</span>
+</div>
+<div class="bar">
+<div class="fill" id="energyFill"></div>
+</div>
+</section>
 
-    <div class="upgrade-bottom">
-      <div class="price">
-        <span id="tapPower">0.10</span> UAH / тап<br>
-        <span class="muted">
-          Ціна: <span id="upgradePrice">10</span> UAH
-        </span>
-      </div>
+<section class="upgrade">
+<div class="upgrade-title">ПОКРАЩЕННЯ</div>
+<div class="upgrade-name">Сила тапу</div>
+<div class="upgrade-desc">Збільшує винагороду за кожне натискання.</div>
 
-      <button class="btn" id="upgradeBtn">
-        ПОКРАЩИТИ
-      </button>
-    </div>
-  </section>
+<div class="upgrade-bottom">
+<div class="price">
+<span id="tapPower">0.10</span> UAH / тап<br>
+<span class="muted">
+Ціна: <span id="upgradePrice">10</span> UAH
+</span>
+</div>
 
-  <section class="stats">
-    <div class="stat">
-      <div class="muted">Сьогодні</div>
-      <div class="v">
-        <span id="today">0.00</span> UAH
-      </div>
-    </div>
+<button class="btn" id="upgradeBtn">ПОКРАЩИТИ</button>
+</div>
+</section>
 
-    <div class="stat">
-      <div class="muted">Тапів</div>
-      <div class="v" id="taps">0</div>
-    </div>
-  </section>
+<section class="stats">
+
+<div class="stat">
+<div class="muted">Сьогодні</div>
+<div class="v">
+<span id="today">0.00</span> UAH
+</div>
+</div>
+
+<div class="stat">
+<div class="muted">Тапів</div>
+<div class="v" id="taps">0</div>
+</div>
+
+</section>
 </section>
 
 <section class="screen" id="screen-tasks">
 
-  <div class="page-title">Завдання</div>
+<div class="page-title">Завдання</div>
+<div class="page-subtitle">
+Виконуйте активності та отримуйте додаткову винагороду.
+</div>
 
-  <div class="page-subtitle">
-    Виконуйте активності та отримуйте додаткову винагороду.
-  </div>
+<div class="card">
+<div>
+<b>Щоденний вхід</b>
+<p>Відкрийте GRYVNA сьогодні.</p>
+</div>
+<button class="btn small" data-task="login">+5 UAH</button>
+</div>
 
-  <div class="card">
-    <div>
-      <b>Щоденний вхід</b>
-      <p>Відкрийте GRYVNA сьогодні.</p>
-    </div>
+<div class="card">
+<div>
+<b>100 тапів</b>
+<p>Зробіть 100 натискань.</p>
+</div>
+<button class="btn small" data-task="taps">+10 UAH</button>
+<div class="muted" id="taskTapsText">0 / 100</div>
+</div>
 
-    <button class="btn small" data-task="login">
-      +5 UAH
-    </button>
-  </div>
+<div class="card">
+<div>
+<b>Активний день</b>
+<p>Заробіть 50 UAH за день.</p>
+</div>
+<button class="btn small" data-task="earn">+15 UAH</button>
+<div class="muted" id="taskEarnText">0 / 50 UAH</div>
+</div>
 
-  <div class="card">
-    <div>
-      <b>100 тапів</b>
-      <p>Зробіть 100 натискань.</p>
-    </div>
-
-    <button class="btn small" data-task="taps">
-      +10 UAH
-    </button>
-
-    <div class="muted" id="taskTapsText">
-      0 / 100
-    </div>
-  </div>
-
-  <div class="card">
-    <div>
-      <b>Активний день</b>
-      <p>Заробіть 50 UAH за день.</p>
-    </div>
-
-    <button class="btn small" data-task="earn">
-      +15 UAH
-    </button>
-
-    <div class="muted" id="taskEarnText">
-      0 / 50 UAH
-    </div>
-  </div>
-
-  <div class="card">
-    <div>
-      <b>Серія днів</b>
-      <p id="streakText">0 днів поспіль</p>
-    </div>
-
-    <div class="muted">
-      3 дні: +20 UAH<br>
-      7 днів: +50 UAH
-    </div>
-
-    <button class="btn small" id="openStreak">
-      ПЕРЕГЛЯНУТИ
-    </button>
-  </div>
+<div class="card">
+<div>
+<b>Серія днів</b>
+<p id="streakText">0 днів поспіль</p>
+</div>
+<div class="muted">
+3 дні: +20 UAH<br>
+7 днів: +50 UAH
+</div>
+<button class="btn small" id="openStreak">ПЕРЕГЛЯНУТИ</button>
+</div>
 
 </section>
 
 <section class="screen" id="screen-streak">
 
-  <div class="page-title">Серія днів</div>
+<div class="page-title">Серія днів</div>
 
-  <div class="page-subtitle">
-    Відкривайте GRYVNA щодня, щоб продовжувати серію та отримувати бонуси.
-  </div>
+<div class="page-subtitle">
+Відкривайте GRYVNA щодня, щоб продовжувати серію та отримувати бонуси.
+</div>
 
-  <div class="stats">
+<div class="stats">
 
-    <div class="stat">
-      <div class="muted">Поточна серія</div>
-      <div class="v">
-        <span id="currentStreak">0</span> днів
-      </div>
-    </div>
+<div class="stat">
+<div class="muted">Поточна серія</div>
+<div class="v">
+<span id="currentStreak">0</span> днів
+</div>
+</div>
 
-    <div class="stat">
-      <div class="muted">Найкраща серія</div>
-      <div class="v">
-        <span id="bestStreak">0</span> днів
-      </div>
-    </div>
+<div class="stat">
+<div class="muted">Найкраща серія</div>
+<div class="v">
+<span id="bestStreak">0</span> днів
+</div>
+</div>
 
-  </div>
+</div>
 
-  <div class="card">
-    <div>
-      <b>Бонус за 3 дні</b>
-      <p id="streak3Progress">0 / 3 дні</p>
-    </div>
+<div class="card">
+<div>
+<b>Бонус за 3 дні</b>
+<p id="streak3Progress">0 / 3 дні</p>
+</div>
+<div class="muted">+20 UAH</div>
+</div>
 
-    <div class="muted">
-      +20 UAH
-    </div>
-  </div>
+<div class="bar">
+<div class="fill" id="streak3Fill" style="width:0%"></div>
+</div>
 
-  <div class="bar">
-    <div class="fill" id="streak3Fill" style="width:0%"></div>
-  </div>
+<div class="card">
+<div>
+<b>Бонус за 7 днів</b>
+<p id="streak7Progress">0 / 7 днів</p>
+</div>
+<div class="muted">+50 UAH</div>
+</div>
 
-  <div class="card">
-    <div>
-      <b>Бонус за 7 днів</b>
-      <p id="streak7Progress">0 / 7 днів</p>
-    </div>
+<div class="bar">
+<div class="fill" id="streak7Fill" style="width:0%"></div>
+</div>
 
-    <div class="muted">
-      +50 UAH
-    </div>
-  </div>
-
-  <div class="bar">
-    <div class="fill" id="streak7Fill" style="width:0%"></div>
-  </div>
-
-  <button class="btn wide" id="backTasks">
-    ПОВЕРНУТИСЯ ДО ЗАВДАНЬ
-  </button>
+<button class="btn wide" id="backTasks">
+ПОВЕРНУТИСЯ ДО ЗАВДАНЬ
+</button>
 
 </section>
 
 <section class="screen" id="screen-business">
 
-  <div class="page-title">Бізнес</div>
+<div class="page-title">Бізнес</div>
 
-  <div class="page-subtitle">
-    Розвивайте власний бізнес та отримуйте дохід.
-  </div>
+<div class="page-subtitle">
+Розвивайте власний бізнес та отримуйте дохід.
+</div>
 
-  <div class="business-grid">
+<div class="business-grid">
 
-    <div class="business">
-      <div class="business-icon">01</div>
-      <b>Кав’ярня</b>
-      <span>Доступ за погодженням</span>
-    </div>
+<div class="business">
+<div class="business-icon">01</div>
+<b>Кав’ярня</b>
+<span>Доступ за погодженням</span>
+</div>
 
-    <div class="business">
-      <div class="business-icon">02</div>
-      <b>Автомийка</b>
-      <span>Доступ за погодженням</span>
-    </div>
+<div class="business">
+<div class="business-icon">02</div>
+<b>Автомийка</b>
+<span>Доступ за погодженням</span>
+</div>
 
-    <div class="business">
-      <div class="business-icon">03</div>
-      <b>Магазин</b>
-      <span>Доступ за погодженням</span>
-    </div>
+<div class="business">
+<div class="business-icon">03</div>
+<b>Магазин</b>
+<span>Доступ за погодженням</span>
+</div>
 
-    <div class="business">
-      <div class="business-icon">04</div>
-      <b>СТО</b>
-      <span>Доступ за погодженням</span>
-    </div>
+<div class="business">
+<div class="business-icon">04</div>
+<b>СТО</b>
+<span>Доступ за погодженням</span>
+</div>
 
-  </div>
+</div>
 
-  <button class="btn wide" id="businessBtn">
-    ХОЧУ ВІДКРИТИ БІЗНЕС
-  </button>
+<button class="btn wide" id="businessBtn">
+ХОЧУ ВІДКРИТИ БІЗНЕС
+</button>
 
 </section>
 
 <section class="screen" id="screen-friends">
 
-  <div class="page-title">Друзі</div>
+<div class="page-title">Друзі</div>
 
-  <div class="page-subtitle">
-    Запрошуйте друзів та отримуйте реферальні бонуси.
-  </div>
+<div class="page-subtitle">
+Запрошуйте друзів та отримуйте реферальні бонуси.
+</div>
 
-  <div class="ref-card">
+<div class="ref-card">
 
-    <div class="ref-label">
-      Ваше запрошення
-    </div>
+<div class="ref-label">Ваше запрошення</div>
 
-    <div class="ref-link">
-      GRYVNA • REFERRAL
-    </div>
+<div class="ref-link">
+GRYVNA • REFERRAL
+</div>
 
-    <button class="btn wide" id="refBtn">
-      ЗАПРОСИТИ ДРУЗІВ
-    </button>
+<button class="btn wide" id="refBtn">
+ЗАПРОСИТИ ДРУЗІВ
+</button>
 
-  </div>
+</div>
 
-  <div class="stats">
+<div class="stats">
 
-    <div class="stat">
-      <div class="muted">Запрошено</div>
-      <div class="v" id="friendsCount">0</div>
-    </div>
+<div class="stat">
+<div class="muted">Запрошено</div>
+<div class="v" id="friendsCount">0</div>
+</div>
 
-    <div class="stat">
-      <div class="muted">Бонуси</div>
-      <div class="v">0.00 UAH</div>
-    </div>
+<div class="stat">
+<div class="muted">Бонуси</div>
+<div class="v">0.00 UAH</div>
+</div>
 
-  </div>
+</div>
 
 </section>
 
 <section class="screen" id="screen-profile">
 
-  <div class="page-title">Профіль</div>
+<div class="page-title">Профіль</div>
 
-  <div class="page-subtitle">
-    Ваша статистика GRYVNA.
-  </div>
+<div class="page-subtitle">
+Ваша статистика GRYVNA.
+</div>
 
-  <div class="profile-card">
+<div class="profile-card">
 
-    <div class="avatar">₴</div>
+<div class="avatar">₴</div>
 
-    <div>
-      <b>Мій профіль</b>
-      <div class="muted">Учасник GRYVNA</div>
-    </div>
+<div>
+<b>Мій профіль</b>
+<div class="muted">Учасник GRYVNA</div>
+</div>
 
-  </div>
+</div>
 
-  <div class="stats profile-stats">
+<div class="stats profile-stats">
 
-    <div class="stat">
-      <div class="muted">Баланс</div>
-      <div class="v">
-        <span id="profileBalance">50.00</span> UAH
-      </div>
-    </div>
+<div class="stat">
+<div class="muted">Баланс</div>
+<div class="v">
+<span id="profileBalance">50.00</span> UAH
+</div>
+</div>
 
-    <div class="stat">
-      <div class="muted">Зароблено сьогодні</div>
-      <div class="v">
-        <span id="profileToday">0.00</span> UAH
-      </div>
-    </div>
+<div class="stat">
+<div class="muted">Зароблено сьогодні</div>
+<div class="v">
+<span id="profileToday">0.00</span> UAH
+</div>
+</div>
 
-    <div class="stat">
-      <div class="muted">Усього тапів</div>
-      <div class="v" id="profileTaps">0</div>
-    </div>
+<div class="stat">
+<div class="muted">Усього тапів</div>
+<div class="v" id="profileTaps">0</div>
+</div>
 
-    <div class="stat">
-      <div class="muted">До виводу</div>
-      <div class="v">500 UAH</div>
-    </div>
+<div class="stat">
+<div class="muted">До виводу</div>
+<div class="v">500 UAH</div>
+</div>
 
-  </div>
+</div>
 
-  <button class="btn wide" id="withdrawBtn">
-    ВИВЕСТИ КОШТИ
-  </button>
+<button class="btn wide" id="withdrawBtn">
+ВИВЕСТИ КОШТИ
+</button>
 
 </section>
 
 <nav class="bottom-nav" aria-label="Основна навігація">
 
-  <button class="nav-item active" data-screen="home">
-    <span>⌂</span>
-    <small>Головна</small>
-  </button>
+<button class="nav-item active" data-screen="home">
+<span>⌂</span>
+<small>Головна</small>
+</button>
 
-  <button class="nav-item" data-screen="tasks">
-    <span>✓</span>
-    <small>Завдання</small>
-  </button>
+<button class="nav-item" data-screen="tasks">
+<span>✓</span>
+<small>Завдання</small>
+</button>
 
-  <button class="nav-item" data-screen="business">
-    <span>◆</span>
-    <small>Бізнес</small>
-  </button>
+<button class="nav-item" data-screen="business">
+<span>◆</span>
+<small>Бізнес</small>
+</button>
 
-  <button class="nav-item" data-screen="friends">
-    <span>+</span>
-    <small>Друзі</small>
-  </button>
+<button class="nav-item" data-screen="friends">
+<span>+</span>
+<small>Друзі</small>
+</button>
 
-  <button class="nav-item" data-screen="profile">
-    <span>○</span>
-    <small>Профіль</small>
-  </button>
+<button class="nav-item" data-screen="profile">
+<span>○</span>
+<small>Профіль</small>
+</button>
 
 </nav>
 
@@ -443,27 +414,29 @@ body{overflow-x:hidden}
 <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <script>
+
 const SAVE_KEY='grvyna_mvp_state_v1';
-const TG_KEY='grvyna_state_v1';
+const TG_KEY='grvyna_state_v2';
+const TG_VERSION=2;
 
 const DEFAULT_STATE={
-  balance:50,
-  energy:100,
-  taps:0,
-  today:0,
-  tapPower:.10,
-  upgradePrice:10,
-  taskDay:'',
-  tasks:{
-    login:false,
-    taps:false,
-    earn:false
-  },
-  streak:0,
-  bestStreak:0,
-  lastLoginDay:'',
-  streak3Claimed:false,
-  streak7Claimed:false
+balance:50,
+energy:100,
+taps:0,
+today:0,
+tapPower:.10,
+upgradePrice:10,
+taskDay:'',
+tasks:{
+login:false,
+taps:false,
+earn:false
+},
+streak:0,
+bestStreak:0,
+lastLoginDay:'',
+streak3Claimed:false,
+streak7Claimed:false
 };
 
 let balance=DEFAULT_STATE.balance;
@@ -483,319 +456,372 @@ let streak7Claimed=DEFAULT_STATE.streak7Claimed;
 const $=id=>document.getElementById(id);
 
 function dayKey(){
-  const d=new Date();
-
-  return d.getFullYear()+
-    '-'+String(d.getMonth()+1).padStart(2,'0')+
-    '-'+String(d.getDate()).padStart(2,'0');
+const d=new Date();
+return d.getFullYear()+'-'+
+String(d.getMonth()+1).padStart(2,'0')+'-'+
+String(d.getDate()).padStart(2,'0')
 }
 
 function previousDayKey(){
-  const d=new Date();
+const d=new Date();
+d.setDate(d.getDate()-1);
 
-  d.setDate(d.getDate()-1);
-
-  return d.getFullYear()+
-    '-'+String(d.getMonth()+1).padStart(2,'0')+
-    '-'+String(d.getDate()).padStart(2,'0');
+return d.getFullYear()+'-'+
+String(d.getMonth()+1).padStart(2,'0')+'-'+
+String(d.getDate()).padStart(2,'0')
 }
 
 function state(){
-  return {
-    balance,
-    energy,
-    taps,
-    today,
-    tapPower,
-    upgradePrice,
-    taskDay,
-    tasks,
-    streak,
-    bestStreak,
-    lastLoginDay,
-    streak3Claimed,
-    streak7Claimed
-  };
+
+return {
+version:TG_VERSION,
+savedAt:Date.now(),
+
+balance,
+energy,
+taps,
+today,
+tapPower,
+upgradePrice,
+taskDay,
+tasks,
+streak,
+bestStreak,
+lastLoginDay,
+streak3Claimed,
+streak7Claimed
+}
+
 }
 
 function apply(saved){
 
-  if(!saved||typeof saved!=='object')return;
+if(!saved || typeof saved!=='object') return;
 
-  balance=Number.isFinite(saved.balance)
-    ?saved.balance
-    :balance;
+balance=
+Number.isFinite(saved.balance)
+?saved.balance
+:balance;
 
-  energy=Number.isFinite(saved.energy)
-    ?Math.min(100,Math.max(0,saved.energy))
-    :energy;
+energy=
+Number.isFinite(saved.energy)
+?Math.min(100,Math.max(0,saved.energy))
+:energy;
 
-  taps=Number.isFinite(saved.taps)
-    ?Math.max(0,Math.floor(saved.taps))
-    :taps;
+taps=
+Number.isFinite(saved.taps)
+?Math.max(0,Math.floor(saved.taps))
+:taps;
 
-  today=Number.isFinite(saved.today)
-    ?Math.max(0,saved.today)
-    :today;
+today=
+Number.isFinite(saved.today)
+?Math.max(0,saved.today)
+:today;
 
-  tapPower=Number.isFinite(saved.tapPower)
-    ?Math.max(.01,saved.tapPower)
-    :tapPower;
+tapPower=
+Number.isFinite(saved.tapPower)
+?Math.max(.01,saved.tapPower)
+:tapPower;
 
-  upgradePrice=Number.isFinite(saved.upgradePrice)
-    ?Math.max(0,Math.round(saved.upgradePrice))
-    :upgradePrice;
+upgradePrice=
+Number.isFinite(saved.upgradePrice)
+?Math.max(0,Math.round(saved.upgradePrice))
+:upgradePrice;
 
-  taskDay=
-    typeof saved.taskDay==='string'
-    ?saved.taskDay
-    :taskDay;
+taskDay=
+typeof saved.taskDay==='string'
+?saved.taskDay
+:taskDay;
 
-  tasks=
-    saved.tasks&&typeof saved.tasks==='object'
-      ?{
-        login:!!saved.tasks.login,
-        taps:!!saved.tasks.taps,
-        earn:!!saved.tasks.earn
-      }
-      :{...DEFAULT_STATE.tasks};
+tasks=
+saved.tasks && typeof saved.tasks==='object'
+?
+{
+login:!!saved.tasks.login,
+taps:!!saved.tasks.taps,
+earn:!!saved.tasks.earn
+}
+:
+{...DEFAULT_STATE.tasks};
 
-  streak=
-    Number.isFinite(saved.streak)
-      ?Math.max(0,Math.floor(saved.streak))
-      :streak;
+streak=
+Number.isFinite(saved.streak)
+?Math.max(0,Math.floor(saved.streak))
+:streak;
 
-  bestStreak=
-    Number.isFinite(saved.bestStreak)
-      ?Math.max(0,Math.floor(saved.bestStreak))
-      :bestStreak;
+bestStreak=
+Number.isFinite(saved.bestStreak)
+?Math.max(0,Math.floor(saved.bestStreak))
+:bestStreak;
 
-  lastLoginDay=
-    typeof saved.lastLoginDay==='string'
-      ?saved.lastLoginDay
-      :lastLoginDay;
+lastLoginDay=
+typeof saved.lastLoginDay==='string'
+?saved.lastLoginDay
+:lastLoginDay;
 
-  streak3Claimed=!!saved.streak3Claimed;
-  streak7Claimed=!!saved.streak7Claimed;
+streak3Claimed=!!saved.streak3Claimed;
+streak7Claimed=!!saved.streak7Claimed;
+
 }
 
 function resetDailyState(){
 
-  const d=dayKey();
+const d=dayKey();
 
-  if(taskDay!==d){
+if(taskDay!==d){
 
-    taskDay=d;
+taskDay=d;
 
-    tasks={
-      login:false,
-      taps:false,
-      earn:false
-    };
+tasks={
+login:false,
+taps:false,
+earn:false
+};
 
-    today=0;
+today=0;
 
-    streak3Claimed=false;
-    streak7Claimed=false;
-  }
+streak3Claimed=false;
+streak7Claimed=false;
+
+}
+
 }
 
 function updateStreak(){
 
-  const d=dayKey();
+const d=dayKey();
 
-  if(lastLoginDay===d){
-    return false;
-  }
+if(lastLoginDay===d)
+return false;
 
-  if(lastLoginDay===previousDayKey()){
-    streak+=1;
-  }else{
-    streak=1;
-  }
+if(lastLoginDay===previousDayKey()){
+streak+=1;
+}else{
+streak=1;
+}
 
-  bestStreak=Math.max(bestStreak,streak);
+bestStreak=Math.max(bestStreak,streak);
 
-  lastLoginDay=d;
+lastLoginDay=d;
 
-  return true;
+return true;
+
 }
 
 function save(){
 
-  const data=state();
+const data=state();
 
-  try{
-    localStorage.setItem(
-      SAVE_KEY,
-      JSON.stringify(data)
-    );
-  }catch(e){}
+try{
+localStorage.setItem(
+SAVE_KEY,
+JSON.stringify(data)
+);
+}catch(e){}
 
-  try{
+try{
 
-    if(
-      window.Telegram &&
-      Telegram.WebApp &&
-      Telegram.WebApp.CloudStorage
-    ){
+if(
+window.Telegram &&
+Telegram.WebApp &&
+Telegram.WebApp.CloudStorage
+){
 
-      Telegram.WebApp.CloudStorage.setItem(
-        TG_KEY,
-        JSON.stringify(data),
-        ()=>{}
-      );
+Telegram.WebApp.CloudStorage.setItem(
+TG_KEY,
+JSON.stringify(data),
+()=>{}
+);
 
-    }
+}
 
-  }catch(e){}
+}catch(e){}
+
 }
 
 function load(){
 
-  try{
+try{
 
-    const saved=
-      JSON.parse(
-        localStorage.getItem(SAVE_KEY)||'null'
-      );
+const saved=
+JSON.parse(
+localStorage.getItem(SAVE_KEY)||'null'
+);
 
-    apply(saved);
+apply(saved);
 
-    resetDailyState();
+resetDailyState();
 
-  }catch(e){}
+}catch(e){}
+
 }
 
 function loadTelegram(){
 
-  try{
+try{
 
-    if(
-      !(window.Telegram &&
-        Telegram.WebApp &&
-        Telegram.WebApp.CloudStorage)
-    ){
-      return;
-    }
+if(
+!(window.Telegram &&
+Telegram.WebApp &&
+Telegram.WebApp.CloudStorage)
+)
+return;
 
-    Telegram.WebApp.CloudStorage.getItem(
-      TG_KEY,
-      (err,value)=>{
+Telegram.WebApp.CloudStorage.getItem(
+TG_KEY,
+(err,value)=>{
 
-        if(err||!value)return;
+if(err || !value)
+return;
 
-        try{
+try{
 
-          apply(JSON.parse(value));
+const cloud=JSON.parse(value);
 
-          resetDailyState();
+const local=
+JSON.parse(
+localStorage.getItem(SAVE_KEY)||'null'
+);
 
-          save();
+const localTime=
+local &&
+Number(local.savedAt) || 0;
 
-          render();
+const cloudTime=
+cloud &&
+Number(cloud.savedAt) || 0;
 
-          renderTasks();
+if(cloudTime>localTime){
 
-        }catch(e){}
+apply(cloud);
 
-      }
-    );
+resetDailyState();
 
-  }catch(e){}
+localStorage.setItem(
+SAVE_KEY,
+JSON.stringify(state())
+);
+
+}else if(local){
+
+apply(local);
+
+resetDailyState();
+
+Telegram.WebApp.CloudStorage.setItem(
+TG_KEY,
+JSON.stringify(state()),
+()=>{}
+);
+
+}else{
+
+apply(cloud);
+
+resetDailyState();
+
+localStorage.setItem(
+SAVE_KEY,
+JSON.stringify(state())
+);
+
+}
+
+render();
+renderTasks();
+
+}catch(e){}
+
+}
+);
+
+}catch(e){}
+
 }
 
 function render(){
 
-  $('balance').textContent=
-    balance.toFixed(2);
+$('balance').textContent=
+balance.toFixed(2);
 
-  $('energy').textContent=
-    Math.floor(energy);
+$('energy').textContent=
+Math.floor(energy);
 
-  $('energyFill').style.width=
-    energy+'%';
+$('energyFill').style.width=
+energy+'%';
 
-  $('tapPower').textContent=
-    tapPower.toFixed(2);
+$('tapPower').textContent=
+tapPower.toFixed(2);
 
-  $('upgradePrice').textContent=
-    upgradePrice.toFixed(0);
+$('upgradePrice').textContent=
+upgradePrice.toFixed(0);
 
-  $('today').textContent=
-    today.toFixed(2);
+$('today').textContent=
+today.toFixed(2);
 
-  $('taps').textContent=
-    taps;
+$('taps').textContent=
+taps;
 
-  $('upgradeBtn').disabled=
-    balance<upgradePrice;
+$('upgradeBtn').disabled=
+balance<upgradePrice;
 
-  $('profileBalance').textContent=
-    balance.toFixed(2);
+$('profileBalance').textContent=
+balance.toFixed(2);
 
-  $('profileToday').textContent=
-    today.toFixed(2);
+$('profileToday').textContent=
+today.toFixed(2);
 
-  $('profileTaps').textContent=
-    taps;
+$('profileTaps').textContent=
+taps;
 
-  if($('streakText')){
-    $('streakText').textContent=
-      streak+
-      ' '+
-      (streak===1?'день':'днів')+
-      ' поспіль';
-  }
+if($('streakText'))
+$('streakText').textContent=
+streak+' '+(streak===1?'день':'днів')+' поспіль';
 
-  if($('currentStreak')){
-    $('currentStreak').textContent=
-      streak;
-  }
+if($('currentStreak'))
+$('currentStreak').textContent=
+streak;
 
-  if($('bestStreak')){
-    $('bestStreak').textContent=
-      bestStreak;
-  }
+if($('bestStreak'))
+$('bestStreak').textContent=
+bestStreak;
 
-  if($('streak3Progress')){
-    $('streak3Progress').textContent=
-      Math.min(streak,3)+' / 3 дні';
-  }
+if($('streak3Progress'))
+$('streak3Progress').textContent=
+Math.min(streak,3)+' / 3 дні';
 
-  if($('streak7Progress')){
-    $('streak7Progress').textContent=
-      Math.min(streak,7)+' / 7 днів';
-  }
+if($('streak7Progress'))
+$('streak7Progress').textContent=
+Math.min(streak,7)+' / 7 днів';
 
-  if($('streak3Fill')){
-    $('streak3Fill').style.width=
-      Math.min(100,streak/3*100)+'%';
-  }
+if($('streak3Fill'))
+$('streak3Fill').style.width=
+Math.min(100,streak/3*100)+'%';
 
-  if($('streak7Fill')){
-    $('streak7Fill').style.width=
-      Math.min(100,streak/7*100)+'%';
-  }
+if($('streak7Fill'))
+$('streak7Fill').style.width=
+Math.min(100,streak/7*100)+'%';
+
 }
 
 function toast(t){
 
-  $('toast').textContent=t;
+$('toast').textContent=t;
 
-  $('toast').classList.add('show');
+$('toast').classList.add('show');
 
-  setTimeout(
-    ()=>$('toast').classList.remove('show'),
-    900
-  );
+setTimeout(
+()=>$('toast').classList.remove('show'),
+900
+);
+
 }
 
-if(window.Telegram&&Telegram.WebApp){
+if(window.Telegram && Telegram.WebApp){
 
-  Telegram.WebApp.ready();
+Telegram.WebApp.ready();
 
-  Telegram.WebApp.expand();
+Telegram.WebApp.expand();
 
 }
 
@@ -806,310 +832,284 @@ render();
 loadTelegram();
 
 $('earn').addEventListener(
-  'click',
-  ()=>{
+'click',
+()=>{
 
-    if(energy<1){
+if(energy<1){
 
-      toast('Недостатньо енергії');
+toast('Недостатньо енергії');
 
-      return;
-    }
+return;
 
-    balance+=tapPower;
+}
 
-    today+=tapPower;
+balance+=tapPower;
+today+=tapPower;
+taps++;
+energy-=1;
 
-    taps++;
+save();
 
-    energy-=1;
+render();
 
-    save();
-
-    render();
-
-  }
+}
 );
 
 $('upgradeBtn').addEventListener(
-  'click',
-  ()=>{
+'click',
+()=>{
 
-    if(balance<upgradePrice)return;
+if(balance<upgradePrice)
+return;
 
-    balance-=upgradePrice;
+balance-=upgradePrice;
 
-    tapPower+=.05;
+tapPower+=.05;
 
-    upgradePrice=
-      Math.round(upgradePrice*1.65);
+upgradePrice=
+Math.round(upgradePrice*1.65);
 
-    save();
+save();
 
-    toast('Покращення придбано');
+toast('Покращення придбано');
 
-    render();
+render();
 
-  }
+}
 );
 
 setInterval(
-  ()=>{
+()=>{
 
-    if(energy<100){
+if(energy<100){
 
-      energy=
-        Math.min(
-          100,
-          energy+.5
-        );
+energy=
+Math.min(
+100,
+energy+.5
+);
 
-      save();
+save();
 
-      render();
+render();
 
-    }
+}
 
-  },
-  1000
+},
+1000
 );
 
 document
-  .querySelectorAll('.nav-item')
-  .forEach(
-    btn=>
-      btn.addEventListener(
-        'click',
-        ()=>{
+.querySelectorAll('.nav-item')
+.forEach(
+btn=>
+btn.addEventListener(
+'click',
+()=>{
 
-          document
-            .querySelectorAll('.screen')
-            .forEach(
-              s=>s.classList.remove('active')
-            );
+document
+.querySelectorAll('.screen')
+.forEach(
+s=>s.classList.remove('active')
+);
 
-          document
-            .getElementById(
-              'screen-'+btn.dataset.screen
-            )
-            .classList.add('active');
+document
+.getElementById(
+'screen-'+btn.dataset.screen
+)
+.classList.add('active');
 
-          document
-            .querySelectorAll('.nav-item')
-            .forEach(
-              n=>n.classList.remove('active')
-            );
+document
+.querySelectorAll('.nav-item')
+.forEach(
+n=>n.classList.remove('active')
+);
 
-          btn.classList.add('active');
+btn.classList.add('active');
 
-          window.scrollTo(0,0);
+window.scrollTo(0,0);
 
-        }
-      )
-  );
+}
+)
+);
 
 function renderTasks(){
 
-  document
-    .querySelectorAll('[data-task]')
-    .forEach(
-      b=>{
+document
+.querySelectorAll('[data-task]')
+.forEach(
+b=>{
 
-        if(tasks[b.dataset.task]){
+if(tasks[b.dataset.task]){
 
-          b.disabled=true;
+b.disabled=true;
 
-          b.textContent='ВИКОНАНО';
+b.textContent='ВИКОНАНО';
 
-        }else{
+}else{
 
-          b.disabled=false;
+b.disabled=false;
 
-          b.textContent=
-            b.dataset.task==='login'
-              ?'+5 UAH'
-              :b.dataset.task==='taps'
-                ?'+10 UAH'
-                :'+15 UAH';
+b.textContent=
+b.dataset.task==='login'
+?'+5 UAH'
+:
+b.dataset.task==='taps'
+?'+10 UAH'
+:'+15 UAH';
 
-        }
+}
 
-      }
-    );
+}
+);
 
-  $('taskTapsText').textContent=
-    Math.min(100,taps)+' / 100';
+$('taskTapsText').textContent=
+Math.min(100,taps)+' / 100';
 
-  $('taskEarnText').textContent=
-    Math.min(50,today).toFixed(2)+
-    ' / 50 UAH';
+$('taskEarnText').textContent=
+Math.min(50,today).toFixed(2)+' / 50 UAH';
 
-  if($('streakText')){
-
-    $('streakText').textContent=
-      streak+
-      ' '+
-      (streak===1?'день':'днів')+
-      ' поспіль';
-
-  }
+if($('streakText'))
+$('streakText').textContent=
+streak+' '+(streak===1?'день':'днів')+' поспіль';
 
 }
 
 document
-  .querySelectorAll('[data-task]')
-  .forEach(
-    btn=>
-      btn.addEventListener(
-        'click',
-        ()=>{
+.querySelectorAll('[data-task]')
+.forEach(
+btn=>
+btn.addEventListener(
+'click',
+()=>{
 
-          const k=btn.dataset.task;
+const k=btn.dataset.task;
 
-          if(tasks[k])return;
+if(tasks[k])
+return;
 
-          if(k==='login'){
+if(k==='login'){
 
-            if(updateStreak()){
+if(updateStreak()){
 
-              balance+=5;
+balance+=5;
+today+=5;
 
-              today+=5;
+}else{
 
-            }else{
+toast('Щоденний вхід уже отримано');
 
-              toast(
-                'Щоденний вхід уже отримано'
-              );
+return;
 
-              return;
-            }
+}
 
-          }
+}else if(k==='taps'){
 
-          else if(k==='taps'){
+if(taps<100){
 
-            if(taps<100){
+toast(
+'Зробіть ще '+(100-taps)+' тапів'
+);
 
-              toast(
-                'Зробіть ще '+
-                (100-taps)+
-                ' тапів'
-              );
+return;
 
-              return;
-            }
+}
 
-            balance+=10;
+balance+=10;
+today+=10;
 
-            today+=10;
+}else if(k==='earn'){
 
-          }
+if(today<50){
 
-          else if(k==='earn'){
+toast(
+'Потрібно заробити ще '+
+Math.max(0,50-today).toFixed(2)+
+' UAH'
+);
 
-            if(today<50){
+return;
 
-              toast(
-                'Потрібно заробити ще '+
-                Math.max(
-                  0,
-                  50-today
-                ).toFixed(2)+
-                ' UAH'
-              );
+}
 
-              return;
-            }
+balance+=15;
+today+=15;
 
-            balance+=15;
+}
 
-            today+=15;
+tasks[k]=true;
 
-          }
+if(
+streak>=7 &&
+!streak7Claimed
+){
 
-          tasks[k]=true;
+balance+=50;
+today+=50;
 
-          if(
-            streak>=7 &&
-            !streak7Claimed
-          ){
+streak7Claimed=true;
 
-            balance+=50;
+toast(
+'Бонус за 7 днів: +50 UAH'
+);
 
-            today+=50;
+}else if(
+streak>=3 &&
+!streak3Claimed
+){
 
-            streak7Claimed=true;
+balance+=20;
+today+=20;
 
-            toast(
-              'Бонус за 7 днів: +50 UAH'
-            );
+streak3Claimed=true;
 
-          }
+toast(
+'Бонус за 3 дні: +20 UAH'
+);
 
-          else if(
-            streak>=3 &&
-            !streak3Claimed
-          ){
+}
 
-            balance+=20;
+save();
 
-            today+=20;
+render();
 
-            streak3Claimed=true;
+renderTasks();
 
-            toast(
-              'Бонус за 3 дні: +20 UAH'
-            );
+if(
+k!=='login' ||
+(
+streak<3 ||
+streak3Claimed &&
+streak!==3
+)
+)
+toast('Нагороду отримано');
 
-          }
-
-          save();
-
-          render();
-
-          renderTasks();
-
-          if(
-            k!=='login'||
-            (
-              streak<3||
-              streak3Claimed&&
-              streak!==3
-            )
-          ){
-
-            toast(
-              'Нагороду отримано'
-            );
-
-          }
-
-        }
-      )
-  );
+}
+)
+);
 
 $('businessBtn').addEventListener(
-  'click',
-  ()=>toast(
-    'Заявку буде передано в підтримку'
-  )
+'click',
+()=>toast(
+'Заявку буде передано в підтримку'
+)
 );
 
 $('refBtn').addEventListener(
-  'click',
-  ()=>toast(
-    'Реферальне посилання з’явиться після підключення Telegram'
-  )
+'click',
+()=>toast(
+'Реферальне посилання з’явиться після підключення Telegram'
+)
 );
 
 $('withdrawBtn').addEventListener(
-  'click',
-  ()=>toast(
-    balance>=500
-      ?'Заявку на виведення буде створено'
-      :'Мінімум для виводу — 500 UAH'
-  )
+'click',
+()=>toast(
+balance>=500
+?'Заявку на виведення буде створено'
+:'Мінімум для виводу — 500 UAH'
+)
 );
 
 render();
@@ -1117,71 +1117,72 @@ render();
 renderTasks();
 
 setInterval(
-  ()=>{
+()=>{
 
-    const before=taskDay;
+const before=taskDay;
 
-    resetDailyState();
+resetDailyState();
 
-    if(before!==taskDay){
+if(before!==taskDay){
 
-      save();
+save();
 
-      render();
+render();
 
-      renderTasks();
+renderTasks();
 
-      toast(
-        'Новий день — завдання оновлено'
-      );
+toast(
+'Новий день — завдання оновлено'
+);
 
-    }
+}
 
-  },
-  60000
+},
+60000
 );
 
 document
-  .getElementById('openStreak')
-  .addEventListener(
-    'click',
-    ()=>{
-
-      document
-        .querySelectorAll('.screen')
-        .forEach(
-          s=>s.classList.remove('active')
-        );
-
-      document
-        .getElementById('screen-streak')
-        .classList.add('active');
-
-      window.scrollTo(0,0);
-
-    }
-  );
+.getElementById('openStreak')
+.addEventListener(
+'click',
+()=>{
 
 document
-  .getElementById('backTasks')
-  .addEventListener(
-    'click',
-    ()=>{
+.querySelectorAll('.screen')
+.forEach(
+s=>s.classList.remove('active')
+);
 
-      document
-        .querySelectorAll('.screen')
-        .forEach(
-          s=>s.classList.remove('active')
-        );
+document
+.getElementById('screen-streak')
+.classList.add('active');
 
-      document
-        .getElementById('screen-tasks')
-        .classList.add('active');
+window.scrollTo(0,0);
 
-      window.scrollTo(0,0);
+}
+);
 
-    }
-  );
+document
+.getElementById('backTasks')
+.addEventListener(
+'click',
+()=>{
+
+document
+.querySelectorAll('.screen')
+.forEach(
+s=>s.classList.remove('active')
+);
+
+document
+.getElementById('screen-tasks')
+.classList.add('active');
+
+window.scrollTo(0,0);
+
+}
+);
+
 </script>
 
 </body>
