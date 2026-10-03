@@ -4,32 +4,822 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>GRYVNA</title>
+
 <style>
-:root{color-scheme:dark;--bg:#07100c;--panel:#0d1712;--panel2:#111e17;--text:#f5f7f5;--muted:#91a39a;--green:#36e58b;--green2:#21b96b;--line:rgba(255,255,255,.08);--gold:#f4d16a}
-*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}body{overflow-x:hidden}.app{min-height:100vh;background:radial-gradient(circle at 50% 8%,rgba(132,54,229,.18),transparent 34%),radial-gradient(circle at 50% 52%,rgba(57,255,154,.06),transparent 42%),linear-gradient(180deg,#0b0712 0%,#05040a 100%);padding:20px 16px 28px;max-width:520px;margin:auto}.top{display:flex;align-items:center;justify-content:space-between}.brand{font-size:20px;font-weight:900;letter-spacing:.18em}.status{font-size:12px;color:var(--green);border:1px solid rgba(57,255,154,.2);background:rgba(57,255,154,.05);padding:7px 10px;border-radius:999px}.balance{text-align:center;margin:32px 0 18px}.label{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.12em}.amount{font-size:46px;line-height:1.05;font-weight:900;letter-spacing:-.04em;margin-top:7px}.currency{font-size:16px;color:var(--green);margin-left:5px;letter-spacing:0}.coin-wrap{display:flex;justify-content:center;margin:18px 0}.coin{width:190px;height:190px;border-radius:50%;border:1px solid rgba(255,212,90,.85);background:radial-gradient(circle at 32% 24%,#fff2a1 0,#ffd45a 24%,#f2a900 58%,#a96300 82%,#6f3c00 100%);box-shadow:0 0 0 9px rgba(255,212,90,.06),0 0 45px rgba(255,190,35,.22),0 20px 65px rgba(0,0,0,.45),inset 0 3px 14px rgba(255,255,255,.5),inset 0 -10px 20px rgba(103,50,0,.3);display:grid;place-items:center;cursor:pointer;user-select:none;touch-action:manipulation;transition:transform .08s ease}.coin:active{transform:scale(.94)}.coin span{font-size:76px;font-weight:900;color:#5b3500;text-shadow:0 2px 0 rgba(255,246,180,.55)}.hint{text-align:center;color:var(--muted);font-size:13px;margin-top:-2px}.energy{margin-top:25px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px}.row{display:flex;justify-content:space-between;align-items:center}.row b{font-size:14px}.muted{color:var(--muted);font-size:13px}.bar{height:9px;background:#21182a;border-radius:99px;overflow:hidden;margin-top:11px}.fill{height:100%;width:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:inherit;transition:width .25s}.upgrade{margin-top:14px;background:linear-gradient(180deg,#181024,#0d0913);border:1px solid rgba(57,255,154,.22);border-radius:20px;padding:17px}.upgrade-title{font-size:12px;color:var(--green);letter-spacing:.12em;font-weight:800}.upgrade-name{font-size:21px;font-weight:850;margin:6px 0 2px}.upgrade-desc{font-size:13px;color:var(--muted);line-height:1.4}.upgrade-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}.price{font-weight:800}.btn{border:0;border-radius:13px;padding:12px 16px;font-weight:850;color:#04130b;background:var(--green);cursor:pointer}.btn:disabled{opacity:.35;cursor:not-allowed}.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}.stat .v{font-size:18px;font-weight:850;margin-top:5px}.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#eafff2;color:#062416;padding:10px 15px;border-radius:999px;font-weight:800;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.3)}.toast.show{opacity:1;transform:translate(-50%,0)}@media(max-width:380px){.coin{width:165px;height:165px}.coin span{font-size:66px}.amount{font-size:40px}}
+:root{
+  color-scheme:dark;
+  --bg:#07100c;
+  --panel:#0d1712;
+  --panel2:#111e17;
+  --text:#f5f7f5;
+  --muted:#91a39a;
+  --green:#36e58b;
+  --green2:#21b96b;
+  --line:rgba(255,255,255,.08);
+  --gold:#f4d16a
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  min-height:100%;
+  background:var(--bg);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  color:var(--text)
+}
+
+body{overflow-x:hidden}
+
+.app{
+  min-height:100vh;
+  background:
+    radial-gradient(circle at 50% 8%,rgba(132,54,229,.18),transparent 34%),
+    radial-gradient(circle at 50% 52%,rgba(57,255,154,.06),transparent 42%),
+    linear-gradient(180deg,#0b0712 0%,#05040a 100%);
+  padding:20px 16px 100px;
+  max-width:520px;
+  margin:auto
+}
+
+.top{
+  display:flex;
+  align-items:center;
+  justify-content:space-between
+}
+
+.brand{
+  font-size:20px;
+  font-weight:900;
+  letter-spacing:.18em
+}
+
+.status{
+  font-size:12px;
+  color:var(--green);
+  border:1px solid rgba(57,255,154,.2);
+  background:rgba(57,255,154,.05);
+  padding:7px 10px;
+  border-radius:999px
+}
+
+.screen{
+  display:none;
+  min-height:calc(100vh - 145px)
+}
+
+.screen.active{
+  display:block
+}
+
+.page-title{
+  font-size:32px;
+  font-weight:900;
+  margin:30px 0 7px
+}
+
+.page-subtitle{
+  color:var(--muted);
+  font-size:14px;
+  line-height:1.45;
+  margin-bottom:18px
+}
+
+.card,
+.business,
+.ref-card,
+.profile-card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:16px;
+  margin:10px 0
+}
+
+.card{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px
+}
+
+.card p{
+  margin:5px 0 0;
+  color:var(--muted);
+  font-size:13px
+}
+
+.small{
+  padding:10px 12px;
+  white-space:nowrap
+}
+
+.business-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px
+}
+
+.business{
+  margin:0;
+  min-height:120px;
+  display:flex;
+  flex-direction:column;
+  justify-content:space-between
+}
+
+.business-icon{
+  color:var(--green);
+  font-size:12px;
+  font-weight:900;
+  letter-spacing:.1em
+}
+
+.business span{
+  color:var(--muted);
+  font-size:12px
+}
+
+.wide{
+  width:100%;
+  margin-top:14px
+}
+
+.ref-label{
+  color:var(--muted);
+  font-size:12px;
+  text-transform:uppercase;
+  letter-spacing:.1em
+}
+
+.ref-link{
+  font-weight:850;
+  margin:8px 0
+}
+
+.profile-card{
+  display:flex;
+  align-items:center;
+  gap:14px
+}
+
+.avatar{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:rgba(54,229,139,.12);
+  border:1px solid rgba(54,229,139,.25);
+  color:var(--green);
+  font-weight:900;
+  font-size:22px
+}
+
+.bottom-nav{
+  position:fixed;
+  left:50%;
+  bottom:10px;
+  transform:translateX(-50%);
+  width:min(488px,calc(100% - 20px));
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:4px;
+  padding:7px;
+  background:rgba(13,23,18,.94);
+  border:1px solid var(--line);
+  border-radius:20px;
+  backdrop-filter:blur(18px);
+  z-index:20
+}
+
+.nav-item{
+  min-width:0;
+  min-height:58px;
+  border:0;
+  border-radius:14px;
+  background:transparent;
+  color:var(--muted);
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:3px;
+  cursor:pointer
+}
+
+.nav-item span{
+  font-size:20px;
+  line-height:1
+}
+
+.nav-item small{
+  font-size:10px;
+  font-weight:700
+}
+
+.nav-item.active{
+  background:rgba(54,229,139,.12);
+  color:var(--green)
+}
+
+.balance{
+  text-align:center;
+  margin:32px 0 18px
+}
+
+.label{
+  color:var(--muted);
+  font-size:13px;
+  text-transform:uppercase;
+  letter-spacing:.12em
+}
+
+.amount{
+  font-size:46px;
+  line-height:1.05;
+  font-weight:900;
+  letter-spacing:-.04em;
+  margin-top:7px
+}
+
+.currency{
+  font-size:16px;
+  color:var(--green);
+  margin-left:5px;
+  letter-spacing:0
+}
+
+.coin-wrap{
+  display:flex;
+  justify-content:center;
+  margin:18px 0
+}
+
+.coin{
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  border:1px solid rgba(255,212,90,.85);
+  background:
+    radial-gradient(circle at 32% 24%,#fff2a1 0,#ffd45a 24%,#f2a900 58%,#a96300 82%,#6f3c00 100%);
+  box-shadow:
+    0 0 0 9px rgba(255,212,90,.06),
+    0 0 45px rgba(255,190,35,.22),
+    0 20px 65px rgba(0,0,0,.45),
+    inset 0 3px 14px rgba(255,255,255,.5),
+    inset 0 -10px 20px rgba(103,50,0,.3);
+  display:grid;
+  place-items:center;
+  cursor:pointer;
+  user-select:none;
+  touch-action:manipulation;
+  transition:transform .08s ease
+}
+
+.coin:active{
+  transform:scale(.94)
+}
+
+.coin span{
+  font-size:76px;
+  font-weight:900;
+  color:#5b3500;
+  text-shadow:0 2px 0 rgba(255,246,180,.55)
+}
+
+.hint{
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
+  margin-top:-2px
+}
+
+.energy{
+  margin-top:25px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:15px
+}
+
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center
+}
+
+.row b{
+  font-size:14px
+}
+
+.muted{
+  color:var(--muted);
+  font-size:13px
+}
+
+.bar{
+  height:9px;
+  background:#21182a;
+  border-radius:99px;
+  overflow:hidden;
+  margin-top:11px
+}
+
+.fill{
+  height:100%;
+  width:100%;
+  background:linear-gradient(90deg,var(--green2),var(--green));
+  border-radius:inherit;
+  transition:width .25s
+}
+
+.upgrade{
+  margin-top:14px;
+  background:linear-gradient(180deg,#181024,#0d0913);
+  border:1px solid rgba(57,255,154,.22);
+  border-radius:20px;
+  padding:17px
+}
+
+.upgrade-title{
+  font-size:12px;
+  color:var(--green);
+  letter-spacing:.12em;
+  font-weight:800
+}
+
+.upgrade-name{
+  font-size:21px;
+  font-weight:850;
+  margin:6px 0 2px
+}
+
+.upgrade-desc{
+  font-size:13px;
+  color:var(--muted);
+  line-height:1.4
+}
+
+.upgrade-bottom{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:14px
+}
+
+.price{
+  font-weight:800
+}
+
+.btn{
+  border:0;
+  border-radius:13px;
+  padding:12px 16px;
+  font-weight:850;
+  color:#04130b;
+  background:var(--green);
+  cursor:pointer
+}
+
+.btn:disabled{
+  opacity:.35;
+  cursor:not-allowed
+}
+
+.stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:10px
+}
+
+.stat{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:16px;
+  padding:14px
+}
+
+.stat .v{
+  font-size:18px;
+  font-weight:850;
+  margin-top:5px
+}
+
+.toast{
+  position:fixed;
+  left:50%;
+  bottom:90px;
+  transform:translate(-50%,20px);
+  background:#eafff2;
+  color:#062416;
+  padding:10px 15px;
+  border-radius:999px;
+  font-weight:800;
+  opacity:0;
+  pointer-events:none;
+  transition:.2s;
+  white-space:nowrap;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+  z-index:30
+}
+
+.toast.show{
+  opacity:1;
+  transform:translate(-50%,0)
+}
+
+@media(max-width:380px){
+  .coin{
+    width:165px;
+    height:165px
+  }
+
+  .coin span{
+    font-size:66px
+  }
+
+  .amount{
+    font-size:40px
+  }
+
+  .nav-item small{
+    font-size:9px
+  }
+}
 </style>
 </head>
+
 <body>
+
 <main class="app">
-  <header class="top"><div class="brand">GRYVNA</div><div class="status">MVP</div></header>
-  <section class="balance"><div class="label">Ваш баланс</div><div class="amount"><span id="balance">50.00</span><span class="currency">UAH</span></div></section>
-  <section class="coin-wrap"><button class="coin" id="earn" aria-label="Заробити"><span>₴</span></button></section>
-  <div class="hint">Натискайте, щоб заробляти</div>
-  <section class="energy"><div class="row"><b>Енергія</b><span class="muted"><span id="energy">100</span> / 100</span></div><div class="bar"><div class="fill" id="energyFill"></div></div></section>
-  <section class="upgrade">
-    <div class="upgrade-title">ПЕРША ПРОКАЧКА</div>
-    <div class="upgrade-name">Сила тапу</div>
-    <div class="upgrade-desc">Збільшує винагороду за кожне натискання.</div>
-    <div class="upgrade-bottom"><div class="price"><span id="tapPower">0.10</span> UAH / тап<br><span class="muted">Ціна: <span id="upgradePrice">10</span> UAH</span></div><button class="btn" id="upgradeBtn">ПОКРАЩИТИ</button></div>
+
+<header class="top">
+  <div class="brand">GRYVNA</div>
+  <div class="status">MVP</div>
+</header>
+
+<!-- ГОЛОВНА -->
+<section class="screen active" id="screen-home">
+
+  <section class="balance">
+    <div class="label">Ваш баланс</div>
+    <div class="amount">
+      <span id="balance">50.00</span>
+      <span class="currency">UAH</span>
+    </div>
   </section>
-  <section class="stats"><div class="stat"><div class="muted">Сьогодні</div><div class="v"><span id="today">0.00</span> UAH</div></div><div class="stat"><div class="muted">Тапів</div><div class="v" id="taps">0</div></div></section>
+
+  <section class="coin-wrap">
+    <button class="coin" id="earn" aria-label="Заробити">
+      <span>₴</span>
+    </button>
+  </section>
+
+  <div class="hint">
+    Натискайте, щоб заробляти
+  </div>
+
+  <section class="energy">
+    <div class="row">
+      <b>Енергія</b>
+      <span class="muted">
+        <span id="energy">100</span> / 100
+      </span>
+    </div>
+
+    <div class="bar">
+      <div class="fill" id="energyFill"></div>
+    </div>
+  </section>
+
+  <section class="upgrade">
+
+    <div class="upgrade-title">
+      ПОКРАЩЕННЯ
+    </div>
+
+    <div class="upgrade-name">
+      Сила тапу
+    </div>
+
+    <div class="upgrade-desc">
+      Збільшує винагороду за кожне натискання.
+    </div>
+
+    <div class="upgrade-bottom">
+
+      <div class="price">
+        <span id="tapPower">0.10</span> UAH / тап
+        <br>
+
+        <span class="muted">
+          Ціна:
+          <span id="upgradePrice">10</span> UAH
+        </span>
+      </div>
+
+      <button class="btn" id="upgradeBtn">
+        ПОКРАЩИТИ
+      </button>
+
+    </div>
+
+  </section>
+
+  <section class="stats">
+
+    <div class="stat">
+      <div class="muted">Сьогодні</div>
+      <div class="v">
+        <span id="today">0.00</span> UAH
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="muted">Тапів</div>
+      <div class="v" id="taps">0</div>
+    </div>
+
+  </section>
+
+</section>
+
+
+<!-- ЗАВДАННЯ -->
+<section class="screen" id="screen-tasks">
+
+  <div class="page-title">
+    Завдання
+  </div>
+
+  <div class="page-subtitle">
+    Виконуйте активності та отримуйте додаткову винагороду.
+  </div>
+
+  <div class="card">
+
+    <div>
+      <b>Щоденний вхід</b>
+      <p>Відкрийте GRYVNA сьогодні.</p>
+    </div>
+
+    <button class="btn small" data-task="login">
+      +5 UAH
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <div>
+      <b>100 тапів</b>
+      <p>Зробіть 100 натискань.</p>
+    </div>
+
+    <button class="btn small" data-task="taps">
+      +10 UAH
+    </button>
+
+  </div>
+
+  <div class="card">
+
+    <div>
+      <b>Активний день</b>
+      <p>Заробіть 50 UAH за день.</p>
+    </div>
+
+    <button class="btn small" data-task="earn">
+      +15 UAH
+    </button>
+
+  </div>
+
+</section>
+
+
+<!-- БІЗНЕС -->
+<section class="screen" id="screen-business">
+
+  <div class="page-title">
+    Бізнес
+  </div>
+
+  <div class="page-subtitle">
+    Розвивайте власний бізнес та отримуйте дохід.
+  </div>
+
+  <div class="business-grid">
+
+    <div class="business">
+      <div class="business-icon">01</div>
+      <b>Кав’ярня</b>
+      <span>Доступ за погодженням</span>
+    </div>
+
+    <div class="business">
+      <div class="business-icon">02</div>
+      <b>Автомийка</b>
+      <span>Доступ за погодженням</span>
+    </div>
+
+    <div class="business">
+      <div class="business-icon">03</div>
+      <b>Магазин</b>
+      <span>Доступ за погодженням</span>
+    </div>
+
+    <div class="business">
+      <div class="business-icon">04</div>
+      <b>СТО</b>
+      <span>Доступ за погодженням</span>
+    </div>
+
+  </div>
+
+  <button class="btn wide" id="businessBtn">
+    ХОЧУ ВІДКРИТИ БІЗНЕС
+  </button>
+
+</section>
+
+
+<!-- ДРУЗІ -->
+<section class="screen" id="screen-friends">
+
+  <div class="page-title">
+    Друзі
+  </div>
+
+  <div class="page-subtitle">
+    Запрошуйте друзів та отримуйте реферальні бонуси.
+  </div>
+
+  <div class="ref-card">
+
+    <div class="ref-label">
+      Ваше запрошення
+    </div>
+
+    <div class="ref-link">
+      GRYVNA • REFERRAL
+    </div>
+
+    <button class="btn wide" id="refBtn">
+      ЗАПРОСИТИ ДРУЗІВ
+    </button>
+
+  </div>
+
+  <div class="stats">
+
+    <div class="stat">
+      <div class="muted">
+        Запрошено
+      </div>
+
+      <div class="v" id="friendsCount">
+        0
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="muted">
+        Бонуси
+      </div>
+
+      <div class="v">
+        0.00 UAH
+      </div>
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- ПРОФІЛЬ -->
+<section class="screen" id="screen-profile">
+
+  <div class="page-title">
+    Профіль
+  </div>
+
+  <div class="page-subtitle">
+    Ваша статистика GRYVNA.
+  </div>
+
+  <div class="profile-card">
+
+    <div class="avatar">
+      ₴
+    </div>
+
+    <div>
+      <b>Мій профіль</b>
+      <div class="muted">
+        Учасник GRYVNA
+      </div>
+    </div>
+
+  </div>
+
+  <div class="stats profile-stats">
+
+    <div class="stat">
+      <div class="muted">
+        Баланс
+      </div>
+
+      <div class="v">
+        <span id="profileBalance">50.00</span> UAH
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="muted">
+        Зароблено сьогодні
+      </div>
+
+      <div class="v">
+        <span id="profileToday">0.00</span> UAH
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="muted">
+        Усього тапів
+      </div>
+
+      <div class="v" id="profileTaps">
+        0
+      </div>
+    </div>
+
+    <div class="stat">
+      <div class="muted">
+        До виводу
+      </div>
+
+      <div class="v">
+        500 UAH
+      </div>
+    </div>
+
+  </div>
+
+  <button class="btn wide" id="withdrawBtn">
+    ВИВЕСТИ КОШТИ
+  </button>
+
+</section>
+
+
+<!-- НИЖНЄ МЕНЮ -->
+<nav class="bottom-nav" aria-label="Основна навігація">
+
+  <button class="nav-item active" data-screen="home">
+    <span>⌂</span>
+    <small>Головна</small>
+  </button>
+
+  <button class="nav-item" data-screen="tasks">
+    <span>✓</span>
+    <small>Завдання</small>
+  </button>
+
+  <button class="nav-item" data-screen="business">
+    <span>◆</span>
+    <small>Бізнес</small>
+  </button>
+
+  <button class="nav-item" data-screen="friends">
+    <span>+</span>
+    <small>Друзі</small>
+  </button>
+
+  <button class="nav-item" data-screen="profile">
+    <span>○</span>
+    <small>Профіль</small>
+  </button>
+
+</nav>
+
 </main>
+
 <div class="toast" id="toast"></div>
 
-<script>
-const SAVE_KEY='grvyna_mvp_state_v1';
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
-const DEFAULT_STATE={
+<script>
+
+const SAVE_KEY = 'grvyna_mvp_state_v1';
+const TG_KEY = 'grvyna_state_v1';
+
+const DEFAULT_STATE = {
   balance:50,
   energy:100,
   taps:0,
@@ -38,125 +828,390 @@ const DEFAULT_STATE={
   upgradePrice:10
 };
 
-let balance=DEFAULT_STATE.balance;
-let energy=DEFAULT_STATE.energy;
-let taps=DEFAULT_STATE.taps;
-let today=DEFAULT_STATE.today;
-let tapPower=DEFAULT_STATE.tapPower;
-let upgradePrice=DEFAULT_STATE.upgradePrice;
+let balance = DEFAULT_STATE.balance;
+let energy = DEFAULT_STATE.energy;
+let taps = DEFAULT_STATE.taps;
+let today = DEFAULT_STATE.today;
+let tapPower = DEFAULT_STATE.tapPower;
+let upgradePrice = DEFAULT_STATE.upgradePrice;
 
-const $=id=>document.getElementById(id);
+const $ = id => document.getElementById(id);
 
-function save(){
-  localStorage.setItem(
-    SAVE_KEY,
-    JSON.stringify({
-      balance,
-      energy,
-      taps,
-      today,
-      tapPower,
-      upgradePrice
-    })
-  );
+
+function state(){
+
+  return {
+    balance,
+    energy,
+    taps,
+    today,
+    tapPower,
+    upgradePrice
+  };
+
 }
 
-function load(){
-  try{
-    const saved=JSON.parse(localStorage.getItem(SAVE_KEY)||'null');
 
-    if(!saved||typeof saved!=='object'){
-      return;
-    }
+function apply(saved){
 
-    balance=Number.isFinite(saved.balance)
+  if(!saved || typeof saved !== 'object') return;
+
+  balance =
+    Number.isFinite(saved.balance)
       ? saved.balance
       : balance;
 
-    energy=Number.isFinite(saved.energy)
+  energy =
+    Number.isFinite(saved.energy)
       ? Math.min(100,Math.max(0,saved.energy))
       : energy;
 
-    taps=Number.isFinite(saved.taps)
+  taps =
+    Number.isFinite(saved.taps)
       ? Math.max(0,Math.floor(saved.taps))
       : taps;
 
-    today=Number.isFinite(saved.today)
+  today =
+    Number.isFinite(saved.today)
       ? Math.max(0,saved.today)
       : today;
 
-    tapPower=Number.isFinite(saved.tapPower)
+  tapPower =
+    Number.isFinite(saved.tapPower)
       ? Math.max(.01,saved.tapPower)
       : tapPower;
 
-    upgradePrice=Number.isFinite(saved.upgradePrice)
+  upgradePrice =
+    Number.isFinite(saved.upgradePrice)
       ? Math.max(0,Math.round(saved.upgradePrice))
       : upgradePrice;
 
-  }catch(e){}
 }
+
+
+function save(){
+
+  const data = state();
+
+  try{
+    localStorage.setItem(
+      SAVE_KEY,
+      JSON.stringify(data)
+    );
+  }catch(e){}
+
+  try{
+
+    if(
+      window.Telegram &&
+      Telegram.WebApp &&
+      Telegram.WebApp.CloudStorage
+    ){
+
+      Telegram.WebApp.CloudStorage.setItem(
+        TG_KEY,
+        JSON.stringify(data),
+        ()=>{}
+      );
+
+    }
+
+  }catch(e){}
+
+}
+
+
+function load(){
+
+  try{
+
+    const saved =
+      JSON.parse(
+        localStorage.getItem(SAVE_KEY) || 'null'
+      );
+
+    apply(saved);
+
+  }catch(e){}
+
+}
+
+
+function loadTelegram(){
+
+  try{
+
+    if(
+      !(window.Telegram &&
+      Telegram.WebApp &&
+      Telegram.WebApp.CloudStorage)
+    ){
+      return;
+    }
+
+    Telegram.WebApp.CloudStorage.getItem(
+      TG_KEY,
+      (err,value)=>{
+
+        if(err || !value) return;
+
+        try{
+
+          apply(JSON.parse(value));
+          save();
+          render();
+
+        }catch(e){}
+
+      }
+    );
+
+  }catch(e){}
+
+}
+
 
 function render(){
-  $('balance').textContent=balance.toFixed(2);
-  $('energy').textContent=Math.floor(energy);
-  $('energyFill').style.width=energy+'%';
-  $('tapPower').textContent=tapPower.toFixed(2);
-  $('upgradePrice').textContent=upgradePrice.toFixed(0);
-  $('today').textContent=today.toFixed(2);
-  $('taps').textContent=taps;
-  $('upgradeBtn').disabled=balance<upgradePrice;
+
+  $('balance').textContent =
+    balance.toFixed(2);
+
+  $('energy').textContent =
+    Math.floor(energy);
+
+  $('energyFill').style.width =
+    energy + '%';
+
+  $('tapPower').textContent =
+    tapPower.toFixed(2);
+
+  $('upgradePrice').textContent =
+    upgradePrice.toFixed(0);
+
+  $('today').textContent =
+    today.toFixed(2);
+
+  $('taps').textContent =
+    taps;
+
+  $('upgradeBtn').disabled =
+    balance < upgradePrice;
+
+  $('profileBalance').textContent =
+    balance.toFixed(2);
+
+  $('profileToday').textContent =
+    today.toFixed(2);
+
+  $('profileTaps').textContent =
+    taps;
+
 }
+
 
 function toast(t){
-  $('toast').textContent=t;
+
+  $('toast').textContent = t;
+
   $('toast').classList.add('show');
 
-  setTimeout(()=>{
-    $('toast').classList.remove('show');
-  },900);
+  setTimeout(
+    () => $('toast').classList.remove('show'),
+    900
+  );
+
 }
+
+
+if(
+  window.Telegram &&
+  Telegram.WebApp
+){
+
+  Telegram.WebApp.ready();
+  Telegram.WebApp.expand();
+
+}
+
 
 load();
 render();
+loadTelegram();
 
-$('earn').addEventListener('click',()=>{
-  if(energy<1){
-    toast('Недостатньо енергії');
-    return;
-  }
 
-  balance+=tapPower;
-  today+=tapPower;
-  taps++;
-  energy-=1;
+/* ТАП */
 
-  save();
-  render();
-});
+$('earn').addEventListener(
+  'click',
+  ()=>{
 
-$('upgradeBtn').addEventListener('click',()=>{
-  if(balance<upgradePrice){
-    return;
-  }
+    if(energy < 1){
 
-  balance-=upgradePrice;
-  tapPower+=.05;
-  upgradePrice=Math.round(upgradePrice*1.65);
+      toast('Недостатньо енергії');
 
-  save();
-  toast('Покращення придбано');
-  render();
-});
+      return;
 
-setInterval(()=>{
-  if(energy<100){
-    energy=Math.min(100,energy+.5);
+    }
+
+    balance += tapPower;
+    today += tapPower;
+    taps++;
+    energy -= 1;
+
     save();
     render();
+
   }
-},1000);
+);
+
+
+/* ПОКРАЩЕННЯ */
+
+$('upgradeBtn').addEventListener(
+  'click',
+  ()=>{
+
+    if(balance < upgradePrice) return;
+
+    balance -= upgradePrice;
+
+    tapPower += .05;
+
+    upgradePrice =
+      Math.round(upgradePrice * 1.65);
+
+    save();
+
+    toast('Покращення придбано');
+
+    render();
+
+  }
+);
+
+
+/* ВІДНОВЛЕННЯ ЕНЕРГІЇ */
+
+setInterval(
+  ()=>{
+
+    if(energy < 100){
+
+      energy =
+        Math.min(
+          100,
+          energy + .5
+        );
+
+      save();
+      render();
+
+    }
+
+  },
+  1000
+);
+
+
+/* НАВІГАЦІЯ */
+
+document
+  .querySelectorAll('.nav-item')
+  .forEach(btn => {
+
+    btn.addEventListener(
+      'click',
+      ()=>{
+
+        document
+          .querySelectorAll('.screen')
+          .forEach(
+            s => s.classList.remove('active')
+          );
+
+        document
+          .getElementById(
+            'screen-' + btn.dataset.screen
+          )
+          .classList.add('active');
+
+        document
+          .querySelectorAll('.nav-item')
+          .forEach(
+            n => n.classList.remove('active')
+          );
+
+        btn.classList.add('active');
+
+        window.scrollTo(0,0);
+
+      }
+    );
+
+  });
+
+
+/* ЗАВДАНИЯ */
+
+document
+  .querySelectorAll('[data-task]')
+  .forEach(btn => {
+
+    btn.addEventListener(
+      'click',
+      ()=>{
+        toast(
+          'Завдання буде активовано на наступному етапі'
+        );
+      }
+    );
+
+  });
+
+
+/* БІЗНЕС */
+
+$('businessBtn').addEventListener(
+  'click',
+  ()=>{
+    toast(
+      'Заявку буде передано в підтримку'
+    );
+  }
+);
+
+
+/* ДРУЗІ */
+
+$('refBtn').addEventListener(
+  'click',
+  ()=>{
+    toast(
+      'Реферальне посилання з’явиться після підключення Telegram'
+    );
+  }
+);
+
+
+/* ВИВІД */
+
+$('withdrawBtn').addEventListener(
+  'click',
+  ()=>{
+
+    toast(
+      balance >= 500
+        ? 'Заявку на виведення буде створено'
+        : 'Мінімум для виводу — 500 UAH'
+    );
+
+  }
+);
+
 
 render();
+
 </script>
+
 </body>
 </html>
