@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>GRYVNA</title>
+<style>
+:root{color-scheme:dark;--bg:#07100c;--panel:#0d1712;--panel2:#111e17;--text:#f5f7f5;--muted:#91a39a;--green:#36e58b;--green2:#21b96b;--line:rgba(255,255,255,.08);--gold:#f4d16a}
+*{box-sizing:border-box}
+html,body{margin:0;min-height:100%;background:var(--bg);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--text)}
+body{overflow-x:hidden}
+.app{min-height:100vh;background:radial-gradient(circle at 50% 8%,rgba(132,54,229,.18),transparent 34%),radial-gradient(circle at 50% 52%,rgba(57,255,154,.06),transparent 42%),linear-gradient(180deg,#0b0712 0%,#05040a 100%);padding:20px 16px 28px;max-width:520px;margin:auto}
+.top{display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:20px;font-weight:900;letter-spacing:.18em}
+.status{font-size:12px;color:var(--green);border:1px solid rgba(57,255,154,.2);background:rgba(57,255,154,.05);padding:7px 10px;border-radius:999px}
+.balance{text-align:center;margin:32px 0 18px}
+.label{color:var(--muted);font-size:13px;text-transform:uppercase;letter-spacing:.12em}
+.amount{font-size:46px;line-height:1.05;font-weight:900;letter-spacing:-.04em;margin-top:7px}
+.currency{font-size:16px;color:var(--green);margin-left:5px;letter-spacing:0}
+.coin-wrap{display:flex;justify-content:center;margin:18px 0}
+.coin{width:190px;height:190px;border-radius:50%;border:1px solid rgba(255,212,90,.85);background:radial-gradient(circle at 32% 24%,#fff2a1 0,#ffd45a 24%,#f2a900 58%,#a96300 82%,#6f3c00 100%);box-shadow:0 0 0 9px rgba(255,212,90,.06),0 0 45px rgba(255,190,35,.22),0 20px 65px rgba(0,0,0,.45),inset 0 3px 14px rgba(255,255,255,.5),inset 0 -10px 20px rgba(103,50,0,.3);display:grid;place-items:center;cursor:pointer;user-select:none;touch-action:manipulation;transition:transform .08s ease}
+.coin:active{transform:scale(.94)}
+.coin span{font-size:76px;font-weight:900;color:#5b3500;text-shadow:0 2px 0 rgba(255,246,180,.55)}
+.hint{text-align:center;color:var(--muted);font-size:13px;margin-top:-2px}
+.energy{margin-top:25px;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:15px}
+.row{display:flex;justify-content:space-between;align-items:center}
+.row b{font-size:14px}
+.muted{color:var(--muted);font-size:13px}
+.bar{height:9px;background:#21182a;border-radius:99px;overflow:hidden;margin-top:11px}
+.fill{height:100%;width:100%;background:linear-gradient(90deg,var(--green2),var(--green));border-radius:inherit;transition:width .25s}
+.upgrade{margin-top:14px;background:linear-gradient(180deg,#181024,#0d0913);border:1px solid rgba(57,255,154,.22);border-radius:20px;padding:17px}
+.upgrade-title{font-size:12px;color:var(--green);letter-spacing:.12em;font-weight:800}
+.upgrade-name{font-size:21px;font-weight:850;margin:6px 0 2px}
+.upgrade-desc{font-size:13px;color:var(--muted);line-height:1.4}
+.upgrade-bottom{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:14px}
+.price{font-weight:800}
+.btn{border:0;border-radius:13px;padding:12px 16px;font-weight:850;color:#04130b;background:var(--green);cursor:pointer}
+.btn:disabled{opacity:.35;cursor:not-allowed}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:10px}
+.stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:14px}
+.stat .v{font-size:18px;font-weight:850;margin-top:5px}
+.toast{position:fixed;left:50%;bottom:28px;transform:translate(-50%,20px);background:#eafff2;color:#062416;padding:10px 15px;border-radius:999px;font-weight:800;opacity:0;pointer-events:none;transition:.2s;white-space:nowrap;box-shadow:0 10px 30px rgba(0,0,0,.3)}
+.toast.show{opacity:1;transform:translate(-50%,0)}
+@media(max-width:380px){
+.coin{width:165px;height:165px}
+.coin span{font-size:66px}
+.amount{font-size:40px}
+}
+</style>
+</head>
+
+<body>
+
+<main class="app">
+
+<header class="top">
+<div class="brand">GRYVNA</div>
+<div class="status">MVP</div>
+</header>
+
+<section class="balance">
+<div class="label">Ваш баланс</div>
+<div class="amount">
+<span id="balance">50.00</span>
+<span class="currency">UAH</span>
+</div>
+</section>
+
+<section class="coin-wrap">
+<button class="coin" id="earn" aria-label="Заробити">
+<span>₴</span>
+</button>
+</section>
+
+<div class="hint">Натискайте, щоб заробляти</div>
+
+<section class="energy">
+<div class="row">
+<b>Енергія</b>
+<span class="muted">
+<span id="energy">100</span> / 100
+</span>
+</div>
+
+<div class="bar">
+<div class="fill" id="energyFill"></div>
+</div>
+</section>
+
+<section class="upgrade">
+
+<div class="upgrade-title">ПЕРША ПРОКАЧКА</div>
+
+<div class="upgrade-name">
+Сила тапу
+</div>
+
+<div class="upgrade-desc">
+Збільшує винагороду за кожне натискання.
+</div>
+
+<div class="upgrade-bottom">
+
+<div class="price">
+<span id="tapPower">0.10</span> UAH / тап
+<br>
+<span class="muted">
+Ціна:
+<span id="upgradePrice">10</span> UAH
+</span>
+</div>
+
+<button class="btn" id="upgradeBtn">
+ПОКРАЩИТИ
+</button>
+
+</div>
+
+</section>
+
+<section class="stats">
+
+<div class="stat">
+<div class="muted">Сьогодні</div>
+<div class="v">
+<span id="today">0.00</span> UAH
+</div>
+</div>
+
+<div class="stat">
+<div class="muted">Тапів</div>
+<div class="v" id="taps">0</div>
+</div>
+
+</section>
+
+</main>
+
+<div class="toast" id="toast"></div>
+
+<script>
+
+let balance = 50;
+let energy = 100;
+let taps = 0;
+let today = 0;
+let tapPower = 0.10;
+let upgradePrice = 10;
+
+const $ = id => document.getElementById(id);
+
+function render(){
+
+$('balance').textContent = balance.toFixed(2);
+
+$('energy').textContent = Math.floor(energy);
+
+$('energyFill').style.width = energy + '%';
+
+$('tapPower').textContent = tapPower.toFixed(2);
+
+$('upgradePrice').textContent = upgradePrice.toFixed(0);
+
+$('today').textContent = today.toFixed(2);
+
+$('taps').textContent = taps;
+
+$('upgradeBtn').disabled = balance < upgradePrice;
+
+}
+
+function toast(t){
+
+$('toast').textContent = t;
+
+$('toast').classList.add('show');
+
+setTimeout(() => {
+
+$('toast').classList.remove('show');
+
+},900);
+
+}
+
+$('earn').addEventListener('click',()=>{
+
+if(energy < 1){
+
+toast('Недостатньо енергії');
+
+return;
+
+}
+
+balance += tapPower;
+
+today += tapPower;
+
+taps++;
+
+energy -= 1;
+
+render();
+
+});
+
+$('upgradeBtn').addEventListener('click',()=>{
+
+if(balance < upgradePrice) return;
+
+balance -= upgradePrice;
+
+tapPower += 0.05;
+
+upgradePrice = Math.round(upgradePrice * 1.65);
+
+toast('Покращення придбано');
+
+render();
+
+});
+
+setInterval(()=>{
+
+if(energy < 100){
+
+energy = Math.min(100,energy + 0.5);
+
+render();
+
+}
+
+},1000);
+
+render();
+
+</script>
+
+</body>
+</html>
