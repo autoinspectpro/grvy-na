@@ -3,881 +3,1337 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#090b0d">
 <title>LUCKY-CLOVER</title>
 
-<style>
-:root{
-  color-scheme:dark;
-  --bg:#07100c;
-  --panel:#0d1712;
-  --panel2:#111e17;
-  --text:#f5f7f5;
-  --muted:#91a39a;
-  --green:#36e58b;
-  --green2:#21b96b;
-  --line:rgba(255,255,255,.08);
-  --gold:#f4d16a;
-}
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
+<style>
 *{
   box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
 }
 
-html,
-body{
+:root{
+  --bg:#080a0c;
+  --bg2:#0e1215;
+  --card:#11171a;
+  --card2:#151c20;
+  --line:rgba(255,255,255,.08);
+  --green:#46be82;
+  --green2:#65e3a0;
+  --purple:#8d65ff;
+  --gold:#ffd35a;
+  --red:#ff5d6c;
+  --text:#f5f7f8;
+  --muted:#8b969d;
+  --shadow:0 15px 45px rgba(0,0,0,.35);
+}
+
+html,body{
   margin:0;
+  padding:0;
+  width:100%;
   min-height:100%;
-  background:var(--bg);
-  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  background:
+    radial-gradient(circle at 50% -10%,rgba(70,190,130,.13),transparent 34%),
+    radial-gradient(circle at 100% 35%,rgba(141,101,255,.08),transparent 30%),
+    var(--bg);
   color:var(--text);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
 }
 
 body{
   overflow-x:hidden;
 }
 
-.app{
-  min-height:100vh;
-  background:
-    radial-gradient(circle at 50% 8%,rgba(132,54,229,.18),transparent 34%),
-    radial-gradient(circle at 50% 52%,rgba(57,255,154,.06),transparent 42%),
-    linear-gradient(180deg,#0b0712 0%,#05040a 100%);
-  padding:20px 16px 100px;
-  max-width:520px;
-  margin:auto;
+button{
+  font:inherit;
+  border:0;
+  outline:0;
 }
 
-.top{
+.app{
+  width:100%;
+  max-width:520px;
+  min-height:100vh;
+  margin:0 auto;
+  padding:
+    calc(12px + env(safe-area-inset-top))
+    14px
+    calc(94px + env(safe-area-inset-bottom));
+}
+
+/* =========================
+   HEADER
+========================= */
+
+.topbar{
   display:flex;
   align-items:center;
   justify-content:space-between;
+  margin-bottom:14px;
 }
 
 .brand{
-  font-size:20px;
-  font-weight:900;
-  letter-spacing:.12em;
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-.status{
-  font-size:12px;
-  color:var(--green);
-  border:1px solid rgba(57,255,154,.2);
-  background:rgba(57,255,154,.05);
-  padding:7px 10px;
-  border-radius:999px;
+.logo{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:23px;
+  background:
+    linear-gradient(145deg,#193728,#10241b);
+  border:1px solid rgba(70,190,130,.25);
+  box-shadow:
+    0 0 25px rgba(70,190,130,.12),
+    inset 0 0 20px rgba(70,190,130,.06);
 }
+
+.brand-title{
+  font-size:16px;
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+
+.brand-sub{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:2px;
+  letter-spacing:1px;
+}
+
+.profile-mini{
+  width:42px;
+  height:42px;
+  border-radius:14px;
+  background:var(--card);
+  border:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:18px;
+}
+
+/* =========================
+   SCREENS
+========================= */
 
 .screen{
   display:none;
-  min-height:calc(100vh - 145px);
+  animation:screenIn .22s ease;
 }
 
 .screen.active{
   display:block;
 }
 
-.page-title{
-  font-size:32px;
+@keyframes screenIn{
+  from{
+    opacity:0;
+    transform:translateY(5px);
+  }
+  to{
+    opacity:1;
+    transform:none;
+  }
+}
+
+/* =========================
+   COMMON
+========================= */
+
+.section-title{
+  font-size:12px;
   font-weight:900;
-  margin:30px 0 7px;
-}
-
-.page-subtitle{
-  color:var(--muted);
-  font-size:14px;
-  line-height:1.45;
-  margin-bottom:18px;
-}
-
-.card,
-.business,
-.ref-card,
-.profile-card{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:16px;
-  margin:10px 0;
+  letter-spacing:1.3px;
+  color:#aeb8bd;
+  margin:22px 3px 10px;
+  text-transform:uppercase;
 }
 
 .card{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.card p{
-  margin:5px 0 0;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.small{
-  padding:10px 12px;
-  white-space:nowrap;
-}
-
-.list{
-  display:grid;
-  gap:10px;
-}
-
-.list .card{
-  margin:0;
-  display:block;
-}
-
-.tag{
-  display:inline-block;
-  color:var(--green);
-  font-size:11px;
-  font-weight:800;
-  letter-spacing:.08em;
-}
-
-.progress-text{
-  display:flex;
-  justify-content:space-between;
-  color:var(--muted);
-  font-size:12px;
-  margin-top:8px;
-}
-
-.locked{
-  opacity:.62;
-}
-
-.support-item{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-}
-
-.ref-code{
-  font-size:22px;
-  font-weight:900;
-  letter-spacing:.08em;
-  margin:10px 0;
-}
-
-.history{
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.6;
-}
-
-.boost{
-  margin-top:14px;
-  background:linear-gradient(180deg,#241a0b,#110c07);
-  border:1px solid rgba(244,209,106,.25);
-  border-radius:20px;
-  padding:17px;
-}
-
-.boost-title{
-  color:var(--gold);
-  font-size:12px;
-  letter-spacing:.12em;
-  font-weight:900;
-}
-
-.boost-time{
-  font-size:26px;
-  font-weight:900;
-  margin-top:6px;
-}
-
-.admin-note{
-  font-size:12px;
-  color:var(--muted);
-  line-height:1.5;
-  margin-top:12px;
-}
-
-.screen-actions{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:14px;
-}
-
-.business-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.business{
-  margin:0;
-  min-height:120px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.business-icon{
-  color:var(--green);
-  font-size:12px;
-  font-weight:900;
-  letter-spacing:.1em;
-}
-
-.business span{
-  color:var(--muted);
-  font-size:12px;
-}
-
-.wide{
-  width:100%;
-  margin-top:14px;
-}
-
-.ref-label{
-  color:var(--muted);
-  font-size:12px;
-  text-transform:uppercase;
-  letter-spacing:.1em;
-}
-
-.ref-link{
-  font-weight:850;
-  margin:8px 0;
-}
-
-.profile-card{
-  display:flex;
-  align-items:center;
-  gap:14px;
-}
-
-.avatar{
-  width:48px;
-  height:48px;
-  border-radius:50%;
-  display:grid;
-  place-items:center;
-  background:rgba(54,229,139,.12);
-  border:1px solid rgba(54,229,139,.25);
-  color:var(--green);
-  font-weight:900;
-  font-size:22px;
-}
-
-.bottom-nav{
-  position:fixed;
-  left:50%;
-  bottom:10px;
-  transform:translateX(-50%);
-  width:min(488px,calc(100% - 20px));
-  display:grid;
-  grid-template-columns:repeat(5,1fr);
-  gap:4px;
-  padding:7px;
-  background:rgba(13,23,18,.94);
+  background:
+    linear-gradient(145deg,rgba(255,255,255,.025),rgba(255,255,255,.005)),
+    var(--card);
   border:1px solid var(--line);
   border-radius:20px;
-  backdrop-filter:blur(18px);
-  z-index:20;
+  box-shadow:var(--shadow);
 }
 
-.nav-item{
-  min-width:0;
-  min-height:58px;
-  border:0;
-  border-radius:14px;
-  background:transparent;
-  color:var(--muted);
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  justify-content:center;
-  gap:3px;
+button,
+.clickable{
   cursor:pointer;
 }
 
-.nav-item span{
-  font-size:20px;
-  line-height:1;
+.primary{
+  width:100%;
+  min-height:50px;
+  border-radius:16px;
+  background:linear-gradient(135deg,var(--green),#299765);
+  color:#06110b;
+  font-weight:900;
+  box-shadow:0 8px 25px rgba(70,190,130,.18);
 }
 
-.nav-item small{
-  font-size:10px;
-  font-weight:700;
+.primary:active{
+  transform:scale(.98);
 }
 
-.nav-item.active{
-  background:rgba(54,229,139,.12);
-  color:var(--green);
+.secondary{
+  width:100%;
+  min-height:48px;
+  border-radius:15px;
+  background:#192126;
+  border:1px solid var(--line);
+  color:#fff;
+  font-weight:800;
+}
+
+.danger{
+  color:#ff7580;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.small{
+  font-size:11px;
+}
+
+.empty{
+  padding:30px 15px;
+  text-align:center;
+  color:var(--muted);
+}
+
+/* =========================
+   BALANCE
+========================= */
+
+.balance-card{
+  position:relative;
+  overflow:hidden;
+  padding:20px;
+  min-height:145px;
+  background:
+    radial-gradient(circle at 90% 20%,rgba(141,101,255,.17),transparent 32%),
+    radial-gradient(circle at 10% 100%,rgba(70,190,130,.13),transparent 40%),
+    var(--card);
+}
+
+.balance-card:after{
+  content:"";
+  position:absolute;
+  width:140px;
+  height:140px;
+  right:-65px;
+  bottom:-70px;
+  border-radius:50%;
+  border:1px solid rgba(70,190,130,.13);
+  box-shadow:0 0 0 18px rgba(70,190,130,.025);
+}
+
+.balance-label{
+  color:var(--muted);
+  font-size:11px;
+  letter-spacing:1.2px;
+  font-weight:800;
 }
 
 .balance{
-  text-align:center;
-  margin:32px 0 18px;
-}
-
-.label{
-  color:var(--muted);
-  font-size:13px;
-  text-transform:uppercase;
-  letter-spacing:.12em;
-}
-
-.amount{
-  font-size:46px;
-  line-height:1.05;
-  font-weight:900;
-  letter-spacing:-.04em;
   margin-top:7px;
+  font-size:37px;
+  line-height:1;
+  font-weight:950;
+  letter-spacing:-1px;
 }
 
-.currency{
-  font-size:16px;
-  color:var(--green);
-  margin-left:5px;
+.balance span{
+  color:var(--green2);
+  font-size:17px;
   letter-spacing:0;
 }
 
-.coin-wrap{
+.balance-bottom{
   display:flex;
+  justify-content:space-between;
+  align-items:end;
+  margin-top:17px;
+}
+
+.earn-rate{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.earn-rate b{
+  color:#fff;
+}
+
+.boost-pill{
+  display:none;
+  padding:6px 9px;
+  border-radius:10px;
+  background:rgba(141,101,255,.15);
+  border:1px solid rgba(141,101,255,.3);
+  color:#c8b9ff;
+  font-size:10px;
+  font-weight:900;
+}
+
+/* =========================
+   TAP AREA
+========================= */
+
+.tap-zone{
+  margin-top:15px;
+  text-align:center;
+}
+
+.energy-row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:11px;
+  margin-bottom:8px;
+  color:var(--muted);
+}
+
+.energy-row b{
+  color:#fff;
+}
+
+.energy-bar{
+  height:7px;
+  width:100%;
+  background:#1b2226;
+  border-radius:20px;
+  overflow:hidden;
+}
+
+.energy-fill{
+  width:100%;
+  height:100%;
+  background:linear-gradient(90deg,#46be82,#65e3a0);
+  border-radius:20px;
+  transition:width .25s ease;
+}
+
+.coin-wrap{
+  position:relative;
+  width:245px;
+  height:245px;
+  margin:15px auto 8px;
+  display:flex;
+  align-items:center;
   justify-content:center;
-  margin:18px 0;
+}
+
+.coin-glow{
+  position:absolute;
+  width:190px;
+  height:190px;
+  border-radius:50%;
+  background:rgba(70,190,130,.12);
+  filter:blur(25px);
 }
 
 .coin{
   position:relative;
   width:190px;
   height:190px;
-  border:0;
-  background:transparent;
-  display:grid;
-  place-items:center;
-  cursor:pointer;
+  border-radius:50%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:85px;
   user-select:none;
   touch-action:manipulation;
+  background:
+    radial-gradient(circle at 35% 28%,#79e9aa,#35a96f 48%,#17643f 100%);
+  border:7px solid #183d2c;
+  box-shadow:
+    0 0 0 5px rgba(70,190,130,.08),
+    0 20px 50px rgba(0,0,0,.45),
+    0 0 45px rgba(70,190,130,.2),
+    inset 0 5px 15px rgba(255,255,255,.2),
+    inset 0 -15px 25px rgba(0,0,0,.2);
   transition:transform .08s ease;
-  filter:drop-shadow(0 20px 28px rgba(0,0,0,.45));
-}
-
-.coin:before,
-.coin:after{
-  content:"";
-  position:absolute;
-  width:88px;
-  height:88px;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      circle at 35% 28%,
-      #fff2a1 0,
-      #ffd45a 25%,
-      #f2a900 62%,
-      #9b5b00 100%
-    );
-  border:2px solid rgba(255,232,130,.9);
-  box-shadow:
-    inset 0 5px 10px rgba(255,255,255,.35),
-    0 4px 10px rgba(0,0,0,.2);
-}
-
-.coin:before{
-  left:15px;
-  top:51px;
-}
-
-.coin:after{
-  right:15px;
-  top:51px;
-}
-
-.coin span{
-  position:relative;
-  z-index:2;
-  width:92px;
-  height:92px;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      circle at 32% 25%,
-      #fff1a0 0,
-      #ffd45a 28%,
-      #d98b13 68%,
-      #704008 100%
-    );
-  border:3px solid #fff0a4;
-  box-shadow:
-    inset 0 5px 8px rgba(255,255,255,.3),
-    0 0 0 6px rgba(255,212,90,.1),
-    0 8px 15px rgba(0,0,0,.28);
-  display:grid;
-  place-items:center;
-  font-size:28px;
-  font-weight:900;
-  color:#5b3500;
-}
-
-.coin span:before{
-  content:"";
-  position:absolute;
-  inset:8px;
-  border-radius:50%;
-  border:1px solid rgba(91,53,0,.22);
-}
-
-.coin span:after{
-  content:"";
-  position:absolute;
-  width:45px;
-  height:15px;
-  border-radius:50%;
-  background:#6b3e05;
-  top:24px;
-  opacity:.65;
-  box-shadow:
-    0 8px 0 #8f570b,
-    0 16px 0 #b47413;
-}
-
-.coin-jug{
-  position:absolute;
-  z-index:3;
-  width:46px;
-  height:40px;
-  bottom:51px;
-  border-radius:7px 7px 15px 15px;
-  background:linear-gradient(
-    180deg,
-    #fff0a0,
-    #d59a23 70%,
-    #70430a
-  );
-  border:2px solid #fff0a4;
-  box-shadow:0 5px 10px rgba(0,0,0,.25);
-}
-
-.coin-jug:before{
-  content:"";
-  position:absolute;
-  width:32px;
-  height:10px;
-  border-radius:50%;
-  left:5px;
-  top:-7px;
-  background:#ffe88a;
-  border:2px solid #8a5a0d;
-}
-
-.coin-jug:after{
-  content:"";
-  position:absolute;
-  width:10px;
-  height:10px;
-  border-radius:50%;
-  background:#ffe27a;
-  left:8px;
-  top:-14px;
-  box-shadow:
-    12px 2px 0 #ffc83e,
-    23px 0 0 #f0b52c;
 }
 
 .coin:active{
-  transform:scale(.94);
+  transform:scale(.93);
 }
 
-.coin.clover:before,
-.coin.clover:after{
-  background:
-    radial-gradient(
-      circle at 35% 28%,
-      #b9ffda 0,
-      #35e58b 28%,
-      #0b9b57 68%,
-      #063b24 100%
-    );
+.coin-inner{
+  filter:drop-shadow(0 4px 3px rgba(0,0,0,.35));
 }
 
-.coin.clover span{
-  background:
-    radial-gradient(
-      circle at 32% 25%,
-      #aaffd1 0,
-      #62f8ad 30%,
-      #138d53 70%,
-      #07512f 100%
-    );
-  color:#032616;
-  border-color:#b8ffda;
-}
-
-.hint{
-  text-align:center;
+.tap-hint{
   color:var(--muted);
-  font-size:13px;
-  margin-top:-2px;
-}
-
-.energy{
-  margin-top:25px;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:15px;
-}
-
-.row{
-  display:flex;
-  justify-content:space-between;
-  align-items:center;
-}
-
-.row b{
-  font-size:14px;
-}
-
-.muted{
-  color:var(--muted);
-  font-size:13px;
-}
-
-.bar{
-  height:9px;
-  background:#21182a;
-  border-radius:99px;
-  overflow:hidden;
-  margin-top:11px;
-}
-
-.fill{
-  height:100%;
-  width:100%;
-  background:linear-gradient(
-    90deg,
-    var(--green2),
-    var(--green)
-  );
-  border-radius:inherit;
-  transition:width .25s;
-}
-
-.upgrade,
-.passive{
-  margin-top:14px;
-  background:linear-gradient(
-    180deg,
-    #181024,
-    #0d0913
-  );
-  border:1px solid rgba(57,255,154,.22);
-  border-radius:20px;
-  padding:17px;
-}
-
-.upgrade-title,
-.passive-title{
-  font-size:12px;
-  color:var(--green);
-  letter-spacing:.12em;
-  font-weight:800;
-}
-
-.upgrade-name,
-.passive-name{
-  font-size:21px;
-  font-weight:850;
-  margin:6px 0 2px;
-}
-
-.upgrade-desc,
-.passive-desc{
-  font-size:13px;
-  color:var(--muted);
-  line-height:1.4;
-}
-
-.upgrade-bottom,
-.passive-bottom{
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  gap:12px;
-  margin-top:14px;
-}
-
-.price{
-  font-weight:800;
-}
-
-.btn{
-  position:relative;
-  overflow:hidden;
-  border:1px solid rgba(139,255,198,.35);
-  border-radius:14px;
-  padding:12px 17px;
-  font-weight:900;
-  letter-spacing:.04em;
-  color:#03150b;
-  background:
-    linear-gradient(
-      180deg,
-      #62f5aa 0%,
-      #27d47c 48%,
-      #16a95d 100%
-    );
-  box-shadow:
-    0 7px 18px rgba(24,211,119,.18),
-    inset 0 1px 0 rgba(255,255,255,.35);
-  cursor:pointer;
-  transition:
-    transform .12s ease,
-    box-shadow .12s ease,
-    filter .12s ease;
-}
-
-.btn:before{
-  content:"";
-  position:absolute;
-  inset:0;
-  background:
-    linear-gradient(
-      110deg,
-      transparent 25%,
-      rgba(255,255,255,.28) 48%,
-      transparent 70%
-    );
-  transform:translateX(-120%);
-  transition:transform .45s ease;
-}
-
-.btn:hover:before{
-  transform:translateX(120%);
-}
-
-.btn:hover{
-  filter:brightness(1.06);
-  box-shadow:
-    0 9px 24px rgba(24,211,119,.25),
-    inset 0 1px 0 rgba(255,255,255,.4);
-}
-
-.btn:active{
-  transform:translateY(1px) scale(.97);
-  box-shadow:0 4px 12px rgba(24,211,119,.16);
-}
-
-.btn:disabled{
-  opacity:.35;
-  cursor:not-allowed;
-  filter:grayscale(.35);
-  box-shadow:none;
-}
-
-.btn.small{
-  padding:10px 13px;
-  border-radius:12px;
   font-size:11px;
 }
 
-.wide{
-  min-height:48px;
-}
-
-.stats{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-  margin-top:10px;
-}
-
-.stat{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:16px;
-  padding:14px;
-}
-
-.stat .v{
-  font-size:18px;
-  font-weight:850;
-  margin-top:5px;
-}
-
-.bonus{
-  margin-top:10px;
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:16px;
-}
-
-.bonus p{
-  margin:5px 0;
-  color:var(--muted);
-  font-size:13px;
-}
-
-.manager-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.manager{
-  border:1px solid var(--line);
-  border-radius:18px;
-  background:var(--panel);
-  color:var(--text);
-  padding:16px;
-  text-align:left;
-  cursor:pointer;
-}
-
-.skin-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.skin{
-  background:var(--panel);
-  border:1px solid var(--line);
-  border-radius:18px;
-  padding:14px;
-  text-align:center;
-}
-
-.skin-art{
-  height:105px;
-  border-radius:16px;
-  display:grid;
-  place-items:center;
-  margin-bottom:10px;
-  background:
-    radial-gradient(
-      circle,
-      #f7d86c 0 8%,
-      #8b5a10 9% 18%,
-      #17291e 19% 100%
-    );
-}
-
-.skin-art.clover{
-  background:
-    radial-gradient(
-      circle,
-      #36e58b 0 8%,
-      #0b5b35 9% 18%,
-      #08120d 19% 100%
-    );
-}
-
-.skin-art.lucky{
-  background:
-    radial-gradient(
-      circle,
-      #fff1a0 0 8%,
-      #c58b22 9% 18%,
-      #251706 19% 100%
-    );
-}
-
-.skin-art.night{
-  background:
-    radial-gradient(
-      circle,
-      #b78cff 0 8%,
-      #50328c 9% 18%,
-      #0b0712 19% 100%
-    );
-}
-
-.skin-art span{
-  font-size:42px;
-  font-weight:900;
-  color:#f6d66c;
-}
-
-.skin-art.clover span{
-  color:#5cffad;
-}
-
-.skin-art.night span{
-  color:#d4b9ff;
-}
-
 .float-reward{
-  position:fixed;
-  left:50%;
-  top:43%;
-  transform:translate(-50%,0);
-  color:var(--gold);
-  font-weight:900;
-  font-size:24px;
+  position:absolute;
   pointer-events:none;
-  z-index:40;
-  animation:floatUp .65s ease-out forwards;
+  color:#74e6a7;
+  font-size:18px;
+  font-weight:950;
+  animation:floatUp .75s ease forwards;
+  z-index:20;
 }
 
 @keyframes floatUp{
-  from{
-    opacity:1;
-    transform:translate(-50%,0) scale(1);
-  }
-  to{
+  0%{
     opacity:0;
-    transform:translate(-50%,-75px) scale(1.15);
+    transform:translate(-50%,10px) scale(.8);
+  }
+  20%{opacity:1}
+  100%{
+    opacity:0;
+    transform:translate(-50%,-65px) scale(1.05);
   }
 }
 
-.toast{
-  position:fixed;
-  left:50%;
-  bottom:90px;
-  transform:translate(-50%,20px);
-  background:#eafff2;
-  color:#062416;
-  padding:10px 15px;
-  border-radius:999px;
+/* =========================
+   QUICK STATS
+========================= */
+
+.stats-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:9px;
+  margin-top:18px;
+}
+
+.stat{
+  padding:13px 8px;
+  text-align:center;
+  border-radius:16px;
+  background:var(--card);
+  border:1px solid var(--line);
+}
+
+.stat-value{
+  font-size:16px;
+  font-weight:900;
+}
+
+.stat-label{
+  margin-top:4px;
+  font-size:9px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+/* =========================
+   ACTION CARDS
+========================= */
+
+.action-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.action{
+  min-height:92px;
+  padding:15px;
+  text-align:left;
+  border-radius:18px;
+  background:var(--card);
+  border:1px solid var(--line);
+  color:#fff;
+}
+
+.action:active{
+  transform:scale(.98);
+}
+
+.action-icon{
+  font-size:22px;
+  margin-bottom:9px;
+}
+
+.action-title{
+  font-size:12px;
+  font-weight:900;
+}
+
+.action-sub{
+  margin-top:3px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+/* =========================
+   UPGRADES
+========================= */
+
+.upgrade-card{
+  padding:15px;
+  margin-bottom:10px;
+}
+
+.upgrade-head{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  align-items:center;
+}
+
+.upgrade-icon{
+  width:43px;
+  height:43px;
+  border-radius:14px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#18211e;
+  font-size:20px;
+}
+
+.upgrade-info{
+  flex:1;
+}
+
+.upgrade-title{
+  font-size:12px;
+  font-weight:900;
+}
+
+.upgrade-desc{
+  margin-top:4px;
+  font-size:10px;
+  color:var(--muted);
+}
+
+.upgrade-price{
+  white-space:nowrap;
+  color:var(--green2);
+  font-size:11px;
+  font-weight:900;
+}
+
+.upgrade-btn{
+  width:100%;
+  margin-top:12px;
+  min-height:40px;
+  border-radius:12px;
+  background:#1a2521;
+  border:1px solid rgba(70,190,130,.16);
+  color:#bdf3d3;
+  font-size:11px;
+  font-weight:900;
+}
+
+.upgrade-btn:active{
+  transform:scale(.98);
+}
+
+/* =========================
+   TASKS
+========================= */
+
+.task{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px;
+  margin-bottom:9px;
+}
+
+.task-icon{
+  width:42px;
+  height:42px;
+  border-radius:13px;
+  background:#19231f;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:19px;
+}
+
+.task-info{
+  flex:1;
+}
+
+.task-title{
+  font-size:12px;
+  font-weight:900;
+}
+
+.task-desc{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+.task-reward{
+  font-size:10px;
+  font-weight:900;
+  color:var(--green2);
+}
+
+.task-done{
+  color:#68747a;
+}
+
+/* =========================
+   STREAK
+========================= */
+
+.streak-hero{
+  padding:20px;
+  text-align:center;
+  background:
+    radial-gradient(circle at center,rgba(141,101,255,.13),transparent 65%),
+    var(--card);
+}
+
+.streak-number{
+  font-size:55px;
+  font-weight:950;
+  line-height:1;
+  margin:8px 0;
+}
+
+.streak-label{
+  font-size:11px;
+  color:var(--muted);
+}
+
+.streak-days{
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+  gap:7px;
+  margin-top:18px;
+}
+
+.day{
+  padding:10px 2px;
+  border-radius:12px;
+  background:#161d21;
+  border:1px solid var(--line);
+  text-align:center;
+  font-size:9px;
+}
+
+.day.active{
+  background:rgba(70,190,130,.13);
+  border-color:rgba(70,190,130,.3);
+  color:#72dfa1;
+}
+
+.day b{
+  display:block;
+  margin-top:5px;
+  font-size:12px;
+}
+
+/* =========================
+   PASSIVE
+========================= */
+
+.mining-card{
+  padding:18px;
+  background:
+    radial-gradient(circle at 100% 0,rgba(70,190,130,.1),transparent 40%),
+    var(--card);
+}
+
+.mining-top{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.mining-rate{
+  font-size:25px;
+  font-weight:950;
+}
+
+.mining-rate small{
+  font-size:10px;
+  color:var(--muted);
+  font-weight:600;
+}
+
+.mining-progress{
+  height:7px;
+  border-radius:20px;
+  background:#1b2226;
+  overflow:hidden;
+  margin:14px 0;
+}
+
+.mining-progress-fill{
+  width:0;
+  height:100%;
+  background:linear-gradient(90deg,#46be82,#65e3a0);
+}
+
+.mining-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.collect-btn{
+  padding:10px 14px;
+  border-radius:12px;
+  background:#1b2a23;
+  color:#82e8ae;
+  font-size:10px;
+  font-weight:900;
+}
+
+/* =========================
+   BUSINESS
+========================= */
+
+.business{
+  padding:17px;
+  margin-bottom:10px;
+}
+
+.business-head{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+
+.business-icon{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  background:#1b2428;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+}
+
+.business-info{
+  flex:1;
+}
+
+.business-name{
+  font-size:13px;
+  font-weight:900;
+}
+
+.business-desc{
+  margin-top:4px;
+  color:var(--muted);
+  font-size:9px;
+  line-height:1.4;
+}
+
+.business-profit{
+  color:var(--green2);
+  font-size:11px;
+  font-weight:900;
+}
+
+.business-status{
+  margin-top:13px;
+  padding-top:12px;
+  border-top:1px solid var(--line);
+  display:flex;
+  justify-content:space-between;
+  color:var(--muted);
+  font-size:9px;
+}
+
+/* =========================
+   FRIENDS
+========================= */
+
+.ref-code{
+  text-align:center;
+  padding:22px;
+}
+
+.ref-code-label{
+  color:var(--muted);
+  font-size:10px;
+}
+
+.ref-code-value{
+  margin:9px 0 14px;
+  font-size:25px;
+  font-weight:950;
+  letter-spacing:2px;
+  color:var(--green2);
+}
+
+.friend-stats{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+  margin-top:10px;
+}
+
+.friend-stat{
+  padding:17px;
+  text-align:center;
+}
+
+.friend-stat b{
+  display:block;
+  font-size:22px;
+}
+
+.friend-stat span{
+  color:var(--muted);
+  font-size:9px;
+}
+
+/* =========================
+   PROFILE
+========================= */
+
+.profile-card{
+  padding:20px;
+  text-align:center;
+}
+
+.avatar{
+  width:70px;
+  height:70px;
+  border-radius:23px;
+  margin:0 auto 12px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:32px;
+  background:
+    linear-gradient(145deg,#263b31,#141c18);
+  border:1px solid rgba(70,190,130,.22);
+}
+
+.profile-name{
+  font-size:17px;
+  font-weight:950;
+}
+
+.profile-username{
+  color:var(--muted);
+  font-size:10px;
+  margin-top:4px;
+}
+
+.profile-grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:8px;
+  margin-top:18px;
+}
+
+.profile-stat{
+  background:#151c20;
+  border-radius:14px;
+  padding:12px 5px;
+}
+
+.profile-stat b{
+  display:block;
+  font-size:14px;
+}
+
+.profile-stat span{
+  color:var(--muted);
+  font-size:8px;
+}
+
+/* =========================
+   WITHDRAW
+========================= */
+
+.withdraw-card{
+  padding:19px;
+}
+
+.input{
+  width:100%;
+  height:50px;
+  margin-top:9px;
+  padding:0 14px;
+  color:#fff;
+  background:#0b1012;
+  border:1px solid var(--line);
+  border-radius:14px;
+  outline:0;
+}
+
+.input:focus{
+  border-color:rgba(70,190,130,.4);
+}
+
+.withdraw-min{
+  padding:11px;
+  margin:10px 0 15px;
+  border-radius:12px;
+  background:#161e21;
+  color:var(--muted);
+  font-size:10px;
+}
+
+.withdraw-methods{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:12px;
+}
+
+.method{
+  padding:13px;
+  text-align:center;
+  border-radius:13px;
+  background:#151d20;
+  border:1px solid var(--line);
+  color:#aab4b9;
+  font-size:10px;
   font-weight:800;
+}
+
+.method.selected{
+  color:#fff;
+  border-color:rgba(70,190,130,.5);
+  background:rgba(70,190,130,.09);
+}
+
+/* =========================
+   BONUS
+========================= */
+
+.bonus{
+  padding:17px;
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.bonus-icon{
+  width:48px;
+  height:48px;
+  border-radius:15px;
+  background:#222015;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:24px;
+}
+
+.bonus-info{
+  flex:1;
+}
+
+.bonus-title{
+  font-size:12px;
+  font-weight:900;
+}
+
+.bonus-desc{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:4px;
+}
+
+.bonus-btn{
+  padding:9px 11px;
+  border-radius:11px;
+  background:#263329;
+  color:#92e9b4;
+  font-size:9px;
+  font-weight:900;
+}
+
+/* =========================
+   RATING
+========================= */
+
+.rating-row{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:14px;
+  margin-bottom:8px;
+}
+
+.rating-place{
+  width:30px;
+  text-align:center;
+  color:var(--muted);
+  font-size:11px;
+  font-weight:900;
+}
+
+.rating-avatar{
+  width:39px;
+  height:39px;
+  border-radius:13px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#1a2226;
+}
+
+.rating-info{
+  flex:1;
+}
+
+.rating-name{
+  font-size:11px;
+  font-weight:900;
+}
+
+.rating-balance{
+  margin-top:3px;
+  font-size:9px;
+  color:var(--muted);
+}
+
+.rating-value{
+  color:var(--green2);
+  font-size:10px;
+  font-weight:900;
+}
+
+/* =========================
+   SUPPORT
+========================= */
+
+.support-card{
+  padding:20px;
+  text-align:center;
+}
+
+.support-icon{
+  font-size:42px;
+  margin-bottom:12px;
+}
+
+.manager{
+  padding:14px;
+  margin-top:9px;
+  display:flex;
+  align-items:center;
+  gap:11px;
+  text-align:left;
+}
+
+.manager-avatar{
+  width:40px;
+  height:40px;
+  border-radius:13px;
+  background:#1c2528;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+}
+
+.manager-info{
+  flex:1;
+}
+
+.manager-name{
+  font-size:11px;
+  font-weight:900;
+}
+
+.manager-role{
+  color:var(--muted);
+  font-size:8px;
+  margin-top:3px;
+}
+
+.manager-open{
+  padding:8px 10px;
+  border-radius:10px;
+  background:#1b2c23;
+  color:#8de5ae;
+  font-size:9px;
+  font-weight:900;
+}
+
+/* =========================
+   REFERRAL
+========================= */
+
+.referral-card{
+  padding:22px;
+  text-align:center;
+  background:
+    radial-gradient(circle at 50% 0,rgba(141,101,255,.15),transparent 55%),
+    var(--card);
+}
+
+.referral-icon{
+  font-size:48px;
+}
+
+.referral-title{
+  margin-top:8px;
+  font-size:20px;
+  font-weight:950;
+}
+
+.referral-desc{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.6;
+  margin:9px auto 18px;
+  max-width:330px;
+}
+
+.referral-link{
+  display:flex;
+  gap:7px;
+}
+
+.referral-link input{
+  min-width:0;
+}
+
+/* =========================
+   SKINS
+========================= */
+
+.skin{
+  padding:16px;
+  margin-bottom:9px;
+  display:flex;
+  align-items:center;
+  gap:13px;
+}
+
+.skin-preview{
+  width:52px;
+  height:52px;
+  border-radius:17px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:25px;
+  background:linear-gradient(145deg,#79e9aa,#267f54);
+}
+
+.skin:nth-child(3) .skin-preview{
+  background:linear-gradient(145deg,#fff1a6,#b77b12);
+}
+
+.skin:nth-child(4) .skin-preview{
+  background:linear-gradient(145deg,#9f8aff,#48308c);
+}
+
+.skin:nth-child(5) .skin-preview{
+  background:linear-gradient(145deg,#29323b,#07090b);
+}
+
+.skin-info{
+  flex:1;
+}
+
+.skin-name{
+  font-size:12px;
+  font-weight:900;
+}
+
+.skin-desc{
+  color:var(--muted);
+  font-size:9px;
+  margin-top:4px;
+}
+
+.skin-btn{
+  padding:9px 11px;
+  border-radius:11px;
+  background:#1a2421;
+  color:#8ce4ad;
+  font-size:9px;
+  font-weight:900;
+}
+
+.skin-btn.locked{
+  color:#aeb6ba;
+  background:#1a2023;
+}
+
+/* =========================
+   NAVIGATION
+========================= */
+
+.bottom-nav{
+  position:fixed;
+  z-index:100;
+  left:50%;
+  bottom:0;
+  transform:translateX(-50%);
+  width:min(520px,100%);
+  padding:
+    8px 9px
+    calc(8px + env(safe-area-inset-bottom));
+  background:rgba(9,12,14,.93);
+  backdrop-filter:blur(18px);
+  -webkit-backdrop-filter:blur(18px);
+  border-top:1px solid rgba(255,255,255,.07);
+}
+
+.nav{
+  display:grid;
+  grid-template-columns:repeat(5,1fr);
+  gap:3px;
+}
+
+.nav-btn{
+  min-height:55px;
+  border-radius:14px;
+  background:transparent;
+  color:#68737a;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:4px;
+}
+
+.nav-btn.active{
+  background:rgba(70,190,130,.09);
+  color:#70dca0;
+}
+
+.nav-icon{
+  font-size:18px;
+  line-height:1;
+}
+
+.nav-label{
+  font-size:8px;
+  font-weight:800;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+#toast{
+  position:fixed;
+  z-index:500;
+  left:50%;
+  bottom:88px;
+  transform:translate(-50%,15px);
   opacity:0;
   pointer-events:none;
-  transition:.2s;
+  padding:11px 15px;
+  border-radius:13px;
+  background:#20282c;
+  border:1px solid rgba(255,255,255,.08);
+  color:#fff;
+  font-size:11px;
+  font-weight:800;
+  box-shadow:0 10px 35px rgba(0,0,0,.4);
+  transition:.2s ease;
   white-space:nowrap;
-  box-shadow:0 10px 30px rgba(0,0,0,.3);
-  z-index:30;
 }
 
-.toast.show{
+#toast.show{
   opacity:1;
   transform:translate(-50%,0);
 }
 
-@media(max-width:380px){
-  .coin{
-    width:165px;
-    height:165px;
+/* =========================
+   LOADING
+========================= */
+
+.loading{
+  position:fixed;
+  inset:0;
+  z-index:1000;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#080a0c;
+  transition:.3s ease;
+}
+
+.loading.hide{
+  opacity:0;
+  pointer-events:none;
+}
+
+.loading-inner{
+  text-align:center;
+}
+
+.loading-logo{
+  font-size:52px;
+  animation:pulse 1.2s infinite ease-in-out;
+}
+
+.loading-title{
+  margin-top:10px;
+  font-size:18px;
+  font-weight:950;
+  letter-spacing:2px;
+}
+
+.loading-text{
+  margin-top:6px;
+  color:var(--muted);
+  font-size:9px;
+}
+
+@keyframes pulse{
+  0%,100%{transform:scale(1)}
+  50%{transform:scale(1.08)}
+}
+
+/* =========================
+   ONLINE STATUS
+========================= */
+
+.online{
+  display:inline-flex;
+  align-items:center;
+  gap:5px;
+  font-size:9px;
+  color:#73dba0;
+}
+
+.online-dot{
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#55d990;
+  box-shadow:0 0 8px rgba(85,217,144,.6);
+}
+
+/* =========================
+   DESKTOP
+========================= */
+
+@media(min-width:700px){
+  .app{
+    padding-bottom:110px;
   }
 
-  .coin:before,
-  .coin:after{
-    width:76px;
-    height:76px;
-  }
-
-  .coin span{
-    width:82px;
-    height:82px;
-    font-size:25px;
-  }
-
-  .amount{
-    font-size:40px;
-  }
-
-  .nav-item small{
-    font-size:9px;
+  .bottom-nav{
+    border:1px solid rgba(255,255,255,.07);
+    border-bottom:0;
+    border-radius:22px 22px 0 0;
   }
 }
 </style>
@@ -885,1416 +1341,1009 @@ body{
 
 <body>
 
-<main class="app">
+<div class="loading" id="loading">
+  <div class="loading-inner">
+    <div class="loading-logo">☘️</div>
+    <div class="loading-title">LUCKY-CLOVER</div>
+    <div class="loading-text">Завантаження...</div>
+  </div>
+</div>
 
-<header class="top">
-  <div class="brand">LUCKY-CLOVER</div>
-  <div class="status">LIVE</div>
-</header>
+<div class="app">
 
-<!-- ГОЛОВНА -->
-<section class="screen active" id="screen-home">
-
-  <section class="balance">
-    <div class="label">Ваш баланс</div>
-
-    <div class="amount">
-      <span id="balance">50.00</span>
-      <span class="currency">LC</span>
+  <!-- HEADER -->
+  <div class="topbar">
+    <div class="brand">
+      <div class="logo">☘️</div>
+      <div>
+        <div class="brand-title">LUCKY-CLOVER</div>
+        <div class="brand-sub">PLAY • EARN • GROW</div>
+      </div>
     </div>
-  </section>
 
-  <section class="coin-wrap">
-    <button
-      class="coin clover"
-      id="earn"
-      aria-label="Заробити"
-    >
-      <span>LC</span>
-      <i class="coin-jug" aria-hidden="true"></i>
-    </button>
-  </section>
-
-  <div class="hint">
-    Натискайте, щоб заробляти
+    <button class="profile-mini" onclick="openScreen('profile')">👤</button>
   </div>
 
-  <!-- ЕНЕРГІЯ -->
-  <section class="energy">
 
-    <div class="row">
-      <b>Енергія</b>
+  <!-- ================= HOME ================= -->
+  <section class="screen active" id="screen-home">
 
-      <span class="muted">
-        <span id="energy">100</span>
-        /
-        <span id="maxEnergy">100</span>
-      </span>
-    </div>
-
-    <div class="bar">
-      <div
-        class="fill"
-        id="energyFill"
-      ></div>
-    </div>
-
-    <div class="upgrade-bottom">
-
-      <div class="muted">
-        Відновлюється автоматично, навіть коли ви не в боті.
+    <div class="card balance-card">
+      <div class="balance-label">ВАШ БАЛАНС</div>
+      <div class="balance">
+        <span id="balance">50.00</span>
+        <span> LC</span>
       </div>
 
-      <button
-        class="btn small"
-        id="energyUpgradeBtn"
-      >
-        +20 енергії
+      <div class="balance-bottom">
+        <div class="earn-rate">
+          За сьогодні:
+          <b><span id="today">0.00</span> LC</b>
+        </div>
+
+        <div class="boost-pill" id="boostPill">
+          ⚡ X2 <span id="boostTimer">30:00</span>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="tap-zone">
+
+      <div class="energy-row">
+        <span>⚡ Енергія</span>
+        <b><span id="energy">100</span> / <span id="maxEnergy">100</span></b>
+      </div>
+
+      <div class="energy-bar">
+        <div class="energy-fill" id="energyFill"></div>
+      </div>
+
+      <div class="coin-wrap" id="coinWrap">
+        <div class="coin-glow"></div>
+
+        <button class="coin" id="earn">
+          <span class="coin-inner" id="coinIcon">☘️</span>
+        </button>
+      </div>
+
+      <div class="tap-hint">
+        НАТИСКАЙ НА КЛІВЕР
+      </div>
+
+    </div>
+
+
+    <div class="stats-grid">
+      <div class="stat">
+        <div class="stat-value" id="taps">0</div>
+        <div class="stat-label">Тапів</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-value" id="tapPower">0.10</div>
+        <div class="stat-label">LC / тап</div>
+      </div>
+
+      <div class="stat">
+        <div class="stat-value" id="streak">0</div>
+        <div class="stat-label">Стрік</div>
+      </div>
+    </div>
+
+
+    <div class="section-title">Покращення</div>
+
+    <div class="card upgrade-card">
+      <div class="upgrade-head">
+        <div class="upgrade-icon">👆</div>
+
+        <div class="upgrade-info">
+          <div class="upgrade-title">СИЛА ТАПУ</div>
+          <div class="upgrade-desc">
+            Більше LC за кожне натискання
+          </div>
+        </div>
+
+        <div class="upgrade-price">
+          <span id="tapUpgradePrice">10</span> LC
+        </div>
+      </div>
+
+      <button class="upgrade-btn" id="upgradeTap">
+        ПІДВИЩИТИ СИЛУ
       </button>
-
     </div>
 
-  </section>
 
-  <!-- СИЛА ТАПУ -->
-  <section class="upgrade">
+    <div class="card upgrade-card">
+      <div class="upgrade-head">
+        <div class="upgrade-icon">⚡</div>
 
-    <div class="upgrade-title">
-      ПОКРАЩЕННЯ
-    </div>
+        <div class="upgrade-info">
+          <div class="upgrade-title">МАКС. ЕНЕРГІЯ</div>
+          <div class="upgrade-desc">
+            Збільшити запас енергії
+          </div>
+        </div>
 
-    <div class="upgrade-name">
-      Сила тапу
-    </div>
-
-    <div class="upgrade-desc">
-      Збільшує винагороду за кожне натискання.
-    </div>
-
-    <div class="upgrade-bottom">
-
-      <div class="price">
-
-        <span id="tapPower">0.10</span>
-        LC / тап
-
-        <br>
-
-        <span class="muted">
-          Ціна:
-          <span id="upgradePrice">10</span>
-          LC
-        </span>
-
+        <div class="upgrade-price">
+          <span id="energyUpgradePrice">50</span> LC
+        </div>
       </div>
 
-      <button
-        class="btn"
-        id="upgradeBtn"
-      >
-        ПОКРАЩИТИ
+      <button class="upgrade-btn" id="upgradeEnergy">
+        ЗБІЛЬШИТИ ЕНЕРГІЮ
       </button>
+    </div>
+
+
+    <div class="section-title">Пасивний дохід</div>
+
+    <div class="card mining-card">
+
+      <div class="mining-top">
+        <div>
+          <div class="muted small">МАЙНІНГ</div>
+          <div class="mining-rate">
+            <span id="passiveRate">10</span>
+            <small>LC / год</small>
+          </div>
+        </div>
+
+        <div class="online">
+          <span class="online-dot"></span>
+          ONLINE
+        </div>
+      </div>
+
+      <div class="mining-progress">
+        <div class="mining-progress-fill" id="miningProgress"></div>
+      </div>
+
+      <div class="mining-bottom">
+        <div class="small muted">
+          Накопичено:
+          <b id="passivePending">0.00 LC</b>
+        </div>
+
+        <button class="collect-btn" id="collectPassive">
+          ЗАБРАТИ
+        </button>
+      </div>
 
     </div>
 
   </section>
 
-  <!-- СТАТИСТИКА -->
-  <section class="stats">
 
-    <div class="stat">
-      <div class="muted">
-        Сьогодні
+  <!-- ================= TASKS ================= -->
+  <section class="screen" id="screen-tasks">
+
+    <div class="section-title">Щоденні завдання</div>
+
+    <div class="card task" id="taskLogin">
+      <div class="task-icon">🎁</div>
+
+      <div class="task-info">
+        <div class="task-title">Зайти в LUCKY-CLOVER</div>
+        <div class="task-desc">Відкрий гру протягом дня</div>
       </div>
 
-      <div class="v">
-        <span id="today">0.00</span>
-        LC
-      </div>
-    </div>
-
-    <div class="stat">
-      <div class="muted">
-        Тапів
-      </div>
-
-      <div
-        class="v"
-        id="taps"
-      >
-        0
+      <div class="task-reward" id="taskLoginBtn">
+        +5 LC
       </div>
     </div>
 
-  </section>
 
-  <!-- ПАСИВНЫЙ ДОХОД -->
-  <section class="passive">
+    <div class="card task" id="taskTaps">
+      <div class="task-icon">👆</div>
 
-    <div class="passive-title">
-      ПАСИВНИЙ ДОХІД
-    </div>
-
-    <div class="passive-name">
-      Прибуток за годину
-    </div>
-
-    <div class="passive-desc">
-      LC накопичуються автоматично, навіть коли ви не в боті.
-      Максимальний час накопичення — 3 години.
-    </div>
-
-    <div class="passive-bottom">
-
-      <div class="price">
-
-        <span id="passiveIncome">
-          0
-        </span>
-
-        LC / год
-
-        <br>
-
-        <span class="muted">
-          Наступний рівень:
-          <span id="passivePrice">
-            75
-          </span>
-          LC
-        </span>
-
+      <div class="task-info">
+        <div class="task-title">100 тапів</div>
+        <div class="task-desc">
+          Виконайте 100 натискань за день
+        </div>
       </div>
 
-      <button
-        class="btn"
-        id="passiveBtn"
-      >
-        ПРИДБАТИ
-      </button>
-
-    </div>
-
-    <div class="progress-text">
-      <span>Накопичено</span>
-      <strong id="miningPending">
-        0.00 LC
-      </strong>
-    </div>
-
-    <div class="bar">
-      <div
-        class="fill"
-        id="miningFill"
-        style="width:0%"
-      ></div>
-    </div>
-
-    <button
-      class="btn wide"
-      id="collectMiningBtn"
-    >
-      ЗАБРАТИ
-    </button>
-
-  </section>
-
-  <!-- БОНУС ДНЯ -->
-  <section class="bonus">
-
-    <div class="row">
-
-      <div>
-
-        <b>
-          Бонус дня
-        </b>
-
-        <p>
-          Отримуйте +10 LC один раз на день.
-        </p>
-
-      </div>
-
-      <button
-        class="btn small"
-        id="dailyBonusBtn"
-      >
+      <div class="task-reward" id="taskTapsBtn">
         +10 LC
-      </button>
+      </div>
+    </div>
 
+
+    <div class="card task" id="taskEarn">
+      <div class="task-icon">💰</div>
+
+      <div class="task-info">
+        <div class="task-title">Заробити 50 LC</div>
+        <div class="task-desc">
+          Заробіть 50 LC протягом дня
+        </div>
+      </div>
+
+      <div class="task-reward" id="taskEarnBtn">
+        +15 LC
+      </div>
+    </div>
+
+
+    <div class="section-title">Щоденний прогрес</div>
+
+    <div class="card upgrade-card">
+      <div class="upgrade-head">
+        <div class="upgrade-icon">🔥</div>
+
+        <div class="upgrade-info">
+          <div class="upgrade-title">ЩОДЕННИЙ СТРІК</div>
+          <div class="upgrade-desc">
+            Заходь щодня та отримуй додаткові нагороди
+          </div>
+        </div>
+      </div>
+
+      <button class="upgrade-btn" onclick="openScreen('streak')">
+        ВІДКРИТИ СТРІК
+      </button>
     </div>
 
   </section>
 
-</section>
 
-<!-- ЗАВДАННЯ -->
-<section
-  class="screen"
-  id="screen-tasks"
->
+  <!-- ================= STREAK ================= -->
+  <section class="screen" id="screen-streak">
 
-  <div class="page-title">
-    Завдання
-  </div>
+    <div class="card streak-hero">
+      <div class="muted small">ПОТОЧНИЙ СТРІК</div>
 
-  <div class="page-subtitle">
-    Виконуйте активності та отримуйте додаткову винагороду.
-  </div>
+      <div class="streak-number" id="streakBig">0</div>
 
-  <div class="card">
-
-    <div>
-      <b>
-        Щоденний вхід
-      </b>
-
-      <p>
-        Відкрийте LUCKY-CLOVER сьогодні.
-      </p>
-    </div>
-
-    <button
-      class="btn small"
-      data-task="login"
-    >
-      +5 LC
-    </button>
-
-  </div>
-
-  <div class="card">
-
-    <div>
-      <b>
-        100 тапів
-      </b>
-
-      <p>
-        Зробіть 100 натискань.
-      </p>
-    </div>
-
-    <button
-      class="btn small"
-      data-task="taps"
-    >
-      +10 LC
-    </button>
-
-    <div
-      class="muted"
-      id="taskTapsText"
-    >
-      0 / 100
-    </div>
-
-  </div>
-
-  <div class="card">
-
-    <div>
-      <b>
-        Активний день
-      </b>
-
-      <p>
-        Заробіть 50 LC за день.
-      </p>
-    </div>
-
-    <button
-      class="btn small"
-      data-task="earn"
-    >
-      +15 LC
-    </button>
-
-    <div
-      class="muted"
-      id="taskEarnText"
-    >
-      0 / 50 LC
-    </div>
-
-  </div>
-
-  <div class="card">
-
-    <div>
-      <b>
-        Серія днів
-      </b>
-
-      <p id="streakText">
-        0 днів поспіль
-      </p>
-    </div>
-
-    <div class="muted">
-      3 дні: +20 LC
-      <br>
-      7 днів: +50 LC
-    </div>
-
-    <button
-      class="btn small"
-      id="openStreak"
-    >
-      ПЕРЕГЛЯНУТИ
-    </button>
-
-  </div>
-
-</section>
-
-<!-- СЕРИЯ -->
-<section
-  class="screen"
-  id="screen-streak"
->
-
-  <div class="page-title">
-    Серія днів
-  </div>
-
-  <div class="page-subtitle">
-    Відкривайте LUCKY-CLOVER щодня,
-    щоб продовжувати серію та отримувати бонуси.
-  </div>
-
-  <div class="stats">
-
-    <div class="stat">
-
-      <div class="muted">
-        Поточна серія
+      <div class="streak-label">
+        днів поспіль
       </div>
 
-      <div class="v">
-        <span id="currentStreak">
-          0
-        </span>
-        днів
+      <div class="streak-days">
+        <div class="day" id="day1">Д1<b>+5</b></div>
+        <div class="day" id="day2">Д2<b>+5</b></div>
+        <div class="day" id="day3">Д3<b>+20</b></div>
+        <div class="day" id="day4">Д4<b>+5</b></div>
+        <div class="day" id="day5">Д5<b>+5</b></div>
+        <div class="day" id="day6">Д6<b>+5</b></div>
+        <div class="day" id="day7">Д7<b>+50</b></div>
+      </div>
+    </div>
+
+
+    <div class="section-title">Нагороди</div>
+
+    <div class="card upgrade-card">
+      <div class="upgrade-head">
+        <div class="upgrade-icon">🔥</div>
+
+        <div class="upgrade-info">
+          <div class="upgrade-title">3 ДНІ</div>
+          <div class="upgrade-desc">
+            Бонус за серію з трьох днів
+          </div>
+        </div>
+
+        <div class="upgrade-price">+20 LC</div>
       </div>
 
+      <button class="upgrade-btn" id="claimStreak3">
+        ОТРИМАТИ
+      </button>
     </div>
 
-    <div class="stat">
 
-      <div class="muted">
-        Найкраща серія
+    <div class="card upgrade-card">
+      <div class="upgrade-head">
+        <div class="upgrade-icon">🏆</div>
+
+        <div class="upgrade-info">
+          <div class="upgrade-title">7 ДНІВ</div>
+          <div class="upgrade-desc">
+            Велика нагорода за тижневий стрік
+          </div>
+        </div>
+
+        <div class="upgrade-price">+50 LC</div>
       </div>
 
-      <div class="v">
-        <span id="bestStreak">
-          0
-        </span>
-        днів
+      <button class="upgrade-btn" id="claimStreak7">
+        ОТРИМАТИ
+      </button>
+    </div>
+
+  </section>
+
+
+  <!-- ================= BUSINESS ================= -->
+  <section class="screen" id="screen-business">
+
+    <div class="section-title">Бізнес</div>
+
+    <div class="card business">
+      <div class="business-head">
+        <div class="business-icon">☕</div>
+
+        <div class="business-info">
+          <div class="business-name">Кав'ярня</div>
+          <div class="business-desc">
+            Затишний бізнес із постійним потоком клієнтів.
+          </div>
+        </div>
+
+        <div class="business-profit">
+          +LC
+        </div>
       </div>
 
-    </div>
-
-  </div>
-
-  <div class="card">
-
-    <div>
-
-      <b>
-        Бонус за 3 дні
-      </b>
-
-      <p id="streak3Progress">
-        0 / 3 дні
-      </p>
-
-    </div>
-
-    <div class="muted">
-      +20 LC
-    </div>
-
-  </div>
-
-  <div class="bar">
-    <div
-      class="fill"
-      id="streak3Fill"
-      style="width:0%"
-    ></div>
-  </div>
-
-  <div class="card">
-
-    <div>
-
-      <b>
-        Бонус за 7 днів
-      </b>
-
-      <p id="streak7Progress">
-        0 / 7 днів
-      </p>
-
-    </div>
-
-    <div class="muted">
-      +50 LC
-    </div>
-
-  </div>
-
-  <div class="bar">
-    <div
-      class="fill"
-      id="streak7Fill"
-      style="width:0%"
-    ></div>
-  </div>
-
-  <button
-    class="btn wide"
-    id="backTasks"
-  >
-    ПОВЕРНУТИСЯ ДО ЗАВДАНЬ
-  </button>
-
-</section>
-
-<!-- БИЗНЕС -->
-<section
-  class="screen"
-  id="screen-business"
->
-
-  <div class="page-title">
-    Бізнес
-  </div>
-
-  <div class="page-subtitle">
-    Отримуйте доступ до бізнесів після погодження адміністратора.
-  </div>
-
-  <div class="business-grid">
-
-    <div class="business">
-      <div class="business-icon">
-        01
+      <div class="business-status">
+        <span>Інвестиції</span>
+        <span>Уточнюється</span>
       </div>
 
-      <b>
-        Кав’ярня
-      </b>
-
-      <span>
-        Доступ за погодженням
-      </span>
+      <button class="upgrade-btn businessRequest">
+        ЗАПИТАТИ У МЕНЕДЖЕРА
+      </button>
     </div>
 
-    <div class="business">
-      <div class="business-icon">
-        02
+
+    <div class="card business">
+      <div class="business-head">
+        <div class="business-icon">🚗</div>
+
+        <div class="business-info">
+          <div class="business-name">Автомийка</div>
+          <div class="business-desc">
+            Бізнес із регулярним попитом та стабільним доходом.
+          </div>
+        </div>
+
+        <div class="business-profit">
+          +LC
+        </div>
       </div>
 
-      <b>
-        Автомийка
-      </b>
-
-      <span>
-        Доступ за погодженням
-      </span>
-    </div>
-
-    <div class="business">
-      <div class="business-icon">
-        03
+      <div class="business-status">
+        <span>Інвестиції</span>
+        <span>Уточнюється</span>
       </div>
 
-      <b>
-        Магазин
-      </b>
-
-      <span>
-        Доступ за погодженням
-      </span>
+      <button class="upgrade-btn businessRequest">
+        ЗАПИТАТИ У МЕНЕДЖЕРА
+      </button>
     </div>
 
-    <div class="business">
-      <div class="business-icon">
-        04
+
+    <div class="card business">
+      <div class="business-head">
+        <div class="business-icon">🏪</div>
+
+        <div class="business-info">
+          <div class="business-name">Магазин</div>
+          <div class="business-desc">
+            Роздрібний бізнес для довгострокового розвитку.
+          </div>
+        </div>
+
+        <div class="business-profit">
+          +LC
+        </div>
       </div>
 
-      <b>
-        СТО
-      </b>
-
-      <span>
-        Доступ за погодженням
-      </span>
-    </div>
-
-  </div>
-
-  <button
-    class="btn wide"
-    id="businessBtn"
-  >
-    ХОЧУ ВІДКРИТИ БІЗНЕС
-  </button>
-
-</section>
-
-<!-- ДРУЗЬЯ -->
-<section
-  class="screen"
-  id="screen-friends"
->
-
-  <div class="page-title">
-    Друзі
-  </div>
-
-  <div class="page-subtitle">
-    Запрошуйте друзів та отримуйте по 100 LC
-    за кожного нового учасника.
-  </div>
-
-  <div class="ref-card">
-
-    <div class="ref-label">
-      Ваше запрошення
-    </div>
-
-    <div class="ref-link">
-      LUCKY-CLOVER • REFERRAL
-    </div>
-
-    <button
-      class="btn wide"
-      id="refBtn"
-    >
-      ЗАПРОСИТИ ДРУЗІВ
-    </button>
-
-  </div>
-
-  <div class="stats">
-
-    <div class="stat">
-
-      <div class="muted">
-        Запрошено
+      <div class="business-status">
+        <span>Інвестиції</span>
+        <span>Уточнюється</span>
       </div>
 
-      <div
-        class="v"
-        id="friendsCount"
-      >
-        0
-      </div>
-
+      <button class="upgrade-btn businessRequest">
+        ЗАПИТАТИ У МЕНЕДЖЕРА
+      </button>
     </div>
 
-    <div class="stat">
 
-      <div class="muted">
-        Реферальні бонуси
+    <div class="card business">
+      <div class="business-head">
+        <div class="business-icon">⛽</div>
+
+        <div class="business-info">
+          <div class="business-name">Сервісна станція</div>
+          <div class="business-desc">
+            Автомобільний бізнес із потенціалом масштабування.
+          </div>
+        </div>
+
+        <div class="business-profit">
+          +LC
+        </div>
       </div>
 
-      <div
-        class="v"
-        id="refBonusTotal"
-      >
-        0 LC
+      <div class="business-status">
+        <span>Інвестиції</span>
+        <span>Уточнюється</span>
       </div>
 
+      <button class="upgrade-btn businessRequest">
+        ЗАПИТАТИ У МЕНЕДЖЕРА
+      </button>
     </div>
 
-  </div>
+  </section>
 
-  <div class="card">
 
-    <div>
+  <!-- ================= FRIENDS ================= -->
+  <section class="screen" id="screen-friends">
 
-      <b>
+    <div class="card ref-code">
+      <div class="ref-code-label">ВАШ РЕФЕРАЛЬНИЙ КОД</div>
+      <div class="ref-code-value" id="refCode">LC-000000</div>
+
+      <button class="primary" id="copyRef">
+        СКОПІЮВАТИ КОД
+      </button>
+    </div>
+
+
+    <div class="friend-stats">
+      <div class="card friend-stat">
+        <b id="refCount">0</b>
+        <span>ДРУЗІВ</span>
+      </div>
+
+      <div class="card friend-stat">
+        <b id="refEarned">0.00</b>
+        <span>ЗАРОБЛЕНО LC</span>
+      </div>
+    </div>
+
+
+    <div class="section-title">Запроси друзів</div>
+
+    <div class="card referral-card">
+      <div class="referral-icon">👥</div>
+
+      <div class="referral-title">
         +100 LC
-      </b>
-
-      <p>
-        Бонус за кожного нового друга після підтвердження його участі.
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- ПРОФИЛЬ -->
-<section
-  class="screen"
-  id="screen-profile"
->
-
-  <div class="page-title">
-    Профіль
-  </div>
-
-  <div class="page-subtitle">
-    Ваша статистика LUCKY-CLOVER.
-  </div>
-
-  <div class="profile-card">
-
-    <div class="avatar">
-      LC
-    </div>
-
-    <div>
-
-      <b>
-        Мій профіль
-      </b>
-
-      <div
-        class="muted"
-        id="profileName"
-      >
-        Учасник LUCKY-CLOVER
       </div>
 
-    </div>
-
-  </div>
-
-  <div class="stats profile-stats">
-
-    <div class="stat">
-
-      <div class="muted">
-        Баланс
+      <div class="referral-desc">
+        Запроси друга в LUCKY-CLOVER.
+        За підтвердженого друга ти отримаєш
+        100 LC.
       </div>
 
-      <div class="v">
-        <span id="profileBalance">
-          50.00
-        </span>
-        LC
-      </div>
-
-    </div>
-
-    <div class="stat">
-
-      <div class="muted">
-        Зароблено сьогодні
-      </div>
-
-      <div class="v">
-        <span id="profileToday">
-          0.00
-        </span>
-        LC
-      </div>
-
-    </div>
-
-    <div class="stat">
-
-      <div class="muted">
-        Усього тапів
-      </div>
-
-      <div
-        class="v"
-        id="profileTaps"
-      >
-        0
-      </div>
-
-    </div>
-
-    <div class="stat">
-
-      <div class="muted">
-        Мінімум для виводу
-      </div>
-
-      <div class="v">
-        500 LC
-      </div>
-
-    </div>
-
-  </div>
-
-  <div class="screen-actions">
-
-    <button
-      class="btn"
-      id="openWithdraw"
-    >
-      ВИВЕСТИ
-    </button>
-
-    <button
-      class="btn"
-      id="openBonuses"
-    >
-      БОНУСИ
-    </button>
-
-    <button
-      class="btn"
-      id="openRating"
-    >
-      РЕЙТИНГ
-    </button>
-
-    <button
-      class="btn"
-      id="openSupport"
-    >
-      ПІДТРИМКА
-    </button>
-
-    <button
-      class="btn"
-      id="openSkins"
-    >
-      СКІНИ
-    </button>
-
-  </div>
-
-</section>
-
-<!-- ВЫВОД -->
-<section
-  class="screen"
-  id="screen-withdraw"
->
-
-  <div class="page-title">
-    Вивести LC
-  </div>
-
-  <div class="page-subtitle">
-    Мінімальна сума для заявки — 500 LC.
-  </div>
-
-  <div class="card">
-
-    <div>
-
-      <b>
-        Доступно
-      </b>
-
-      <p>
-        Ваш поточний баланс
-      </p>
-
-    </div>
-
-    <strong>
-      <span id="withdrawBalance">
-        50.00
-      </span>
-      LC
-    </strong>
-
-  </div>
-
-  <button
-    class="btn wide"
-    id="withdrawBtn"
-  >
-    СТВОРИТИ ЗАЯВКУ
-  </button>
-
-  <div class="admin-note">
-    Після створення заявки зв’яжіться з підтримкою.
-    Перевірка заявки та виплата виконуються адміністратором вручну.
-  </div>
-
-  <div class="card">
-
-    <div>
-
-      <b>
-        Історія
-      </b>
-
-      <p id="withdrawHistory">
-        Заявок ще немає
-      </p>
-
-    </div>
-
-  </div>
-
-</section>
-
-<!-- БОНУСЫ -->
-<section
-  class="screen"
-  id="screen-bonuses"
->
-
-  <div class="page-title">
-    Бонуси
-  </div>
-
-  <div class="page-subtitle">
-    Додаткові способи отримувати винагороду.
-  </div>
-
-  <div class="list">
-
-    <div class="card">
-
-      <div>
-
-        <span class="tag">
-          ЩОДНЯ
-        </span>
-
-        <b>
-          Бонус дня
-        </b>
-
-        <p>
-          +10 LC один раз на день.
-        </p>
-
-      </div>
-
-      <button
-        class="btn small"
-        id="bonusDailyOpen"
-      >
-        ЗАБРАТИ
+      <button class="primary" id="shareReferral">
+        ЗАПРОСИТИ ДРУГА
       </button>
-
     </div>
 
-    <div class="card">
+  </section>
 
-      <div>
 
-        <span class="tag">
-          АКТИВНІСТЬ
-        </span>
+  <!-- ================= PROFILE ================= -->
+  <section class="screen" id="screen-profile">
 
-        <b>
-          Серія днів
-        </b>
+    <div class="card profile-card">
 
-        <p>
-          3 дні: +20 LC, 7 днів: +50 LC.
-        </p>
-
+      <div class="avatar" id="profileAvatar">
+        👤
       </div>
 
-      <button
-        class="btn small"
-        id="bonusStreakOpen"
-      >
-        ВІДКРИТИ
-      </button>
+      <div class="profile-name" id="profileName">
+        Користувач
+      </div>
 
-    </div>
+      <div class="profile-username" id="profileUsername">
+        @user
+      </div>
 
-    <div class="card">
+      <div class="profile-grid">
 
-      <div>
+        <div class="profile-stat">
+          <b id="profileBalance">0</b>
+          <span>БАЛАНС</span>
+        </div>
 
-        <span class="tag">
-          ×2
-        </span>
+        <div class="profile-stat">
+          <b id="profileToday">0</b>
+          <span>СЬОГОДНІ</span>
+        </div>
 
-        <b>
-          Подвійний дохід
-        </b>
-
-        <p>
-          Тимчасово подвоює дохід від тапів.
-        </p>
-
-        <div
-          class="boost-time"
-          id="boostTime"
-        >
-          Не активний
+        <div class="profile-stat">
+          <b id="profileTaps">0</b>
+          <span>ТАПІВ</span>
         </div>
 
       </div>
 
-      <button
-        class="btn small"
-        id="bonusBoostOpen"
-      >
-        АКТИВУВАТИ ×2
+    </div>
+
+
+    <div class="section-title">Профіль</div>
+
+    <div class="action-grid">
+
+      <button class="action" onclick="openScreen('withdraw')">
+        <div class="action-icon">💸</div>
+        <div class="action-title">Виведення</div>
+        <div class="action-sub">Мінімум 500 LC</div>
+      </button>
+
+      <button class="action" onclick="openScreen('skins')">
+        <div class="action-icon">🎨</div>
+        <div class="action-title">Скіни</div>
+        <div class="action-sub">Оформлення</div>
+      </button>
+
+      <button class="action" onclick="openScreen('bonuses')">
+        <div class="action-icon">🎁</div>
+        <div class="action-title">Бонуси</div>
+        <div class="action-sub">Щоденні нагороди</div>
+      </button>
+
+      <button class="action" onclick="openScreen('support')">
+        <div class="action-icon">💬</div>
+        <div class="action-title">Підтримка</div>
+        <div class="action-sub">Зв'язатися з нами</div>
       </button>
 
     </div>
 
-  </div>
+  </section>
 
-</section>
 
-<!-- РЕЙТИНГ -->
-<section
-  class="screen"
-  id="screen-rating"
->
+  <!-- ================= WITHDRAW ================= -->
+  <section class="screen" id="screen-withdraw">
 
-  <div class="page-title">
-    Рейтинг
-  </div>
+    <div class="section-title">Виведення LC</div>
 
-  <div class="page-subtitle">
-    Порівнюйте свою активність з іншими учасниками.
-  </div>
+    <div class="card withdraw-card">
 
-  <div class="card">
-
-    <div>
-
-      <span class="tag">
-        СЬОГОДНІ
-      </span>
-
-      <b>
-        Ваш результат
-      </b>
-
-      <p>
-        Місце буде формуватися сервером після підключення бази.
-      </p>
-
-    </div>
-
-    <strong id="ratingToday">
-      —
-    </strong>
-
-  </div>
-
-  <div class="card">
-
-    <div>
-
-      <span class="tag">
-        ТИЖДЕНЬ
-      </span>
-
-      <b>
-        Тижневий рейтинг
-      </b>
-
-      <p>
-        Доходи та активність.
-      </p>
-
-    </div>
-
-    <strong>
-      —
-    </strong>
-
-  </div>
-
-  <div class="card">
-
-    <div>
-
-      <span class="tag">
-        МІСЯЦЬ
-      </span>
-
-      <b>
-        Місячний рейтинг
-      </b>
-
-      <p>
-        Довгострокова активність.
-      </p>
-
-    </div>
-
-    <strong>
-      —
-    </strong>
-
-  </div>
-
-  <div class="admin-note">
-    Онлайн-рейтинг потребує серверної бази та Telegram ID.
-  </div>
-
-</section>
-
-<!-- ПОДДЕРЖКА -->
-<section
-  class="screen"
-  id="screen-support"
->
-
-  <div class="page-title">
-    Підтримка
-  </div>
-
-  <div class="page-subtitle">
-    Оберіть менеджера LUCKY-CLOVER.
-  </div>
-
-  <div class="manager-grid">
-
-    <button
-      class="manager"
-      data-manager="CosmoPult_clover1"
-    >
-      <b>
-        @CosmoPult_clover1
-      </b>
-
-      <p class="muted">
-        Менеджер 1
-      </p>
-    </button>
-
-    <button
-      class="manager"
-      data-manager="CosmoPult_clover2"
-    >
-      <b>
-        @CosmoPult_clover2
-      </b>
-
-      <p class="muted">
-        Менеджер 2
-      </p>
-    </button>
-
-  </div>
-
-  <div class="list">
-
-    <button
-      class="card support-item"
-      data-support="withdraw"
-    >
-      <b>
-        Питання щодо виводу
-      </b>
-
-      <span>
-        ›
-      </span>
-    </button>
-
-    <button
-      class="card support-item"
-      data-support="business"
-    >
-      <b>
-        Відкрити бізнес
-      </b>
-
-      <span>
-        ›
-      </span>
-    </button>
-
-    <button
-      class="card support-item"
-      data-support="account"
-    >
-      <b>
-        Проблема з акаунтом
-      </b>
-
-      <span>
-        ›
-      </span>
-    </button>
-
-    <button
-      class="card support-item"
-      data-support="balance"
-    >
-      <b>
-        Проблема з балансом
-      </b>
-
-      <span>
-        ›
-      </span>
-    </button>
-
-    <button
-      class="card support-item"
-      data-support="other"
-    >
-      <b>
-        Інше питання
-      </b>
-
-      <span>
-        ›
-      </span>
-    </button>
-
-  </div>
-
-  <button
-    class="btn wide"
-    id="supportBtn"
-  >
-    НАПИСАТИ МЕНЕДЖЕРУ 1
-  </button>
-
-</section>
-
-<!-- РЕФЕРАЛЫ -->
-<section
-  class="screen"
-  id="screen-referral"
->
-
-  <div class="page-title">
-    Запросити друзів
-  </div>
-
-  <div class="page-subtitle">
-    Поділіться карткою LUCKY-CLOVER.
-    За нового учасника — +100 LC.
-  </div>
-
-  <div class="ref-card">
-
-    <div
-      class="skin-art clover"
-      style="height:150px"
-    >
-      <span>
-        LC
-      </span>
-    </div>
-
-    <div class="ref-label">
-      Ваш код
-    </div>
-
-    <div
-      class="ref-code"
-      id="refCode"
-    >
-      LC-000000
-    </div>
-
-    <div class="muted">
-      Посилання формується автоматично в Telegram.
-    </div>
-
-    <button
-      class="btn wide"
-      id="shareRefBtn"
-    >
-      ПОДІЛИТИСЯ КАРТКОЮ
-    </button>
-
-  </div>
-
-</section>
-
-<!-- СКИНЫ -->
-<section
-  class="screen"
-  id="screen-skins"
->
-
-  <div class="page-title">
-    Скіни
-  </div>
-
-  <div class="page-subtitle">
-    Змінюйте вигляд головної монети за LC.
-  </div>
-
-  <div class="skin-grid">
-
-    <div class="skin">
-
-      <div class="skin-art">
-        <span>
-          LC
-        </span>
+      <div class="balance-label">
+        ДОСТУПНО
       </div>
 
-      <b>
-        Золотий
-      </b>
+      <div class="balance">
+        <span id="withdrawBalance">0.00</span>
+        <span> LC</span>
+      </div>
 
-      <p class="muted">
-        Класичний
-      </p>
+      <div class="withdraw-min">
+        Мінімальна сума для виведення:
+        <b>500 LC</b>
+      </div>
+
+      <div class="small muted">
+        Спосіб отримання
+      </div>
+
+      <div class="withdraw-methods">
+        <button class="method selected" data-method="USDT">
+          USDT
+        </button>
+
+        <button class="method" data-method="CARD">
+          КАРТА
+        </button>
+      </div>
+
+      <div class="small muted">
+        Сума
+      </div>
+
+      <input
+        class="input"
+        id="withdrawAmount"
+        type="number"
+        min="500"
+        placeholder="500"
+      >
+
+      <div class="small muted" style="margin-top:12px">
+        Реквізити
+      </div>
+
+      <input
+        class="input"
+        id="withdrawDetails"
+        type="text"
+        placeholder="Ваші реквізити"
+      >
 
       <button
-        class="btn wide"
-        data-skin="gold"
+        class="primary"
+        id="withdrawBtn"
+        style="margin-top:15px"
       >
-        ВИБРАТИ
+        СТВОРИТИ ЗАЯВКУ
       </button>
 
     </div>
 
-    <div class="skin">
 
-      <div class="skin-art clover">
-        <span>
-          LC
-        </span>
+    <div class="section-title">Історія</div>
+
+    <div id="withdrawHistory">
+      <div class="card empty">
+        Історія виведень порожня
+      </div>
+    </div>
+
+  </section>
+
+
+  <!-- ================= BONUSES ================= -->
+  <section class="screen" id="screen-bonuses">
+
+    <div class="section-title">Бонуси</div>
+
+    <div class="card bonus">
+      <div class="bonus-icon">🎁</div>
+
+      <div class="bonus-info">
+        <div class="bonus-title">Щоденний бонус</div>
+        <div class="bonus-desc">
+          Отримуй +10 LC один раз на день
+        </div>
       </div>
 
-      <b>
-        Смарагд
-      </b>
+      <button class="bonus-btn" id="dailyBonus">
+        +10 LC
+      </button>
+    </div>
 
-      <p class="muted">
-        Ціна: 150 LC
-      </p>
+
+    <div class="card bonus">
+      <div class="bonus-icon">🔥</div>
+
+      <div class="bonus-info">
+        <div class="bonus-title">Бонус за стрік</div>
+        <div class="bonus-desc">
+          Додаткові нагороди за щоденні входи
+        </div>
+      </div>
+
+      <button class="bonus-btn" onclick="openScreen('streak')">
+        ВІДКРИТИ
+      </button>
+    </div>
+
+
+    <div class="card bonus">
+      <div class="bonus-icon">⚡</div>
+
+      <div class="bonus-info">
+        <div class="bonus-title">X2 BOOST</div>
+        <div class="bonus-desc">
+          Подвоює нагороду за тап на 30 хвилин
+        </div>
+      </div>
+
+      <button class="bonus-btn" id="activateBoost">
+        X2
+      </button>
+    </div>
+
+  </section>
+
+
+  <!-- ================= RATING ================= -->
+  <section class="screen" id="screen-rating">
+
+    <div class="section-title">Рейтинг</div>
+
+    <div id="ratingList">
+
+      <div class="card rating-row">
+        <div class="rating-place">1</div>
+        <div class="rating-avatar">👑</div>
+
+        <div class="rating-info">
+          <div class="rating-name">LUCKY PLAYER</div>
+          <div class="rating-balance">Топ гравець</div>
+        </div>
+
+        <div class="rating-value">— LC</div>
+      </div>
+
+      <div class="card rating-row">
+        <div class="rating-place">2</div>
+        <div class="rating-avatar">🍀</div>
+
+        <div class="rating-info">
+          <div class="rating-name">CLOVER</div>
+          <div class="rating-balance">Топ гравець</div>
+        </div>
+
+        <div class="rating-value">— LC</div>
+      </div>
+
+      <div class="card rating-row">
+        <div class="rating-place">3</div>
+        <div class="rating-avatar">💚</div>
+
+        <div class="rating-info">
+          <div class="rating-name">LUCKY</div>
+          <div class="rating-balance">Топ гравець</div>
+        </div>
+
+        <div class="rating-value">— LC</div>
+      </div>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= SUPPORT ================= -->
+  <section class="screen" id="screen-support">
+
+    <div class="section-title">Підтримка</div>
+
+    <div class="card support-card">
+
+      <div class="support-icon">💬</div>
+
+      <div style="font-size:18px;font-weight:950">
+        Потрібна допомога?
+      </div>
+
+      <div class="muted small" style="margin-top:8px;line-height:1.5">
+        Напиши менеджеру. Ми допоможемо
+        з питаннями щодо гри, виплат,
+        бонусів та бізнесу.
+      </div>
+
+    </div>
+
+
+    <div class="card manager">
+      <div class="manager-avatar">👨‍💼</div>
+
+      <div class="manager-info">
+        <div class="manager-name">@CosmoPult_clover1</div>
+        <div class="manager-role">Менеджер підтримки</div>
+      </div>
 
       <button
-        class="btn wide"
-        data-skin="clover"
+        class="manager-open"
+        onclick="openTelegram('CosmoPult_clover1')"
       >
+        НАПИСАТИ
+      </button>
+    </div>
+
+
+    <div class="card manager">
+      <div class="manager-avatar">👨‍💼</div>
+
+      <div class="manager-info">
+        <div class="manager-name">@CosmoPult_clover2</div>
+        <div class="manager-role">Менеджер підтримки</div>
+      </div>
+
+      <button
+        class="manager-open"
+        onclick="openTelegram('CosmoPult_clover2')"
+      >
+        НАПИСАТИ
+      </button>
+    </div>
+
+  </section>
+
+
+  <!-- ================= REFERRAL ================= -->
+  <section class="screen" id="screen-referral">
+
+    <div class="card referral-card">
+
+      <div class="referral-icon">☘️</div>
+
+      <div class="referral-title">
+        РЕФЕРАЛЬНА ПРОГРАМА
+      </div>
+
+      <div class="referral-desc">
+        Запрошуй друзів, розвивай свою мережу
+        та отримуй бонуси за кожного
+        підтвердженого користувача.
+      </div>
+
+      <div class="small muted">
+        Твій код
+      </div>
+
+      <div class="ref-code-value" id="refCode2">
+        LC-000000
+      </div>
+
+      <div class="referral-link">
+        <input
+          class="input"
+          id="refLink"
+          readonly
+          value=""
+        >
+
+        <button
+          class="secondary"
+          style="width:85px"
+          id="copyRefLink"
+        >
+          COPY
+        </button>
+      </div>
+
+      <button
+        class="primary"
+        style="margin-top:10px"
+        id="shareReferral2"
+      >
+        ПОДІЛИТИСЯ
+      </button>
+
+    </div>
+
+  </section>
+
+
+  <!-- ================= SKINS ================= -->
+  <section class="screen" id="screen-skins">
+
+    <div class="section-title">Скіни</div>
+
+    <div class="card skin">
+
+      <div class="skin-preview">
+        ☘️
+      </div>
+
+      <div class="skin-info">
+        <div class="skin-name">GOLD</div>
+        <div class="skin-desc">
+          Базовий скін
+        </div>
+      </div>
+
+      <button class="skin-btn" data-skin="gold">
+        ОБРАТИ
+      </button>
+
+    </div>
+
+
+    <div class="card skin">
+
+      <div class="skin-preview">
+        🍀
+      </div>
+
+      <div class="skin-info">
+        <div class="skin-name">CLOVER</div>
+        <div class="skin-desc">
+          Зелений lucky-стиль
+        </div>
+      </div>
+
+      <button class="skin-btn" data-skin="clover">
         150 LC
       </button>
 
     </div>
 
-    <div class="skin">
 
-      <div class="skin-art lucky">
-        <span>
-          LC
-        </span>
+    <div class="card skin">
+
+      <div class="skin-preview">
+        ☘️
       </div>
 
-      <b>
-        Lucky Gold
-      </b>
+      <div class="skin-info">
+        <div class="skin-name">LUCKY</div>
+        <div class="skin-desc">
+          Преміальний стиль
+        </div>
+      </div>
 
-      <p class="muted">
-        Ціна: 300 LC
-      </p>
-
-      <button
-        class="btn wide"
-        data-skin="lucky"
-      >
+      <button class="skin-btn" data-skin="lucky">
         300 LC
       </button>
 
     </div>
 
-    <div class="skin">
 
-      <div class="skin-art night">
-        <span>
-          LC
-        </span>
+    <div class="card skin">
+
+      <div class="skin-preview">
+        🌑
       </div>
 
-      <b>
-        Night Clover
-      </b>
+      <div class="skin-info">
+        <div class="skin-name">NIGHT</div>
+        <div class="skin-desc">
+          Темний нічний стиль
+        </div>
+      </div>
 
-      <p class="muted">
-        Ціна: 500 LC
-      </p>
-
-      <button
-        class="btn wide"
-        data-skin="night"
-      >
+      <button class="skin-btn" data-skin="night">
         500 LC
       </button>
 
     </div>
 
+  </section>
+
+</div>
+
+
+<!-- ================= NAV ================= -->
+
+<div class="bottom-nav">
+  <div class="nav">
+
+    <button
+      class="nav-btn active"
+      data-screen="home"
+      onclick="openScreen('home')"
+    >
+      <div class="nav-icon">☘️</div>
+      <div class="nav-label">ГОЛОВНА</div>
+    </button>
+
+    <button
+      class="nav-btn"
+      data-screen="tasks"
+      onclick="openScreen('tasks')"
+    >
+      <div class="nav-icon">✓</div>
+      <div class="nav-label">ЗАВДАННЯ</div>
+    </button>
+
+    <button
+      class="nav-btn"
+      data-screen="friends"
+      onclick="openScreen('friends')"
+    >
+      <div class="nav-icon">👥</div>
+      <div class="nav-label">ДРУЗІ</div>
+    </button>
+
+    <button
+      class="nav-btn"
+      data-screen="rating"
+      onclick="openScreen('rating')"
+    >
+      <div class="nav-icon">🏆</div>
+      <div class="nav-label">ТОП</div>
+    </button>
+
+    <button
+      class="nav-btn"
+      data-screen="profile"
+      onclick="openScreen('profile')"
+    >
+      <div class="nav-icon">👤</div>
+      <div class="nav-label">ПРОФІЛЬ</div>
+    </button>
+
   </div>
+</div>
 
-</section>
 
-<!-- НИЖНЯ НАВИГАЦИЯ -->
-<nav
-  class="bottom-nav"
-  aria-label="Основна навігація"
->
+<div id="toast"></div>
 
-  <button
-    class="nav-item active"
-    data-screen="home"
-  >
-    <span>⌂</span>
-    <small>Головна</small>
-  </button>
-
-  <button
-    class="nav-item"
-    data-screen="tasks"
-  >
-    <span>✓</span>
-    <small>Завдання</small>
-  </button>
-
-  <button
-    class="nav-item"
-    data-screen="business"
-  >
-    <span>◆</span>
-    <small>Бізнес</small>
-  </button>
-
-  <button
-    class="nav-item"
-    data-screen="friends"
-  >
-    <span>+</span>
-    <small>Друзі</small>
-  </button>
-
-  <button
-    class="nav-item"
-    data-screen="profile"
-  >
-    <span>○</span>
-    <small>Профіль</small>
-  </button>
-
-</nav>
-
-</main>
-
-<div
-  class="toast"
-  id="toast"
-></div>
-
-<script src="https://telegram.org/js/telegram-web-app.js"></script>
 
 <script>
-
 /* =========================================================
    LUCKY-CLOVER
-   FULL CLIENT VERSION
-   ========================================================= */
+   SUPABASE / QUICK API
+========================================================= */
+
+const API_URL =
+  'https://auxylindmasxrbrzaaqv.supabase.co/functions/v1/quick-api';
 
 const SAVE_KEY = 'lucky_clover_state_v2';
 const TG_KEY = 'lucky_clover_state_v2';
@@ -2310,78 +2359,32 @@ const SUPPORT_USERNAMES = [
 ];
 
 const MIN_WITHDRAW = 500;
-
 const MINING_CAP_HOURS = 3;
 
-/* =========================================================
-   PASSIVE LEVELS
-   ========================================================= */
-
 const PASSIVE_LEVELS = [
-
-  {
-    rate:10,
-    price:75
-  },
-
-  {
-    rate:20,
-    price:120
-  },
-
-  {
-    rate:35,
-    price:180
-  },
-
-  {
-    rate:55,
-    price:280
-  },
-
-  {
-    rate:80,
-    price:420
-  },
-
-  {
-    rate:120,
-    price:650
-  },
-
-  {
-    rate:175,
-    price:950
-  }
-
+  {rate:10, price:75},
+  {rate:20, price:120},
+  {rate:35, price:180},
+  {rate:55, price:280},
+  {rate:80, price:420},
+  {rate:120, price:650},
+  {rate:175, price:950}
 ];
 
-/* =========================================================
-   DEFAULT STATE
-   ========================================================= */
-
 const DEFAULT_STATE = {
-
   balance:50,
-
   energy:100,
-
   maxEnergy:100,
-
   energyUpgradePrice:50,
-
   lastEnergyAt:Date.now(),
 
   taps:0,
-
   today:0,
 
   tapPower:.10,
-
   upgradePrice:10,
 
   taskDay:'',
-
   tasks:{
     login:false,
     taps:false,
@@ -2389,379 +2392,482 @@ const DEFAULT_STATE = {
   },
 
   streak:0,
-
   bestStreak:0,
-
   lastLoginDay:'',
-
   streak3Claimed:false,
-
   streak7Claimed:false,
 
-  currentSkin:'gold'
+  currentSkin:'gold',
 
+  passiveRate:10,
+  passiveLevel:0,
+  passivePending:0,
+  passiveLastAt:Date.now(),
+
+  referralCode:'',
+  referralsCount:0,
+  referralEarnings:0
 };
 
-/* =========================================================
-   MAIN VARIABLES
-   ========================================================= */
-
-let balance = DEFAULT_STATE.balance;
-
-let energy = DEFAULT_STATE.energy;
-
-let maxEnergy = DEFAULT_STATE.maxEnergy;
-
-let energyUpgradePrice =
-  DEFAULT_STATE.energyUpgradePrice;
-
-let lastEnergyAt =
-  DEFAULT_STATE.lastEnergyAt;
-
-let taps = DEFAULT_STATE.taps;
-
-let today = DEFAULT_STATE.today;
-
-let tapPower = DEFAULT_STATE.tapPower;
-
-let upgradePrice = DEFAULT_STATE.upgradePrice;
-
-let taskDay = DEFAULT_STATE.taskDay;
-
-let tasks = {
-  ...DEFAULT_STATE.tasks
-};
-
-let streak = DEFAULT_STATE.streak;
-
-let bestStreak = DEFAULT_STATE.bestStreak;
-
-let lastLoginDay =
-  DEFAULT_STATE.lastLoginDay;
-
-let streak3Claimed =
-  DEFAULT_STATE.streak3Claimed;
-
-let streak7Claimed =
-  DEFAULT_STATE.streak7Claimed;
-
-let currentSkin =
-  DEFAULT_STATE.currentSkin;
 
 /* =========================================================
-   BOOST
-   ========================================================= */
+   STATE
+========================================================= */
 
-let boostUntil = 0;
+let state = structuredClone(DEFAULT_STATE);
 
-/* =========================================================
-   PASSIVE
-   ========================================================= */
+let telegramUser = null;
+let telegramInitData = '';
 
-let passiveIncome = 0;
+let serverReady = false;
+let syncTimer = null;
 
-let passiveLevelIndex = -1;
+let selectedWithdrawMethod = 'USDT';
 
-let lastMiningAt = Date.now();
-
-let miningStored = 0;
 
 /* =========================================================
-   DAILY BONUS
-   ========================================================= */
+   DOM
+========================================================= */
 
-let dailyBonusDay = '';
+const $ = id => document.getElementById(id);
 
-/* =========================================================
-   HELPERS
-   ========================================================= */
-
-const $ = id =>
-  document.getElementById(id);
 
 /* =========================================================
-   DATE
-   ========================================================= */
+   UTIL
+========================================================= */
 
-function dayKey(){
-
-  const d = new Date();
-
-  return (
-    d.getFullYear() +
-    '-' +
-    String(d.getMonth()+1).padStart(2,'0') +
-    '-' +
-    String(d.getDate()).padStart(2,'0')
-  );
-
+function num(value, fallback=0){
+  const n = Number(value);
+  return Number.isFinite(n) ? n : fallback;
 }
 
-function previousDayKey(){
-
-  const d = new Date();
-
-  d.setDate(
-    d.getDate()-1
-  );
-
-  return (
-    d.getFullYear() +
-    '-' +
-    String(d.getMonth()+1).padStart(2,'0') +
-    '-' +
-    String(d.getDate()).padStart(2,'0')
-  );
-
+function money(value){
+  return num(value).toFixed(2);
 }
 
-/* =========================================================
-   TOAST
-   ========================================================= */
+function todayKey(){
+  const d = new Date();
 
-function toast(text){
+  return [
+    d.getFullYear(),
+    String(d.getMonth()+1).padStart(2,'0'),
+    String(d.getDate()).padStart(2,'0')
+  ].join('-');
+}
 
+function yesterdayKey(){
+  const d = new Date();
+  d.setDate(d.getDate()-1);
+
+  return [
+    d.getFullYear(),
+    String(d.getMonth()+1).padStart(2,'0'),
+    String(d.getDate()).padStart(2,'0')
+  ].join('-');
+}
+
+function toast(message){
   const el = $('toast');
 
-  if(!el){
-    return;
-  }
+  if(!el) return;
 
-  el.textContent = text;
-
+  el.textContent = message;
   el.classList.add('show');
 
-  clearTimeout(
-    toast.timer
-  );
+  clearTimeout(toast.timer);
 
-  toast.timer = setTimeout(
-    ()=>{
-      el.classList.remove('show');
-    },
-    1400
-  );
-
+  toast.timer = setTimeout(()=>{
+    el.classList.remove('show');
+  },2200);
 }
+
 
 /* =========================================================
-   FLOAT REWARD
-   ========================================================= */
+   TELEGRAM
+========================================================= */
 
-function showFloatReward(value){
+function loadTelegram(){
 
-  const el =
-    document.createElement('div');
+  if(
+    window.Telegram &&
+    Telegram.WebApp
+  ){
 
-  el.className =
-    'float-reward';
+    Telegram.WebApp.ready();
+    Telegram.WebApp.expand();
 
-  el.textContent =
-    '+' +
-    Number(value).toFixed(2) +
-    ' LC';
+    telegramInitData =
+      Telegram.WebApp.initData || '';
 
-  document.body.appendChild(el);
+    telegramUser =
+      Telegram.WebApp.initDataUnsafe?.user || null;
 
-  setTimeout(
-    ()=>{
-      el.remove();
-    },
-    700
-  );
+    if(telegramUser){
 
+      const name =
+        [
+          telegramUser.first_name,
+          telegramUser.last_name
+        ]
+        .filter(Boolean)
+        .join(' ') ||
+        'Користувач';
+
+      $('profileName').textContent = name;
+
+      $('profileUsername').textContent =
+        telegramUser.username
+          ? '@' + telegramUser.username
+          : 'Telegram користувач';
+
+      $('profileAvatar').textContent =
+        (telegramUser.first_name || '👤')
+          .charAt(0)
+          .toUpperCase();
+    }
+  }
 }
+
 
 /* =========================================================
-   BOOST FUNCTIONS
-   ========================================================= */
+   LOCAL STORAGE
+========================================================= */
 
-function loadBoost(){
-
-  try{
-
-    boostUntil =
-      Number(
-        localStorage.getItem(
-          BOOST_KEY
-        ) || 0
-      ) || 0;
-
-  }catch(e){}
-
-}
-
-function saveBoost(){
+function saveLocal(){
 
   try{
 
     localStorage.setItem(
-      BOOST_KEY,
-      String(boostUntil)
+      SAVE_KEY,
+      JSON.stringify(state)
     );
 
-  }catch(e){}
-
+  }catch(e){
+    console.warn('local save error',e);
+  }
 }
 
-function boostActive(){
+function loadLocal(){
 
-  return Date.now() <
-    boostUntil;
+  try{
 
+    const raw =
+      localStorage.getItem(SAVE_KEY);
+
+    if(raw){
+
+      const parsed =
+        JSON.parse(raw);
+
+      state = {
+        ...structuredClone(DEFAULT_STATE),
+        ...parsed,
+        tasks:{
+          ...DEFAULT_STATE.tasks,
+          ...(parsed.tasks || {})
+        }
+      };
+    }
+
+  }catch(e){
+
+    console.warn('local load error',e);
+  }
 }
 
-function boostText(){
 
-  if(!boostActive()){
-    return 'Не активний';
+/* =========================================================
+   API
+========================================================= */
+
+async function api(action, data={}){
+
+  const payload = {
+    action,
+    ...data
+  };
+
+  if(telegramInitData){
+    payload.initData = telegramInitData;
   }
 
-  const left =
-    Math.max(
-      0,
-      boostUntil-Date.now()
+  try{
+
+    const response = await fetch(API_URL,{
+      method:'POST',
+
+      headers:{
+        'Content-Type':'application/json'
+      },
+
+      body:JSON.stringify(payload)
+    });
+
+    const text =
+      await response.text();
+
+    let result;
+
+    try{
+      result = JSON.parse(text);
+    }catch{
+      result = {
+        ok:false,
+        error:text || 'Invalid server response'
+      };
+    }
+
+    if(!response.ok){
+
+      throw new Error(
+        result.error ||
+        `HTTP ${response.status}`
+      );
+    }
+
+    if(result.ok === false){
+
+      throw new Error(
+        result.error ||
+        'API error'
+      );
+    }
+
+    return result;
+
+  }catch(error){
+
+    console.warn(
+      'API:',
+      action,
+      error
     );
 
-  const minutes =
-    Math.floor(
-      left/60000
-    );
-
-  const seconds =
-    Math.floor(
-      (left%60000)/1000
-    );
-
-  return (
-    'Залишилось ' +
-    String(minutes).padStart(2,'0') +
-    ':' +
-    String(seconds).padStart(2,'0')
-  );
-
+    throw error;
+  }
 }
 
-function syncBoost(){
 
-  const el =
-    $('boostTime');
+/* =========================================================
+   SERVER STATE
+========================================================= */
 
-  if(el){
-    el.textContent =
-      boostText();
-  }
+function applyServerState(data){
 
-  const btn =
-    $('bonusBoostOpen');
+  if(!data) return;
 
-  if(!btn){
+  const s =
+    data.state ||
+    data.user ||
+    data;
+
+  if(!s || typeof s !== 'object'){
     return;
   }
 
-  btn.disabled =
-    boostActive();
+  if(s.balance !== undefined)
+    state.balance = num(s.balance);
 
-  btn.textContent =
-    boostActive()
-      ? 'АКТИВНО'
-      : 'АКТИВУВАТИ ×2';
+  if(s.energy !== undefined)
+    state.energy = num(s.energy);
 
+  if(s.max_energy !== undefined)
+    state.maxEnergy = num(s.max_energy);
+
+  if(s.maxEnergy !== undefined)
+    state.maxEnergy = num(s.maxEnergy);
+
+  if(s.energy_upgrade_price !== undefined)
+    state.energyUpgradePrice =
+      num(s.energy_upgrade_price);
+
+  if(s.tap_power !== undefined)
+    state.tapPower =
+      num(s.tap_power,.10);
+
+  if(s.tapPower !== undefined)
+    state.tapPower =
+      num(s.tapPower,.10);
+
+  if(s.tap_upgrade_price !== undefined)
+    state.upgradePrice =
+      num(s.tap_upgrade_price,10);
+
+  if(s.upgradePrice !== undefined)
+    state.upgradePrice =
+      num(s.upgradePrice,10);
+
+  if(s.total_taps !== undefined)
+    state.taps =
+      num(s.total_taps);
+
+  if(s.taps !== undefined)
+    state.taps =
+      num(s.taps);
+
+  if(s.today_earned !== undefined)
+    state.today =
+      num(s.today_earned);
+
+  if(s.today !== undefined)
+    state.today =
+      num(s.today);
+
+  if(s.passive_income !== undefined)
+    state.passiveRate =
+      num(s.passive_income,10);
+
+  if(s.passive_rate !== undefined)
+    state.passiveRate =
+      num(s.passive_rate,10);
+
+  if(s.passive_level !== undefined)
+    state.passiveLevel =
+      num(s.passive_level);
+
+  if(s.current_streak !== undefined)
+    state.streak =
+      num(s.current_streak);
+
+  if(s.best_streak !== undefined)
+    state.bestStreak =
+      num(s.best_streak);
+
+  if(s.current_skin !== undefined)
+    state.currentSkin =
+      s.current_skin;
+
+  if(s.referrals_count !== undefined)
+    state.referralsCount =
+      num(s.referrals_count);
+
+  if(s.referral_earnings !== undefined)
+    state.referralEarnings =
+      num(s.referral_earnings);
+
+  if(s.referral_code !== undefined)
+    state.referralCode =
+      String(s.referral_code);
+
+  if(data.referralCode)
+    state.referralCode =
+      String(data.referralCode);
 }
 
-function activateBoost(){
 
-  if(
-    boostActive()
-  ){
-    return;
+/* =========================================================
+   INITIAL SERVER LOAD
+========================================================= */
+
+async function syncServer(){
+
+  try{
+
+    const result =
+      await api('init',{
+        version:TG_VERSION,
+        ref:getReferralFromURL()
+      });
+
+    applyServerState(result);
+
+    if(result.referral_code)
+      state.referralCode =
+        result.referral_code;
+
+    if(result.user?.referral_code)
+      state.referralCode =
+        result.user.referral_code;
+
+    if(result.referralCode)
+      state.referralCode =
+        result.referralCode;
+
+    serverReady = true;
+
+    saveLocal();
+    render();
+    renderTasks();
+    renderReferral();
+
+  }catch(error){
+
+    console.warn(
+      'Не вдалося синхронізувати сервер:',
+      error
+    );
+
+  }finally{
+
+    setTimeout(()=>{
+      $('loading')?.classList.add('hide');
+    },300);
   }
-
-  boostUntil =
-    Date.now() +
-    30*60*1000;
-
-  saveBoost();
-
-  syncBoost();
-
-  toast(
-    '×2 дохід активовано на 30 хвилин'
-  );
-
 }
+
 
 /* =========================================================
    ENERGY
-   ========================================================= */
+========================================================= */
 
 function applyOfflineEnergy(){
 
-  const now =
-    Date.now();
+  const now = Date.now();
 
   const elapsed =
     Math.max(
       0,
       now -
-      (
-        Number(lastEnergyAt) ||
-        now
-      )
+      num(state.lastEnergyAt,now)
     );
 
-  energy =
+  /*
+    1 energy / 2 seconds
+  */
+
+  state.energy =
     Math.min(
-      maxEnergy,
-      energy +
-      elapsed/2000
+      state.maxEnergy,
+      state.energy + elapsed / 2000
     );
 
-  lastEnergyAt =
-    now;
-
+  state.lastEnergyAt = now;
 }
+
 
 /* =========================================================
-   PASSIVE LEVEL
-   ========================================================= */
+   PASSIVE INCOME
+========================================================= */
 
-function getPassiveLevelIndex(){
+function loadPassive(){
 
-  if(
-    passiveIncome <= 0
-  ){
-    return -1;
-  }
+  try{
 
-  return PASSIVE_LEVELS.findIndex(
-    item =>
-      item.rate === passiveIncome
-  );
+    const raw =
+      localStorage.getItem(PASSIVE_KEY);
 
+    if(raw){
+
+      const p =
+        JSON.parse(raw);
+
+      state.passivePending =
+        num(p.pending);
+
+      state.passiveLastAt =
+        num(p.lastAt,Date.now());
+
+      if(
+        p.rate !== undefined &&
+        !serverReady
+      ){
+        state.passiveRate =
+          num(p.rate,10);
+      }
+    }
+
+  }catch(e){}
 }
-
-function getNextPassiveLevel(){
-
-  const index =
-    getPassiveLevelIndex();
-
-  if(index === -1){
-
-    return PASSIVE_LEVELS[0];
-
-  }
-
-  return (
-    PASSIVE_LEVELS[index+1] ||
-    null
-  );
-
-}
-
-/* =========================================================
-   PASSIVE SAVE
-   ========================================================= */
 
 function savePassive(){
 
@@ -2770,1208 +2876,1489 @@ function savePassive(){
     localStorage.setItem(
       PASSIVE_KEY,
       JSON.stringify({
-
-        passiveIncome,
-
-        lastMiningAt,
-
-        miningStored,
-
-        dailyBonusDay
-
+        pending:state.passivePending,
+        lastAt:state.passiveLastAt,
+        rate:state.passiveRate
       })
     );
 
   }catch(e){}
-
 }
 
-/* =========================================================
-   PASSIVE LOAD
-   ========================================================= */
+function calculatePassive(){
 
-function loadPassive(){
-
-  try{
-
-    const saved =
-      JSON.parse(
-        localStorage.getItem(
-          PASSIVE_KEY
-        ) || 'null'
-      );
-
-    if(
-      saved &&
-      typeof saved === 'object'
-    ){
-
-      passiveIncome =
-        Number(
-          saved.passiveIncome
-        ) || 0;
-
-      lastMiningAt =
-        Number(
-          saved.lastMiningAt
-        ) ||
-        Date.now();
-
-      miningStored =
-        Number(
-          saved.miningStored
-        ) || 0;
-
-      dailyBonusDay =
-        typeof saved.dailyBonusDay === 'string'
-          ? saved.dailyBonusDay
-          : '';
-
-    }
-
-  }catch(e){}
-
-}
-
-/* =========================================================
-   PASSIVE PENDING
-   ========================================================= */
-
-function miningPending(){
-
-  if(
-    passiveIncome <= 0
-  ){
-    return 0;
-  }
+  const now = Date.now();
 
   const elapsed =
     Math.max(
       0,
-      Date.now() -
-      lastMiningAt
+      now -
+      num(state.passiveLastAt,now)
     );
 
-  const cappedElapsed =
-    Math.min(
-      elapsed,
-      MINING_CAP_HOURS *
-      3600000
-    );
+  const cap =
+    MINING_CAP_HOURS *
+    60 *
+    60 *
+    1000;
 
-  return (
-    miningStored +
-    (
-      cappedElapsed /
-      3600000
-    ) *
-    passiveIncome
-  );
+  const usable =
+    Math.min(elapsed,cap);
 
+  const hours =
+    usable /
+    3600000;
+
+  const earned =
+    hours *
+    num(state.passiveRate,10);
+
+  return earned;
 }
-
-/* =========================================================
-   PASSIVE UI
-   ========================================================= */
 
 function syncPassiveUI(){
 
-  const income =
-    $('passiveIncome');
-
-  if(income){
-
-    income.textContent =
-      passiveIncome.toFixed(0);
-
-  }
-
-  const next =
-    getNextPassiveLevel();
-
-  const price =
-    $('passivePrice');
-
-  if(price){
-
-    price.textContent =
-      next
-        ? next.price.toFixed(0)
-        : 'MAX';
-
-  }
-
   const pending =
-    miningPending();
+    num(state.passivePending) +
+    calculatePassive();
 
-  const pendingEl =
-    $('miningPending');
+  const max =
+    num(state.passiveRate,10) *
+    MINING_CAP_HOURS;
 
-  if(pendingEl){
+  const percent =
+    max > 0
+      ? Math.min(100,pending/max*100)
+      : 0;
 
-    pendingEl.textContent =
-      pending.toFixed(2) +
-      ' LC';
+  if($('passivePending'))
+    $('passivePending').textContent =
+      money(pending) + ' LC';
 
-  }
+  if($('passiveRate'))
+    $('passiveRate').textContent =
+      money(state.passiveRate);
 
-  const fill =
-    $('miningFill');
-
-  if(fill){
-
-    const maxAmount =
-      Math.max(
-        1,
-        passiveIncome *
-        MINING_CAP_HOURS
-      );
-
-    const percent =
-      Math.min(
-        100,
-        pending /
-        maxAmount *
-        100
-      );
-
-    fill.style.width =
+  if($('miningProgress'))
+    $('miningProgress').style.width =
       percent + '%';
+}
 
-  }
 
-  const btn =
-    $('passiveBtn');
+/* =========================================================
+   BOOST
+========================================================= */
 
-  if(btn){
+function loadBoost(){
 
-    if(!next){
+  try{
 
-      btn.disabled = true;
+    const raw =
+      localStorage.getItem(BOOST_KEY);
 
-      btn.textContent =
-        'МАКСИМУМ';
+    if(raw){
 
-    }else{
+      const value =
+        Number(raw);
 
-      btn.disabled =
-        balance <
-        next.price;
-
-      btn.textContent =
-        passiveIncome === 0
-          ? 'ПРИДБАТИ'
-          : 'ПОКРАЩИТИ';
-
+      if(Number.isFinite(value)){
+        window.boostUntil = value;
+      }
     }
 
+  }catch(e){
+
+    window.boostUntil = 0;
   }
-
-  const collect =
-    $('collectMiningBtn');
-
-  if(collect){
-
-    collect.disabled =
-      passiveIncome <= 0 ||
-      pending <= 0;
-
-  }
-
-  const daily =
-    $('dailyBonusBtn');
-
-  if(daily){
-
-    const received =
-      dailyBonusDay ===
-      dayKey();
-
-    daily.disabled =
-      received;
-
-    daily.textContent =
-      received
-        ? 'ОТРИМАНО'
-        : '+10 LC';
-
-  }
-
 }
 
-/* =========================================================
-   PASSIVE COLLECT
-   ========================================================= */
-
-function collectMining(){
-
-  const pending =
-    miningPending();
-
-  if(
-    passiveIncome <= 0
-  ){
-
-    toast(
-      'Спочатку відкрийте прибуток за годину'
-    );
-
-    return;
-
-  }
-
-  if(
-    pending <= 0
-  ){
-
-    toast(
-      'Поки що нічого забирати'
-    );
-
-    return;
-
-  }
-
-  balance +=
-    pending;
-
-  today +=
-    pending;
-
-  miningStored = 0;
-
-  lastMiningAt =
-    Date.now();
-
-  savePassive();
-
-  save();
-
-  toast(
-    'Забрано +' +
-    pending.toFixed(2) +
-    ' LC'
-  );
-
-  render();
-
-  syncPassiveUI();
-
-}
-
-/* =========================================================
-   PASSIVE UPGRADE
-   ========================================================= */
-
-function upgradePassive(){
-
-  const next =
-    getNextPassiveLevel();
-
-  if(!next){
-
-    toast(
-      'Досягнуто максимального рівня'
-    );
-
-    return;
-
-  }
-
-  if(
-    balance <
-    next.price
-  ){
-
-    toast(
-      'Недостатньо LC'
-    );
-
-    return;
-
-  }
-
-  const pending =
-    miningPending();
-
-  if(
-    passiveIncome > 0
-  ){
-
-    miningStored =
-      Math.min(
-        pending,
-        passiveIncome *
-        MINING_CAP_HOURS
-      );
-
-  }
-
-  balance -=
-    next.price;
-
-  passiveIncome =
-    next.rate;
-
-  lastMiningAt =
-    Date.now();
-
-  savePassive();
-
-  save();
-
-  toast(
-    'Прибуток збільшено до ' +
-    passiveIncome +
-    ' LC / год'
-  );
-
-  render();
-
-  syncPassiveUI();
-
-}
-
-/* =========================================================
-   STATE
-   ========================================================= */
-
-function state(){
-
-  return {
-
-    version:TG_VERSION,
-
-    savedAt:Date.now(),
-
-    balance,
-
-    energy,
-
-    maxEnergy,
-
-    energyUpgradePrice,
-
-    lastEnergyAt,
-
-    taps,
-
-    today,
-
-    tapPower,
-
-    upgradePrice,
-
-    taskDay,
-
-    tasks,
-
-    streak,
-
-    bestStreak,
-
-    lastLoginDay,
-
-    streak3Claimed,
-
-    streak7Claimed,
-
-    currentSkin
-
-  };
-
-}
-
-/* =========================================================
-   APPLY STATE
-   ========================================================= */
-
-function apply(saved){
-
-  if(
-    !saved ||
-    typeof saved !== 'object'
-  ){
-    return;
-  }
-
-  balance =
-    Number.isFinite(saved.balance)
-      ? Math.max(0,saved.balance)
-      : balance;
-
-  energy =
-    Number.isFinite(saved.energy)
-      ? Math.max(0,saved.energy)
-      : energy;
-
-  maxEnergy =
-    Number.isFinite(saved.maxEnergy)
-      ? Math.max(100,saved.maxEnergy)
-      : 100;
-
-  energyUpgradePrice =
-    Number.isFinite(
-      saved.energyUpgradePrice
-    )
-      ? Math.max(
-          50,
-          saved.energyUpgradePrice
-        )
-      : 50;
-
-  lastEnergyAt =
-    Number.isFinite(
-      saved.lastEnergyAt
-    )
-      ? saved.lastEnergyAt
-      : Date.now();
-
-  applyOfflineEnergy();
-
-  taps =
-    Number.isFinite(saved.taps)
-      ? Math.max(
-          0,
-          Math.floor(saved.taps)
-        )
-      : taps;
-
-  today =
-    Number.isFinite(saved.today)
-      ? Math.max(0,saved.today)
-      : today;
-
-  tapPower =
-    Number.isFinite(saved.tapPower)
-      ? Math.max(.01,saved.tapPower)
-      : tapPower;
-
-  upgradePrice =
-    Number.isFinite(saved.upgradePrice)
-      ? Math.max(
-          0,
-          Math.round(saved.upgradePrice)
-        )
-      : upgradePrice;
-
-  taskDay =
-    typeof saved.taskDay === 'string'
-      ? saved.taskDay
-      : taskDay;
-
-  tasks =
-    saved.tasks &&
-    typeof saved.tasks === 'object'
-      ? {
-          login:!!saved.tasks.login,
-          taps:!!saved.tasks.taps,
-          earn:!!saved.tasks.earn
-        }
-      : {
-          ...DEFAULT_STATE.tasks
-        };
-
-  streak =
-    Number.isFinite(saved.streak)
-      ? Math.max(
-          0,
-          Math.floor(saved.streak)
-        )
-      : streak;
-
-  bestStreak =
-    Number.isFinite(saved.bestStreak)
-      ? Math.max(
-          0,
-          Math.floor(saved.bestStreak)
-        )
-      : bestStreak;
-
-  lastLoginDay =
-    typeof saved.lastLoginDay === 'string'
-      ? saved.lastLoginDay
-      : lastLoginDay;
-
-  streak3Claimed =
-    !!saved.streak3Claimed;
-
-  streak7Claimed =
-    !!saved.streak7Claimed;
-
-  currentSkin =
-    typeof saved.currentSkin === 'string'
-      ? saved.currentSkin
-      : 'gold';
-
-}
-
-/* =========================================================
-   DAILY RESET
-   ========================================================= */
-
-function resetDailyState(){
-
-  const current =
-    dayKey();
-
-  if(
-    taskDay !== current
-  ){
-
-    taskDay =
-      current;
-
-    tasks = {
-      login:false,
-      taps:false,
-      earn:false
-    };
-
-    today = 0;
-
-    streak3Claimed = false;
-
-    streak7Claimed = false;
-
-  }
-
-}
-
-/* =========================================================
-   STREAK
-   ========================================================= */
-
-function updateStreak(){
-
-  const current =
-    dayKey();
-
-  if(
-    lastLoginDay ===
-    current
-  ){
-
-    return false;
-
-  }
-
-  if(
-    lastLoginDay ===
-    previousDayKey()
-  ){
-
-    streak += 1;
-
-  }else{
-
-    streak = 1;
-
-  }
-
-  bestStreak =
-    Math.max(
-      bestStreak,
-      streak
-    );
-
-  lastLoginDay =
-    current;
-
-  return true;
-
-}
-
-/* =========================================================
-   SAVE
-   ========================================================= */
-
-function save(){
-
-  lastEnergyAt =
-    Date.now();
-
-  const data =
-    state();
+function saveBoost(){
 
   try{
 
     localStorage.setItem(
-      SAVE_KEY,
-      JSON.stringify(data)
+      BOOST_KEY,
+      String(window.boostUntil || 0)
     );
 
   }catch(e){}
-
-  try{
-
-    if(
-      window.Telegram &&
-      Telegram.WebApp &&
-      Telegram.WebApp.CloudStorage
-    ){
-
-      Telegram.WebApp.CloudStorage.setItem(
-        TG_KEY,
-        JSON.stringify(data),
-        ()=>{}
-      );
-
-    }
-
-  }catch(e){}
-
 }
 
-/* =========================================================
-   LOCAL LOAD
-   ========================================================= */
+function boostActive(){
 
-function load(){
-
-  try{
-
-    const saved =
-      JSON.parse(
-        localStorage.getItem(
-          SAVE_KEY
-        ) || 'null'
-      );
-
-    apply(saved);
-
-    resetDailyState();
-
-  }catch(e){}
-
+  return (
+    Number(window.boostUntil || 0) >
+    Date.now()
+  );
 }
 
-/* =========================================================
-   TELEGRAM CLOUD LOAD
-   ========================================================= */
+function syncBoost(){
 
-function loadTelegram(){
+  const pill =
+    $('boostPill');
 
-  try{
+  if(!pill) return;
 
-    if(
-      !(
-        window.Telegram &&
-        Telegram.WebApp &&
-        Telegram.WebApp.CloudStorage
-      )
-    ){
+  if(!boostActive()){
 
-      return;
+    pill.style.display='none';
 
-    }
+    return;
+  }
 
-    Telegram.WebApp.CloudStorage.getItem(
-      TG_KEY,
-      (err,value)=>{
+  pill.style.display='block';
 
-        if(
-          err ||
-          !value
-        ){
-
-          return;
-
-        }
-
-        try{
-
-          const cloud =
-            JSON.parse(value);
-
-          const local =
-            JSON.parse(
-              localStorage.getItem(
-                SAVE_KEY
-              ) || 'null'
-            );
-
-          const localTime =
-            local &&
-            Number(local.savedAt) ||
-            0;
-
-          const cloudTime =
-            cloud &&
-            Number(cloud.savedAt) ||
-            0;
-
-          if(
-            cloudTime >
-            localTime
-          ){
-
-            apply(cloud);
-
-            resetDailyState();
-
-            localStorage.setItem(
-              SAVE_KEY,
-              JSON.stringify(
-                state()
-              )
-            );
-
-          }else if(local){
-
-            apply(local);
-
-            resetDailyState();
-
-            Telegram.WebApp.CloudStorage.setItem(
-              TG_KEY,
-              JSON.stringify(state()),
-              ()=>{}
-            );
-
-          }else{
-
-            apply(cloud);
-
-            resetDailyState();
-
-            localStorage.setItem(
-              SAVE_KEY,
-              JSON.stringify(
-                state()
-              )
-            );
-
-          }
-
-          render();
-
-          renderTasks();
-
-          syncPassiveUI();
-
-        }catch(e){}
-
-      }
+  const left =
+    Math.max(
+      0,
+      Number(window.boostUntil) -
+      Date.now()
     );
 
-  }catch(e){}
+  const sec =
+    Math.floor(left/1000);
 
+  const min =
+    Math.floor(sec/60);
+
+  const seconds =
+    sec%60;
+
+  $('boostTimer').textContent =
+    String(min).padStart(2,'0') +
+    ':' +
+    String(seconds).padStart(2,'0');
 }
+
 
 /* =========================================================
    RENDER
-   ========================================================= */
+========================================================= */
 
 function render(){
 
+  applyOfflineEnergy();
+
   $('balance').textContent =
-    balance.toFixed(2);
+    money(state.balance);
+
+  $('today').textContent =
+    money(state.today);
 
   $('energy').textContent =
-    Math.floor(energy);
+    Math.floor(state.energy);
 
   $('maxEnergy').textContent =
-    maxEnergy;
+    Math.floor(state.maxEnergy);
 
   $('energyFill').style.width =
     Math.min(
       100,
-      energy/maxEnergy*100
+      Math.max(
+        0,
+        state.energy /
+        Math.max(1,state.maxEnergy) *
+        100
+      )
     ) + '%';
 
-  $('energyUpgradeBtn').disabled =
-    balance <
-    energyUpgradePrice;
-
-  const energyAdd =
-    maxEnergy < 300
-      ? 20
-      : 30;
-
-  $('energyUpgradeBtn').textContent =
-    '+' +
-    energyAdd +
-    ' енергії • ' +
-    energyUpgradePrice +
-    ' LC';
+  $('taps').textContent =
+    Math.floor(state.taps);
 
   $('tapPower').textContent =
-    tapPower.toFixed(2);
+    money(state.tapPower);
 
-  $('upgradePrice').textContent =
-    upgradePrice.toFixed(0);
+  $('streak').textContent =
+    Math.floor(state.streak);
 
-  $('today').textContent =
-    today.toFixed(2);
+  $('tapUpgradePrice').textContent =
+    money(state.upgradePrice);
 
-  $('taps').textContent =
-    taps;
-
-  $('upgradeBtn').disabled =
-    balance <
-    upgradePrice;
+  $('energyUpgradePrice').textContent =
+    money(state.energyUpgradePrice);
 
   $('profileBalance').textContent =
-    balance.toFixed(2);
+    money(state.balance);
 
   $('profileToday').textContent =
-    today.toFixed(2);
+    money(state.today);
 
   $('profileTaps').textContent =
-    taps;
+    Math.floor(state.taps);
 
   $('withdrawBalance').textContent =
-    balance.toFixed(2);
+    money(state.balance);
 
-  $('earn').className =
-    'coin ' +
-    currentSkin;
+  $('streakBig').textContent =
+    Math.floor(state.streak);
 
-  if(
-    $('streakText')
-  ){
-
-    $('streakText').textContent =
-      streak +
-      ' ' +
-      (
-        streak === 1
-          ? 'день'
-          : 'днів'
-      ) +
-      ' поспіль';
-
-  }
-
-  if(
-    $('currentStreak')
-  ){
-
-    $('currentStreak').textContent =
-      streak;
-
-  }
-
-  if(
-    $('bestStreak')
-  ){
-
-    $('bestStreak').textContent =
-      bestStreak;
-
-  }
-
-  if(
-    $('streak3Progress')
-  ){
-
-    $('streak3Progress').textContent =
-      Math.min(streak,3) +
-      ' / 3 дні';
-
-  }
-
-  if(
-    $('streak7Progress')
-  ){
-
-    $('streak7Progress').textContent =
-      Math.min(streak,7) +
-      ' / 7 днів';
-
-  }
-
-  if(
-    $('streak3Fill')
-  ){
-
-    $('streak3Fill').style.width =
-      Math.min(
-        100,
-        streak/3*100
-      ) + '%';
-
-  }
-
-  if(
-    $('streak7Fill')
-  ){
-
-    $('streak7Fill').style.width =
-      Math.min(
-        100,
-        streak/7*100
-      ) + '%';
-
-  }
-
-  document
-    .querySelectorAll('[data-skin]')
-    .forEach(
-      button=>{
-
-        if(
-          button.dataset.skin ===
-          currentSkin
-        ){
-
-          button.textContent =
-            'ОБРАНО';
-
-          return;
-
-        }
-
-        if(
-          button.dataset.skin ===
-          'gold'
-        ){
-
-          button.textContent =
-            'ВИБРАТИ';
-
-        }else if(
-          button.dataset.skin ===
-          'clover'
-        ){
-
-          button.textContent =
-            '150 LC';
-
-        }else if(
-          button.dataset.skin ===
-          'lucky'
-        ){
-
-          button.textContent =
-            '300 LC';
-
-        }else{
-
-          button.textContent =
-            '500 LC';
-
-        }
-
-      }
-    );
-
+  renderSkin();
+  renderReferral();
+  syncPassiveUI();
+  syncBoost();
 }
 
-/* =========================================================
-   TASKS RENDER
-   ========================================================= */
-
-function renderTasks(){
-
-  document
-    .querySelectorAll('[data-task]')
-    .forEach(
-      button=>{
-
-        const key =
-          button.dataset.task;
-
-        if(
-          tasks[key]
-        ){
-
-          button.disabled =
-            true;
-
-          button.textContent =
-            'ВИКОНАНО';
-
-        }else{
-
-          button.disabled =
-            false;
-
-          button.textContent =
-            key === 'login'
-              ? '+5 LC'
-              : key === 'taps'
-                ? '+10 LC'
-                : '+15 LC';
-
-        }
-
-      }
-    );
-
-  $('taskTapsText').textContent =
-    Math.min(
-      100,
-      taps
-    ) +
-    ' / 100';
-
-  $('taskEarnText').textContent =
-    Math.min(
-      50,
-      today
-    ).toFixed(2) +
-    ' / 50 LC';
-
-  if(
-    $('streakText')
-  ){
-
-    $('streakText').textContent =
-      streak +
-      ' ' +
-      (
-        streak === 1
-          ? 'день'
-          : 'днів'
-      ) +
-      ' поспіль';
-
-  }
-
-}
 
 /* =========================================================
    NAVIGATION
-   ========================================================= */
+========================================================= */
 
-function openScreen(id){
+function openScreen(name){
 
   document
     .querySelectorAll('.screen')
-    .forEach(
-      screen=>{
-        screen.classList.remove(
-          'active'
-        );
-      }
-    );
+    .forEach(screen=>{
+      screen.classList.remove('active');
+    });
 
   const target =
-    $('screen-' + id);
+    $('screen-' + name);
 
   if(target){
-
-    target.classList.add(
-      'active'
-    );
-
+    target.classList.add('active');
   }
 
   document
-    .querySelectorAll('.nav-item')
-    .forEach(
-      nav=>{
-        nav.classList.toggle(
-          'active',
-          nav.dataset.screen === id
-        );
-      }
-    );
+    .querySelectorAll('.nav-btn')
+    .forEach(btn=>{
+      btn.classList.toggle(
+        'active',
+        btn.dataset.screen === name
+      );
+    });
 
-  window.scrollTo(
-    0,
-    0
-  );
+  window.scrollTo({
+    top:0,
+    behavior:'smooth'
+  });
 
+  if(name === 'rating'){
+    loadRating();
+  }
+
+  if(name === 'withdraw'){
+    loadWithdrawHistory();
+  }
 }
 
+
 /* =========================================================
-   WITHDRAW HISTORY
-   ========================================================= */
+   TAP
+========================================================= */
+
+$('earn').addEventListener('click', async ()=>{
+
+  applyOfflineEnergy();
+
+  if(state.energy < 1){
+
+    toast('⚡ Недостатньо енергії');
+
+    return;
+  }
+
+  /*
+    Server is the source of truth when available.
+    This prevents simple client-side balance cheating.
+  */
+
+  if(serverReady){
+
+    try{
+
+      const result =
+        await api('tap');
+
+      applyServerState(result);
+
+      saveLocal();
+      render();
+
+      const reward =
+        num(
+          result.reward ??
+          result.amount ??
+          result.earned ??
+          state.tapPower *
+          (boostActive() ? 2 : 1)
+        );
+
+      showFloatReward(reward);
+
+      return;
+
+    }catch(error){
+
+      /*
+        If server is temporarily unavailable,
+        keep the interface responsive locally.
+      */
+
+      console.warn(
+        'server tap fallback',
+        error
+      );
+    }
+  }
+
+
+  const reward =
+    state.tapPower *
+    (boostActive() ? 2 : 1);
+
+  state.balance += reward;
+  state.today += reward;
+  state.taps += 1;
+  state.energy -= 1;
+
+  saveLocal();
+  render();
+
+  showFloatReward(reward);
+});
+
+
+function showFloatReward(reward){
+
+  const wrap =
+    $('coinWrap');
+
+  if(!wrap) return;
+
+  const el =
+    document.createElement('div');
+
+  el.className =
+    'float-reward';
+
+  el.textContent =
+    '+' + money(reward) + ' LC';
+
+  el.style.left =
+    (50 + (Math.random()*25-12.5)) + '%';
+
+  el.style.top =
+    '40%';
+
+  wrap.appendChild(el);
+
+  setTimeout(()=>{
+    el.remove();
+  },800);
+}
+
+
+/* =========================================================
+   TAP UPGRADE
+========================================================= */
+
+$('upgradeTap').addEventListener(
+  'click',
+  async ()=>{
+
+    if(serverReady){
+
+      try{
+
+        const result =
+          await api('upgrade_tap');
+
+        applyServerState(result);
+
+        saveLocal();
+        render();
+
+        toast('👆 Сила тапу покращена');
+
+        return;
+
+      }catch(error){
+
+        toast(
+          error.message ||
+          'Не вдалося покращити'
+        );
+
+        return;
+      }
+    }
+
+
+    if(
+      state.balance <
+      state.upgradePrice
+    ){
+
+      toast('Недостатньо LC');
+
+      return;
+    }
+
+    state.balance -=
+      state.upgradePrice;
+
+    state.tapPower += .05;
+
+    state.upgradePrice =
+      Math.round(
+        state.upgradePrice * 1.65
+      );
+
+    saveLocal();
+    render();
+
+    toast('👆 Сила тапу покращена');
+  }
+);
+
+
+/* =========================================================
+   ENERGY UPGRADE
+========================================================= */
+
+$('upgradeEnergy').addEventListener(
+  'click',
+  async ()=>{
+
+    if(serverReady){
+
+      try{
+
+        const result =
+          await api('upgrade_energy');
+
+        applyServerState(result);
+
+        saveLocal();
+        render();
+
+        toast('⚡ Енергію збільшено');
+
+        return;
+
+      }catch(error){
+
+        toast(
+          error.message ||
+          'Не вдалося покращити'
+        );
+
+        return;
+      }
+    }
+
+
+    if(
+      state.balance <
+      state.energyUpgradePrice
+    ){
+
+      toast('Недостатньо LC');
+
+      return;
+    }
+
+    if(state.maxEnergy >= 300){
+
+      toast('⚡ Досягнуто максимуму');
+
+      return;
+    }
+
+    state.balance -=
+      state.energyUpgradePrice;
+
+    state.maxEnergy +=
+      state.maxEnergy < 200
+        ? 20
+        : 30;
+
+    state.energy =
+      state.maxEnergy;
+
+    state.energyUpgradePrice =
+      Math.round(
+        state.energyUpgradePrice * 1.7
+      );
+
+    saveLocal();
+    render();
+
+    toast('⚡ Максимальну енергію збільшено');
+  }
+);
+
+
+/* =========================================================
+   PASSIVE COLLECT
+========================================================= */
+
+$('collectPassive').addEventListener(
+  'click',
+  async ()=>{
+
+    if(serverReady){
+
+      try{
+
+        const result =
+          await api('collect_passive');
+
+        applyServerState(result);
+
+        state.passivePending = 0;
+        state.passiveLastAt =
+          Date.now();
+
+        savePassive();
+        saveLocal();
+        render();
+
+        toast('💰 Пасивний дохід отримано');
+
+        return;
+
+      }catch(error){
+
+        toast(
+          error.message ||
+          'Не вдалося забрати дохід'
+        );
+
+        return;
+      }
+    }
+
+
+    const earned =
+      calculatePassive();
+
+    if(earned <= 0){
+
+      toast('Поки що нічого забирати');
+
+      return;
+    }
+
+    state.balance += earned;
+    state.passivePending = 0;
+    state.passiveLastAt =
+      Date.now();
+
+    savePassive();
+    saveLocal();
+    render();
+
+    toast(
+      '+' + money(earned) +
+      ' LC отримано'
+    );
+  }
+);
+
+
+/* =========================================================
+   PASSIVE UPGRADE
+========================================================= */
+
+async function upgradePassive(){
+
+  if(serverReady){
+
+    try{
+
+      const result =
+        await api('upgrade_passive');
+
+      applyServerState(result);
+
+      saveLocal();
+      render();
+
+      toast('⛏ Пасивний дохід покращено');
+
+      return;
+
+    }catch(error){
+
+      toast(
+        error.message ||
+        'Не вдалося покращити'
+      );
+
+      return;
+    }
+  }
+
+
+  const level =
+    num(state.passiveLevel);
+
+  const next =
+    PASSIVE_LEVELS[level+1];
+
+  if(!next){
+
+    toast('Максимальний рівень');
+
+    return;
+  }
+
+  if(state.balance < next.price){
+
+    toast('Недостатньо LC');
+
+    return;
+  }
+
+  state.balance -=
+    next.price;
+
+  state.passiveLevel =
+    level + 1;
+
+  state.passiveRate =
+    next.rate;
+
+  saveLocal();
+  savePassive();
+  render();
+
+  toast('⛏ Пасивний дохід покращено');
+}
+
+
+/* =========================================================
+   TASKS
+========================================================= */
+
+function resetDailyTasksIfNeeded(){
+
+  const day =
+    todayKey();
+
+  if(state.taskDay !== day){
+
+    state.taskDay = day;
+
+    state.tasks = {
+      login:false,
+      taps:false,
+      earn:false
+    };
+  }
+}
+
+function renderTasks(){
+
+  resetDailyTasksIfNeeded();
+
+  const loginDone =
+    state.tasks.login;
+
+  const tapsDone =
+    state.tasks.taps ||
+    state.taps >= 100;
+
+  const earnDone =
+    state.tasks.earn ||
+    state.today >= 50;
+
+  setTaskState(
+    'taskLogin',
+    'taskLoginBtn',
+    loginDone
+  );
+
+  setTaskState(
+    'taskTaps',
+    'taskTapsBtn',
+    tapsDone
+  );
+
+  setTaskState(
+    'taskEarn',
+    'taskEarnBtn',
+    earnDone
+  );
+}
+
+function setTaskState(
+  cardId,
+  buttonId,
+  done
+){
+
+  const card =
+    $(cardId);
+
+  const button =
+    $(buttonId);
+
+  if(!card || !button) return;
+
+  if(done){
+
+    card.classList.add('task-done');
+
+    button.textContent =
+      '✓ ВИКОНАНО';
+
+    button.style.color =
+      '#68747a';
+
+  }else{
+
+    card.classList.remove('task-done');
+
+    button.style.color =
+      '';
+
+  }
+}
+
+
+/* =========================================================
+   LOGIN DAILY TASK
+========================================================= */
+
+async function claimLoginTask(){
+
+  resetDailyTasksIfNeeded();
+
+  if(state.tasks.login){
+
+    toast('Вже отримано');
+
+    return;
+  }
+
+  if(serverReady){
+
+    try{
+
+      const result =
+        await api('daily_bonus');
+
+      applyServerState(result);
+
+      state.tasks.login = true;
+
+      saveLocal();
+      render();
+      renderTasks();
+
+      toast('+5 LC');
+
+      return;
+
+    }catch(error){
+
+      console.warn(error);
+    }
+  }
+
+  state.balance += 5;
+  state.today += 5;
+  state.tasks.login = true;
+
+  saveLocal();
+  render();
+  renderTasks();
+
+  toast('+5 LC');
+}
+
+$('taskLogin').addEventListener(
+  'click',
+  claimLoginTask
+);
+
+
+/* =========================================================
+   TASK TAP / EARN
+========================================================= */
+
+$('taskTaps').addEventListener(
+  'click',
+  async ()=>{
+
+    resetDailyTasksIfNeeded();
+
+    if(state.tasks.taps){
+
+      toast('Вже виконано');
+
+      return;
+    }
+
+    if(state.taps < 100){
+
+      toast(
+        `Потрібно ще ${100-state.taps} тапів`
+      );
+
+      return;
+    }
+
+    state.tasks.taps = true;
+
+    /*
+      Task reward is handled locally here
+      if the backend task system does not expose
+      a dedicated task action.
+    */
+
+    state.balance += 10;
+    state.today += 10;
+
+    saveLocal();
+    render();
+    renderTasks();
+
+    toast('+10 LC');
+  }
+);
+
+
+$('taskEarn').addEventListener(
+  'click',
+  async ()=>{
+
+    resetDailyTasksIfNeeded();
+
+    if(state.tasks.earn){
+
+      toast('Вже виконано');
+
+      return;
+    }
+
+    if(state.today < 50){
+
+      toast(
+        'Потрібно заробити ще ' +
+        money(50-state.today) +
+        ' LC'
+      );
+
+      return;
+    }
+
+    state.tasks.earn = true;
+
+    state.balance += 15;
+    state.today += 15;
+
+    saveLocal();
+    render();
+    renderTasks();
+
+    toast('+15 LC');
+  }
+);
+
+
+/* =========================================================
+   STREAK
+========================================================= */
+
+function renderStreak(){
+
+  $('streakBig').textContent =
+    Math.floor(state.streak);
+
+  for(let i=1;i<=7;i++){
+
+    const el =
+      $('day'+i);
+
+    if(!el) continue;
+
+    el.classList.toggle(
+      'active',
+      state.streak >= i
+    );
+  }
+
+  const b3 =
+    $('claimStreak3');
+
+  const b7 =
+    $('claimStreak7');
+
+  if(b3){
+
+    if(state.streak3Claimed){
+
+      b3.textContent =
+        '✓ ОТРИМАНО';
+
+    }else{
+
+      b3.textContent =
+        'ОТРИМАТИ';
+    }
+  }
+
+  if(b7){
+
+    if(state.streak7Claimed){
+
+      b7.textContent =
+        '✓ ОТРИМАНО';
+
+    }else{
+
+      b7.textContent =
+        'ОТРИМАТИ';
+    }
+  }
+}
+
+$('claimStreak3').addEventListener(
+  'click',
+  async ()=>{
+
+    if(state.streak < 3){
+
+      toast('Потрібно 3 дні');
+
+      return;
+    }
+
+    if(state.streak3Claimed){
+
+      toast('Вже отримано');
+
+      return;
+    }
+
+    if(serverReady){
+
+      try{
+
+        const result =
+          await api('claim_daily_bonus',{
+            streak:3
+          });
+
+        applyServerState(result);
+
+      }catch(error){
+
+        console.warn(error);
+      }
+    }
+
+    state.balance += 20;
+    state.today += 20;
+    state.streak3Claimed = true;
+
+    saveLocal();
+    render();
+    renderStreak();
+
+    toast('+20 LC');
+  }
+);
+
+
+$('claimStreak7').addEventListener(
+  'click',
+  async ()=>{
+
+    if(state.streak < 7){
+
+      toast('Потрібно 7 днів');
+
+      return;
+    }
+
+    if(state.streak7Claimed){
+
+      toast('Вже отримано');
+
+      return;
+    }
+
+    if(serverReady){
+
+      try{
+
+        const result =
+          await api('claim_daily_bonus',{
+            streak:7
+          });
+
+        applyServerState(result);
+
+      }catch(error){
+
+        console.warn(error);
+      }
+    }
+
+    state.balance += 50;
+    state.today += 50;
+    state.streak7Claimed = true;
+
+    saveLocal();
+    render();
+    renderStreak();
+
+    toast('+50 LC');
+  }
+);
+
+
+/* =========================================================
+   DAILY STREAK CHECK
+========================================================= */
+
+function updateLoginStreak(){
+
+  const today =
+    todayKey();
+
+  if(state.lastLoginDay === today){
+    return;
+  }
+
+  if(state.lastLoginDay === yesterdayKey()){
+
+    state.streak =
+      Math.min(
+        state.streak + 1,
+        7
+      );
+
+  }else{
+
+    state.streak = 1;
+  }
+
+  state.bestStreak =
+    Math.max(
+      state.bestStreak,
+      state.streak
+    );
+
+  state.lastLoginDay =
+    today;
+
+  saveLocal();
+}
+
+
+/* =========================================================
+   BONUS
+========================================================= */
+
+function getDailyBonusKey(){
+
+  return 'lucky_clover_daily_' +
+    todayKey();
+}
+
+$('dailyBonus').addEventListener(
+  'click',
+  async ()=>{
+
+    const key =
+      getDailyBonusKey();
+
+    if(localStorage.getItem(key)){
+
+      toast('🎁 Бонус вже отримано');
+
+      return;
+    }
+
+    if(serverReady){
+
+      try{
+
+        const result =
+          await api('claim_daily_bonus');
+
+        applyServerState(result);
+
+      }catch(error){
+
+        /*
+          Backend can reject if already claimed.
+          Do not double-reward.
+        */
+
+        toast(
+          error.message ||
+          'Бонус недоступний'
+        );
+
+        return;
+      }
+    }
+
+    state.balance += 10;
+    state.today += 10;
+
+    localStorage.setItem(
+      key,
+      '1'
+    );
+
+    saveLocal();
+    render();
+
+    toast('🎁 +10 LC');
+  }
+);
+
+
+/* =========================================================
+   BOOST
+========================================================= */
+
+$('activateBoost').addEventListener(
+  'click',
+  async ()=>{
+
+    if(boostActive()){
+
+      toast('⚡ X2 вже активний');
+
+      return;
+    }
+
+    if(serverReady){
+
+      try{
+
+        const result =
+          await api('activate_boost');
+
+        if(result.boost_until){
+
+          window.boostUntil =
+            Number(result.boost_until);
+
+        }else{
+
+          window.boostUntil =
+            Date.now() +
+            30*60*1000;
+        }
+
+        saveBoost();
+        syncBoost();
+
+        toast('⚡ X2 активовано');
+
+        return;
+
+      }catch(error){
+
+        toast(
+          error.message ||
+          'Не вдалося активувати X2'
+        );
+
+        return;
+      }
+    }
+
+    window.boostUntil =
+      Date.now() +
+      30*60*1000;
+
+    saveBoost();
+    syncBoost();
+
+    toast('⚡ X2 активовано');
+  }
+);
+
+
+/* =========================================================
+   REFERRAL
+========================================================= */
+
+function generateLocalReferral(){
+
+  if(state.referralCode){
+    return state.referralCode;
+  }
+
+  const chars =
+    'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+
+  let code =
+    'LC-';
+
+  for(let i=0;i<6;i++){
+
+    code +=
+      chars[
+        Math.floor(
+          Math.random() *
+          chars.length
+        )
+      ];
+  }
+
+  state.referralCode = code;
+
+  saveLocal();
+
+  return code;
+}
+
+function renderReferral(){
+
+  const code =
+    state.referralCode ||
+    generateLocalReferral();
+
+  if($('refCode'))
+    $('refCode').textContent =
+      code;
+
+  if($('refCode2'))
+    $('refCode2').textContent =
+      code;
+
+  if($('refCount'))
+    $('refCount').textContent =
+      Math.floor(
+        state.referralsCount
+      );
+
+  if($('refEarned'))
+    $('refEarned').textContent =
+      money(
+        state.referralEarnings
+      );
+
+  const link =
+    buildReferralLink(code);
+
+  if($('refLink'))
+    $('refLink').value =
+      link;
+}
+
+function getReferralFromURL(){
+
+  try{
+
+    const params =
+      new URLSearchParams(
+        window.location.search
+      );
+
+    return (
+      params.get('ref') ||
+      ''
+    );
+
+  }catch{
+    return '';
+  }
+}
+
+function buildReferralLink(code){
+
+  /*
+    Keep current WebApp URL and append ref.
+  */
+
+  try{
+
+    const url =
+      new URL(
+        window.location.href
+      );
+
+    url.searchParams.set(
+      'ref',
+      code
+    );
+
+    return url.toString();
+
+  }catch{
+
+    return window.location.href;
+  }
+}
+
+
+/* =========================================================
+   COPY
+========================================================= */
+
+async function copyText(value){
+
+  try{
+
+    await navigator.clipboard.writeText(
+      value
+    );
+
+    toast('Скопійовано');
+
+  }catch{
+
+    const input =
+      document.createElement('textarea');
+
+    input.value = value;
+
+    document.body.appendChild(input);
+
+    input.select();
+
+    document.execCommand('copy');
+
+    input.remove();
+
+    toast('Скопійовано');
+  }
+}
+
+$('copyRef').addEventListener(
+  'click',
+  ()=>{
+    copyText(
+      state.referralCode ||
+      generateLocalReferral()
+    );
+  }
+);
+
+$('copyRefLink').addEventListener(
+  'click',
+  ()=>{
+    copyText(
+      $('refLink').value
+    );
+  }
+);
+
+
+/* =========================================================
+   TELEGRAM SHARE
+========================================================= */
+
+function shareReferral(){
+
+  const code =
+    state.referralCode ||
+    generateLocalReferral();
+
+  const link =
+    buildReferralLink(code);
+
+  const text =
+    `☘️ Приєднуйся до LUCKY-CLOVER!\n\n` +
+    `Мій реферальний код: ${code}`;
+
+  if(
+    window.Telegram &&
+    Telegram.WebApp &&
+    Telegram.WebApp.openTelegramLink
+  ){
+
+    const shareUrl =
+      'https://t.me/share/url' +
+      '?url=' +
+      encodeURIComponent(link) +
+      '&text=' +
+      encodeURIComponent(text);
+
+    Telegram.WebApp.openTelegramLink(
+      shareUrl
+    );
+
+    return;
+  }
+
+  window.open(
+    'https://t.me/share/url' +
+    '?url=' +
+    encodeURIComponent(link) +
+    '&text=' +
+    encodeURIComponent(text),
+    '_blank'
+  );
+}
+
+$('shareReferral').addEventListener(
+  'click',
+  shareReferral
+);
+
+$('shareReferral2').addEventListener(
+  'click',
+  shareReferral
+);
+
+
+/* =========================================================
+   WITHDRAW
+========================================================= */
+
+document
+  .querySelectorAll('.method')
+  .forEach(btn=>{
+
+    btn.addEventListener(
+      'click',
+      ()=>{
+
+        document
+          .querySelectorAll('.method')
+          .forEach(x=>
+            x.classList.remove('selected')
+          );
+
+        btn.classList.add('selected');
+
+        selectedWithdrawMethod =
+          btn.dataset.method;
+      }
+    );
+  });
+
 
 function loadWithdrawHistory(){
 
   try{
 
-    const history =
-      JSON.parse(
-        localStorage.getItem(
-          WITHDRAW_KEY
-        ) || '[]'
+    const raw =
+      localStorage.getItem(
+        WITHDRAW_KEY
       );
 
-    if(
-      history.length &&
-      $('withdrawHistory')
-    ){
+    const history =
+      raw
+        ? JSON.parse(raw)
+        : [];
 
-      const item =
-        history[0];
+    renderWithdrawHistory(
+      Array.isArray(history)
+        ? history
+        : []
+    );
 
-      $('withdrawHistory').textContent =
-        item.amount.toFixed(2) +
-        ' LC • ' +
-        item.status;
+  }catch{
 
-    }
-
-  }catch(e){}
-
+    renderWithdrawHistory([]);
+  }
 }
 
-/* =========================================================
-   WITHDRAW
-   ========================================================= */
-
-function createWithdrawal(){
-
-  if(
-    balance <
-    MIN_WITHDRAW
-  ){
-
-    toast(
-      'Мінімум для виводу — 500 LC'
-    );
-
-    return;
-
-  }
-
-  const amount =
-    Number(
-      balance.toFixed(2)
-    );
-
-  let history = [];
-
-  try{
-
-    history =
-      JSON.parse(
-        localStorage.getItem(
-          WITHDRAW_KEY
-        ) || '[]'
-      );
-
-  }catch(e){
-
-    history = [];
-
-  }
-
-  history.unshift({
-
-    amount,
-
-    date:
-      new Date()
-        .toLocaleString(
-          'uk-UA'
-        ),
-
-    status:
-      'На перевірці'
-
-  });
-
-  history =
-    history.slice(
-      0,
-      10
-    );
+function saveWithdrawHistory(history){
 
   try{
 
@@ -3981,968 +4368,730 @@ function createWithdrawal(){
     );
 
   }catch(e){}
-
-  if(
-    $('withdrawHistory')
-  ){
-
-    $('withdrawHistory').textContent =
-      amount.toFixed(2) +
-      ' LC • На перевірці';
-
-  }
-
-  toast(
-    'Заявку створено'
-  );
-
-  openSupportAfterWithdraw();
-
 }
 
-/* =========================================================
-   WITHDRAW SUPPORT
-   ========================================================= */
+function renderWithdrawHistory(history){
 
-function openSupportAfterWithdraw(){
+  const root =
+    $('withdrawHistory');
 
-  setTimeout(
-    ()=>{
-      openScreen(
-        'support'
-      );
-    },
-    500
-  );
+  if(!root) return;
 
+  if(!history.length){
+
+    root.innerHTML =
+      `<div class="card empty">
+        Історія виведень порожня
+      </div>`;
+
+    return;
+  }
+
+  root.innerHTML =
+    history
+      .slice()
+      .reverse()
+      .map(item=>{
+
+        const status =
+          item.status ||
+          'pending';
+
+        const statusText =
+          status === 'completed'
+            ? 'Виконано'
+            : status === 'rejected'
+              ? 'Відхилено'
+              : 'На розгляді';
+
+        return `
+          <div class="card business">
+            <div class="business-head">
+              <div class="business-icon">💸</div>
+
+              <div class="business-info">
+                <div class="business-name">
+                  ${money(item.amount)} LC
+                </div>
+
+                <div class="business-desc">
+                  ${item.method || 'USDT'}
+                </div>
+              </div>
+
+              <div class="business-profit">
+                ${statusText}
+              </div>
+            </div>
+
+            <div class="business-status">
+              <span>
+                ${item.date || ''}
+              </span>
+
+              <span>
+                ${item.details || ''}
+              </span>
+            </div>
+          </div>
+        `;
+      })
+      .join('');
 }
 
-/* =========================================================
-   SUPPORT
-   ========================================================= */
-
-function openSupportManager(
-  username
-){
-
-  const link =
-    'https://t.me/' +
-    username;
-
-  if(
-    window.Telegram &&
-    Telegram.WebApp &&
-    Telegram.WebApp.openTelegramLink
-  ){
-
-    Telegram.WebApp.openTelegramLink(
-      link
-    );
-
-  }else{
-
-    window.open(
-      link,
-      '_blank'
-    );
-
-  }
-
-}
-
-/* =========================================================
-   REFERRALS
-   ========================================================= */
-
-function telegramUser(){
-
-  return (
-    window.Telegram &&
-    Telegram.WebApp &&
-    Telegram.WebApp.initDataUnsafe &&
-    Telegram.WebApp.initDataUnsafe.user
-  ) || null;
-
-}
-
-function referralCode(){
-
-  const user =
-    telegramUser();
-
-  return (
-    'LC-' +
-    String(
-      (
-        user &&
-        user.id
-      ) ||
-      '000000'
-    ).slice(-6)
-  );
-
-}
-
-function referralUrl(){
-
-  return (
-    location.origin +
-    location.pathname +
-    '?ref=' +
-    encodeURIComponent(
-      referralCode()
-    )
-  );
-
-}
-
-function setupReferral(){
-
-  if(
-    $('refCode')
-  ){
-
-    $('refCode').textContent =
-      referralCode();
-
-  }
-
-}
-
-/* =========================================================
-   TELEGRAM SHARE
-   ========================================================= */
-
-function shareReferral(){
-
-  const url =
-    referralUrl();
-
-  const text =
-    'Приєднуйся до LUCKY-CLOVER та отримуй LC. За нового друга — +100 LC.';
-
-  const telegramShare =
-    'https://t.me/share/url?' +
-    'url=' +
-    encodeURIComponent(url) +
-    '&text=' +
-    encodeURIComponent(text);
-
-  if(
-    window.Telegram &&
-    Telegram.WebApp &&
-    Telegram.WebApp.openTelegramLink
-  ){
-
-    Telegram.WebApp.openTelegramLink(
-      telegramShare
-    );
-
-  }else{
-
-    window.open(
-      telegramShare,
-      '_blank'
-    );
-
-  }
-
-}
-
-/* =========================================================
-   INITIAL TELEGRAM
-   ========================================================= */
-
-if(
-  window.Telegram &&
-  Telegram.WebApp
-){
-
-  Telegram.WebApp.ready();
-
-  Telegram.WebApp.expand();
-
-}
-
-/* =========================================================
-   INITIAL LOAD
-   ========================================================= */
-
-loadBoost();
-
-loadPassive();
-
-load();
-
-loadWithdrawHistory();
-
-render();
-
-renderTasks();
-
-setupReferral();
-
-syncBoost();
-
-syncPassiveUI();
-
-loadTelegram();
-
-/* =========================================================
-   TAP
-   ========================================================= */
-
-$('earn').addEventListener(
-  'click',
-  ()=>{
-
-    applyOfflineEnergy();
-
-    if(
-      energy < 1
-    ){
-
-      toast(
-        'Недостатньо енергії'
-      );
-
-      return;
-
-    }
-
-    const reward =
-      tapPower *
-      (
-        boostActive()
-          ? 2
-          : 1
-      );
-
-    balance +=
-      reward;
-
-    today +=
-      reward;
-
-    taps +=
-      1;
-
-    energy -=
-      1;
-
-    save();
-
-    render();
-
-    syncPassiveUI();
-
-    showFloatReward(
-      reward
-    );
-
-  }
-);
-
-/* =========================================================
-   TAP UPGRADE
-   ========================================================= */
-
-$('upgradeBtn').addEventListener(
-  'click',
-  ()=>{
-
-    if(
-      balance <
-      upgradePrice
-    ){
-
-      return;
-
-    }
-
-    balance -=
-      upgradePrice;
-
-    tapPower +=
-      .05;
-
-    upgradePrice =
-      Math.round(
-        upgradePrice *
-        1.65
-      );
-
-    save();
-
-    toast(
-      'Сила тапу покращена'
-    );
-
-    render();
-
-  }
-);
-
-/* =========================================================
-   ENERGY UPGRADE
-   ========================================================= */
-
-$('energyUpgradeBtn').addEventListener(
-  'click',
-  ()=>{
-
-    if(
-      balance <
-      energyUpgradePrice
-    ){
-
-      return;
-
-    }
-
-    const add =
-      maxEnergy < 300
-        ? 20
-        : 30;
-
-    balance -=
-      energyUpgradePrice;
-
-    maxEnergy +=
-      add;
-
-    energy =
-      maxEnergy;
-
-    energyUpgradePrice =
-      Math.round(
-        energyUpgradePrice *
-        1.7
-      );
-
-    lastEnergyAt =
-      Date.now();
-
-    save();
-
-    toast(
-      'Максимум енергії збільшено'
-    );
-
-    render();
-
-  }
-);
-
-/* =========================================================
-   PASSIVE
-   ========================================================= */
-
-$('passiveBtn').addEventListener(
-  'click',
-  upgradePassive
-);
-
-$('collectMiningBtn').addEventListener(
-  'click',
-  collectMining
-);
-
-/* =========================================================
-   DAILY BONUS
-   ========================================================= */
-
-$('dailyBonusBtn').addEventListener(
-  'click',
-  ()=>{
-
-    if(
-      dailyBonusDay ===
-      dayKey()
-    ){
-
-      return;
-
-    }
-
-    balance +=
-      10;
-
-    today +=
-      10;
-
-    dailyBonusDay =
-      dayKey();
-
-    savePassive();
-
-    save();
-
-    toast(
-      'Бонус дня: +10 LC'
-    );
-
-    render();
-
-    syncPassiveUI();
-
-  }
-);
-
-/* =========================================================
-   NAV
-   ========================================================= */
-
-document
-  .querySelectorAll('.nav-item')
-  .forEach(
-    button=>{
-
-      button.addEventListener(
-        'click',
-        ()=>{
-
-          openScreen(
-            button.dataset.screen
-          );
-
-        }
-      );
-
-    }
-  );
-
-/* =========================================================
-   TASKS
-   ========================================================= */
-
-document
-  .querySelectorAll('[data-task]')
-  .forEach(
-    button=>{
-
-      button.addEventListener(
-        'click',
-        ()=>{
-
-          const key =
-            button.dataset.task;
-
-          if(
-            tasks[key]
-          ){
-
-            return;
-
-          }
-
-          if(
-            key === 'login'
-          ){
-
-            if(
-              !updateStreak()
-            ){
-
-              toast(
-                'Щоденний вхід уже отримано'
-              );
-
-              return;
-
-            }
-
-            balance +=
-              5;
-
-            today +=
-              5;
-
-          }
-
-          else if(
-            key === 'taps'
-          ){
-
-            if(
-              taps < 100
-            ){
-
-              toast(
-                'Зробіть ще ' +
-                (100-taps) +
-                ' тапів'
-              );
-
-              return;
-
-            }
-
-            balance +=
-              10;
-
-            today +=
-              10;
-
-          }
-
-          else if(
-            key === 'earn'
-          ){
-
-            if(
-              today < 50
-            ){
-
-              toast(
-                'Потрібно заробити ще ' +
-                Math.max(
-                  0,
-                  50-today
-                ).toFixed(2) +
-                ' LC'
-              );
-
-              return;
-
-            }
-
-            balance +=
-              15;
-
-            today +=
-              15;
-
-          }
-
-          tasks[key] =
-            true;
-
-          if(
-            streak >= 7 &&
-            !streak7Claimed
-          ){
-
-            balance +=
-              50;
-
-            today +=
-              50;
-
-            streak7Claimed =
-              true;
-
-            toast(
-              'Бонус за 7 днів: +50 LC'
-            );
-
-          }
-
-          else if(
-            streak >= 3 &&
-            !streak3Claimed
-          ){
-
-            balance +=
-              20;
-
-            today +=
-              20;
-
-            streak3Claimed =
-              true;
-
-            toast(
-              'Бонус за 3 дні: +20 LC'
-            );
-
-          }
-
-          save();
-
-          render();
-
-          renderTasks();
-
-        }
-      );
-
-    }
-  );
-
-/* =========================================================
-   BUSINESS
-   ========================================================= */
-
-$('businessBtn').addEventListener(
-  'click',
-  ()=>{
-
-    openScreen(
-      'support'
-    );
-
-    toast(
-      'Заявка на бізнес: оберіть менеджера'
-    );
-
-  }
-);
-
-/* =========================================================
-   REFERRALS
-   ========================================================= */
-
-$('refBtn').addEventListener(
-  'click',
-  ()=>{
-
-    openScreen(
-      'referral'
-    );
-
-  }
-);
-
-$('shareRefBtn').addEventListener(
-  'click',
-  shareReferral
-);
-
-/* =========================================================
-   PROFILE BUTTONS
-   ========================================================= */
-
-$('openWithdraw').addEventListener(
-  'click',
-  ()=>{
-    openScreen(
-      'withdraw'
-    );
-  }
-);
-
-$('openBonuses').addEventListener(
-  'click',
-  ()=>{
-    openScreen(
-      'bonuses'
-    );
-  }
-);
-
-$('openRating').addEventListener(
-  'click',
-  ()=>{
-    openScreen(
-      'rating'
-    );
-  }
-);
-
-$('openSupport').addEventListener(
-  'click',
-  ()=>{
-    openScreen(
-      'support'
-    );
-  }
-);
-
-$('openSkins').addEventListener(
-  'click',
-  ()=>{
-    openScreen(
-      'skins'
-    );
-  }
-);
-
-/* =========================================================
-   WITHDRAW
-   ========================================================= */
 
 $('withdrawBtn').addEventListener(
   'click',
-  createWithdrawal
-);
+  async ()=>{
 
-/* =========================================================
-   BONUS SCREENS
-   ========================================================= */
-
-$('bonusDailyOpen').addEventListener(
-  'click',
-  ()=>{
-
-    openScreen(
-      'home'
-    );
-
-    setTimeout(
-      ()=>{
-        $('dailyBonusBtn').focus();
-      },
-      50
-    );
-
-  }
-);
-
-$('bonusStreakOpen').addEventListener(
-  'click',
-  ()=>{
-    openScreen(
-      'streak'
-    );
-  }
-);
-
-$('bonusBoostOpen').addEventListener(
-  'click',
-  activateBoost
-);
-
-/* =========================================================
-   SUPPORT
-   ========================================================= */
-
-$('supportBtn').addEventListener(
-  'click',
-  ()=>{
-
-    openSupportManager(
-      SUPPORT_USERNAMES[0]
-    );
-
-  }
-);
-
-document
-  .querySelectorAll('[data-manager]')
-  .forEach(
-    button=>{
-
-      button.addEventListener(
-        'click',
-        ()=>{
-
-          openSupportManager(
-            button.dataset.manager
-          );
-
-        }
+    const amount =
+      num(
+        $('withdrawAmount').value
       );
 
-    }
-  );
+    const details =
+      $('withdrawDetails').value
+        .trim();
 
-document
-  .querySelectorAll('[data-support]')
-  .forEach(
-    button=>{
+    if(amount < MIN_WITHDRAW){
 
-      button.addEventListener(
-        'click',
-        ()=>{
-
-          toast(
-            'Оберіть менеджера підтримки вище'
-          );
-
-        }
+      toast(
+        `Мінімум ${MIN_WITHDRAW} LC`
       );
 
+      return;
     }
-  );
+
+    if(amount > state.balance){
+
+      toast('Недостатньо LC');
+
+      return;
+    }
+
+    if(!details){
+
+      toast('Вкажіть реквізити');
+
+      return;
+    }
+
+
+    if(serverReady){
+
+      try{
+
+        const result =
+          await api('withdraw',{
+            amount,
+            method:selectedWithdrawMethod,
+            details
+          });
+
+        applyServerState(result);
+
+        const history =
+          JSON.parse(
+            localStorage.getItem(
+              WITHDRAW_KEY
+            ) || '[]'
+          );
+
+        history.push({
+          amount,
+          method:selectedWithdrawMethod,
+          details,
+          status:'pending',
+          date:new Date().toLocaleString()
+        });
+
+        saveWithdrawHistory(history);
+
+        $('withdrawAmount').value = '';
+        $('withdrawDetails').value = '';
+
+        render();
+        renderWithdrawHistory(history);
+
+        toast('Заявку створено');
+
+        return;
+
+      }catch(error){
+
+        toast(
+          error.message ||
+          'Не вдалося створити заявку'
+        );
+
+        return;
+      }
+    }
+
+
+    /*
+      Local fallback.
+    */
+
+    state.balance -= amount;
+
+    const history =
+      JSON.parse(
+        localStorage.getItem(
+          WITHDRAW_KEY
+        ) || '[]'
+      );
+
+    history.push({
+      amount,
+      method:selectedWithdrawMethod,
+      details,
+      status:'pending',
+      date:new Date().toLocaleString()
+    });
+
+    saveWithdrawHistory(history);
+
+    $('withdrawAmount').value = '';
+    $('withdrawDetails').value = '';
+
+    render();
+    renderWithdrawHistory(history);
+
+    toast('Заявку створено');
+  }
+);
+
+
+/* =========================================================
+   RATING
+========================================================= */
+
+async function loadRating(){
+
+  if(!serverReady){
+    return;
+  }
+
+  try{
+
+    const result =
+      await api('rating');
+
+    const rows =
+      result.rating ||
+      result.users ||
+      result.data ||
+      [];
+
+    if(!Array.isArray(rows) || !rows.length){
+      return;
+    }
+
+    const root =
+      $('ratingList');
+
+    root.innerHTML =
+      rows
+        .slice(0,20)
+        .map((user,index)=>{
+
+          const name =
+            user.username
+              ? '@' + user.username
+              : user.first_name ||
+                'Гравець';
+
+          const balance =
+            num(
+              user.balance ??
+              user.total_earned
+            );
+
+          return `
+            <div class="card rating-row">
+              <div class="rating-place">
+                ${index+1}
+              </div>
+
+              <div class="rating-avatar">
+                ${index===0
+                  ? '👑'
+                  : '☘️'}
+              </div>
+
+              <div class="rating-info">
+                <div class="rating-name">
+                  ${escapeHtml(name)}
+                </div>
+
+                <div class="rating-balance">
+                  Гравець
+                </div>
+              </div>
+
+              <div class="rating-value">
+                ${money(balance)} LC
+              </div>
+            </div>
+          `;
+        })
+        .join('');
+
+  }catch(error){
+
+    console.warn(
+      'rating error',
+      error
+    );
+  }
+}
+
 
 /* =========================================================
    SKINS
-   ========================================================= */
+========================================================= */
+
+const SKINS = {
+  gold:{
+    price:0,
+    icon:'☘️'
+  },
+
+  clover:{
+    price:150,
+    icon:'🍀'
+  },
+
+  lucky:{
+    price:300,
+    icon:'☘️'
+  },
+
+  night:{
+    price:500,
+    icon:'🌑'
+  }
+};
+
+function renderSkin(){
+
+  const skin =
+    SKINS[state.currentSkin] ||
+    SKINS.gold;
+
+  if($('coinIcon'))
+    $('coinIcon').textContent =
+      skin.icon;
+
+  document
+    .querySelectorAll('.skin-btn')
+    .forEach(btn=>{
+
+      const id =
+        btn.dataset.skin;
+
+      if(id === state.currentSkin){
+
+        btn.textContent =
+          '✓ ОБРАНО';
+
+        btn.classList.remove('locked');
+
+        return;
+      }
+
+      const item =
+        SKINS[id];
+
+      if(!item) return;
+
+      btn.textContent =
+        item.price === 0
+          ? 'ОБРАТИ'
+          : `${item.price} LC`;
+
+      btn.classList.toggle(
+        'locked',
+        false
+      );
+    });
+}
 
 document
-  .querySelectorAll('[data-skin]')
-  .forEach(
-    button=>{
+  .querySelectorAll('.skin-btn')
+  .forEach(btn=>{
 
-      button.addEventListener(
-        'click',
-        ()=>{
+    btn.addEventListener(
+      'click',
+      async ()=>{
 
-          const skin =
-            button.dataset.skin;
+        const skin =
+          btn.dataset.skin;
 
-          const costs = {
+        const item =
+          SKINS[skin];
 
-            gold:0,
+        if(!item) return;
 
-            clover:150,
+        if(skin === state.currentSkin){
 
-            lucky:300,
+          toast('Скін вже обраний');
 
-            night:500
+          return;
+        }
 
-          };
+        /*
+          GOLD is free.
+          Other skins require purchase.
+        */
 
-          const cost =
-            costs[skin] ||
-            0;
+        if(serverReady){
 
-          if(
-            currentSkin ===
-            skin
-          ){
+          try{
 
-            toast(
-              'Скін уже обраний'
-            );
+            const result =
+              await api('buy_skin',{
+                skin_id:skin,
+                price:item.price
+              });
+
+            applyServerState(result);
+
+            state.currentSkin =
+              skin;
+
+            saveLocal();
+            render();
+
+            toast('🎨 Скін активовано');
 
             return;
 
-          }
+          }catch(error){
 
-          if(
-            cost > 0
-          ){
+            /*
+              Some backend versions use
+              buy_skin for purchase and select_skin
+              separately. Try selection if purchase
+              is not necessary.
+            */
 
-            if(
-              balance <
-              cost
-            ){
+            try{
 
-              toast(
-                'Недостатньо LC'
-              );
+              const selected =
+                await api('select_skin',{
+                  skin_id:skin
+                });
+
+              applyServerState(selected);
+
+              state.currentSkin =
+                skin;
+
+              saveLocal();
+              render();
+
+              toast('🎨 Скін обрано');
 
               return;
 
+            }catch{
+
+              toast(
+                error.message ||
+                'Не вдалося активувати скін'
+              );
+
+              return;
             }
-
-            balance -=
-              cost;
-
           }
+        }
 
-          currentSkin =
-            skin;
 
-          save();
+        if(
+          state.balance <
+          item.price
+        ){
 
-          toast(
-            cost
-              ? 'Скін придбано'
-              : 'Скін обрано'
-          );
+          toast('Недостатньо LC');
 
+          return;
+        }
+
+        state.balance -=
+          item.price;
+
+        state.currentSkin =
+          skin;
+
+        saveLocal();
+        render();
+
+        toast('🎨 Скін активовано');
+      }
+    );
+  });
+
+
+/* =========================================================
+   BUSINESS SUPPORT
+========================================================= */
+
+document
+  .querySelectorAll('.businessRequest')
+  .forEach(btn=>{
+
+    btn.addEventListener(
+      'click',
+      ()=>{
+        openTelegram(
+          SUPPORT_USERNAMES[0]
+        );
+      }
+    );
+  });
+
+
+/* =========================================================
+   SUPPORT TELEGRAM
+========================================================= */
+
+function openTelegram(username){
+
+  const clean =
+    String(username)
+      .replace(/^@/,'')
+      .trim();
+
+  const url =
+    'https://t.me/' +
+    clean;
+
+  if(
+    window.Telegram &&
+    Telegram.WebApp &&
+    Telegram.WebApp.openTelegramLink
+  ){
+
+    Telegram.WebApp.openTelegramLink(
+      url
+    );
+
+  }else{
+
+    window.open(
+      url,
+      '_blank'
+    );
+  }
+}
+
+
+/* =========================================================
+   HTML ESCAPE
+========================================================= */
+
+function escapeHtml(value){
+
+  return String(value)
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'","&#039;");
+}
+
+
+/* =========================================================
+   AUTO REFRESH
+========================================================= */
+
+setInterval(()=>{
+
+  applyOfflineEnergy();
+
+  syncPassiveUI();
+  syncBoost();
+
+  renderTasks();
+
+},1000);
+
+
+/* =========================================================
+   SERVER PERIODIC SYNC
+========================================================= */
+
+function startPeriodicSync(){
+
+  clearInterval(syncTimer);
+
+  syncTimer =
+    setInterval(
+      async ()=>{
+
+        if(!serverReady)
+          return;
+
+        try{
+
+          const result =
+            await api('get_state');
+
+          applyServerState(result);
+
+          saveLocal();
           render();
 
+        }catch(error){
+
+          console.warn(
+            'periodic sync',
+            error
+          );
         }
-      );
 
+      },
+      30000
+    );
+}
+
+
+/* =========================================================
+   REFERRAL INITIALIZATION
+========================================================= */
+
+function setupReferral(){
+
+  const ref =
+    getReferralFromURL();
+
+  if(ref){
+
+    /*
+      The backend receives the ref during init.
+      Do not award referral rewards on client.
+    */
+
+    console.log(
+      'Referral:',
+      ref
+    );
+  }
+
+  generateLocalReferral();
+  renderReferral();
+}
+
+
+/* =========================================================
+   PAGE VISIBILITY
+========================================================= */
+
+document.addEventListener(
+  'visibilitychange',
+  async ()=>{
+
+    if(
+      document.visibilityState ===
+      'visible'
+    ){
+
+      applyOfflineEnergy();
+
+      if(serverReady){
+
+        try{
+
+          const result =
+            await api('get_state');
+
+          applyServerState(result);
+
+        }catch(error){
+
+          console.warn(error);
+        }
+      }
+
+      saveLocal();
+      render();
+      syncPassiveUI();
+      syncBoost();
     }
-  );
-
-/* =========================================================
-   STREAK
-   ========================================================= */
-
-$('openStreak').addEventListener(
-  'click',
-  ()=>{
-    openScreen(
-      'streak'
-    );
   }
 );
 
-$('backTasks').addEventListener(
-  'click',
-  ()=>{
-    openScreen(
-      'tasks'
-    );
-  }
-);
 
 /* =========================================================
-   BOOST TIMER
-   ========================================================= */
+   BEFORE UNLOAD
+========================================================= */
 
-setInterval(
-  ()=>{
-    syncBoost();
-  },
-  1000
-);
-
-/* =========================================================
-   ENERGY + PASSIVE TIMER
-   ========================================================= */
-
-setInterval(
+window.addEventListener(
+  'beforeunload',
   ()=>{
 
     applyOfflineEnergy();
 
-    save();
+    saveLocal();
+    savePassive();
+    saveBoost();
 
-    render();
-
-    syncPassiveUI();
-
-  },
-  1000
+  }
 );
 
-/* =========================================================
-   DAILY RESET CHECK
-   ========================================================= */
-
-setInterval(
-  ()=>{
-
-    const before =
-      taskDay;
-
-    resetDailyState();
-
-    if(
-      before !==
-      taskDay
-    ){
-
-      save();
-
-      savePassive();
-
-      render();
-
-      renderTasks();
-
-      syncPassiveUI();
-
-      toast(
-        'Новий день — завдання оновлено'
-      );
-
-    }
-
-  },
-  60000
-);
 
 /* =========================================================
-   FINAL RENDER
-   ========================================================= */
+   INIT
+========================================================= */
 
-render();
+(async function(){
 
-renderTasks();
+  loadTelegram();
 
-syncPassiveUI();
+  loadLocal();
 
-syncBoost();
+  loadBoost();
 
+  loadPassive();
+
+  updateLoginStreak();
+
+  resetDailyTasksIfNeeded();
+
+  setupReferral();
+
+  render();
+
+  renderTasks();
+
+  renderStreak();
+
+  loadWithdrawHistory();
+
+  syncBoost();
+
+  syncPassiveUI();
+
+  /*
+    Hide loading even if Telegram/Supabase
+    takes a little longer.
+  */
+
+  setTimeout(()=>{
+    $('loading')?.classList.add('hide');
+  },1500);
+
+  /*
+    Then synchronize with Supabase.
+  */
+
+  await syncServer();
+
+  startPeriodicSync();
+
+})();
 </script>
 
 </body>
