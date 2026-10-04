@@ -5093,6 +5093,202 @@ window.addEventListener(
 
 })();
 </script>
+<!-- =========================================================
+     LUCKY-CLOVER — ОКНО ПОДПИСКИ НА КАНАЛ
+     ========================================================= -->
 
+<style>
+#cloverSubscribeOverlay{
+  position:fixed;
+  inset:0;
+  z-index:99999;
+  display:none;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  background:rgba(0,0,0,.78);
+  backdrop-filter:blur(10px);
+}
+
+#cloverSubscribeOverlay.show{
+  display:flex;
+}
+
+#cloverSubscribeModal{
+  width:100%;
+  max-width:390px;
+  padding:26px 22px 22px;
+  text-align:center;
+  border-radius:26px;
+  background:linear-gradient(
+    180deg,
+    #14261c 0%,
+    #0b1510 100%
+  );
+  border:1px solid rgba(54,229,139,.28);
+  box-shadow:
+    0 25px 80px rgba(0,0,0,.65),
+    0 0 35px rgba(54,229,139,.10);
+}
+
+#cloverSubscribeIcon{
+  width:72px;
+  height:72px;
+  margin:0 auto 16px;
+  display:grid;
+  place-items:center;
+  border-radius:22px;
+  background:rgba(54,229,139,.10);
+  border:1px solid rgba(54,229,139,.20);
+  font-size:40px;
+}
+
+#cloverSubscribeTitle{
+  font-size:22px;
+  font-weight:950;
+  margin-bottom:10px;
+}
+
+#cloverSubscribeText{
+  color:var(--muted,#91a49a);
+  font-size:14px;
+  line-height:1.5;
+  margin-bottom:20px;
+}
+
+#cloverSubscribeButton{
+  display:block;
+  width:100%;
+  box-sizing:border-box;
+  padding:15px 16px;
+  border-radius:15px;
+  background:var(--green,#36e58b);
+  color:#07110b;
+  text-decoration:none;
+  font-size:14px;
+  font-weight:950;
+  border:0;
+  margin-bottom:10px;
+}
+
+#cloverSubscribeConfirm{
+  width:100%;
+  padding:14px 16px;
+  border-radius:15px;
+  background:rgba(54,229,139,.08);
+  border:1px solid rgba(54,229,139,.22);
+  color:inherit;
+  font-size:14px;
+  font-weight:900;
+}
+</style>
+
+
+<div id="cloverSubscribeOverlay">
+
+  <div id="cloverSubscribeModal">
+
+    <div id="cloverSubscribeIcon">
+      ☘️
+    </div>
+
+    <div id="cloverSubscribeTitle">
+      ПІДПИШИСЬ НА НАШ КАНАЛ
+    </div>
+
+    <div id="cloverSubscribeText">
+      Підпишись на Telegram-канал
+      LUCKY-CLOVER, щоб отримувати
+      новини, бонуси та важливі оновлення гри.
+    </div>
+
+    <a
+      id="cloverSubscribeButton"
+      href="https://t.me/clover_company_group"
+      target="_blank"
+      rel="noopener noreferrer"
+    >
+      ПІДПИСАТИСЯ НА КАНАЛ
+    </a>
+
+    <button
+      id="cloverSubscribeConfirm"
+      type="button"
+    >
+      Я ПІДПИСАВСЯ
+    </button>
+
+  </div>
+
+</div>
+
+
+<script>
+(function(){
+
+  const SUBSCRIBE_KEY =
+    'lucky_clover_channel_subscribed_v1';
+
+  const overlay =
+    document.getElementById(
+      'cloverSubscribeOverlay'
+    );
+
+  const confirmButton =
+    document.getElementById(
+      'cloverSubscribeConfirm'
+    );
+
+  if(!overlay || !confirmButton){
+    return;
+  }
+
+  function showSubscription(){
+
+    try{
+
+      if(
+        localStorage.getItem(
+          SUBSCRIBE_KEY
+        ) === '1'
+      ){
+        return;
+      }
+
+    }catch(e){}
+
+    overlay.classList.add('show');
+
+  }
+
+  confirmButton.addEventListener(
+    'click',
+    function(){
+
+      try{
+
+        localStorage.setItem(
+          SUBSCRIBE_KEY,
+          '1'
+        );
+
+      }catch(e){}
+
+      overlay.classList.remove('show');
+
+    }
+  );
+
+  /*
+   * Показываем окно после загрузки
+   * существующего интерфейса.
+   */
+  setTimeout(
+    showSubscription,
+    800
+  );
+
+})();
+</script>
 </body>
 </html>
